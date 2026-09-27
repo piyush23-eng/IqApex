@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: apexiq-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-apexiq_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-apexiq_secure_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-apexiq_telemetry}
+    ports:
+      - "5432:5432"
+    volumes:
+      - apexiq_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-apexiq_user} -d ${POSTGRES_DB:-apexiq_telemetry}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: apexiq-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-apexiq_user}:${POSTGRES_PASSWORD:-apexiq_secure_pass}@db:5432/${POSTGRES_DB:-apexiq_telemetry}
+      - CORS_ORIGINS=["http://localhost:5173","http://localhost:80"]
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: apexiq-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+
+volumes:
+  apexiq_pgdata:
