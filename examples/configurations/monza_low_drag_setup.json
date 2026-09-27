@@ -1,0 +1,21 @@
+{
+  "baseline_setup": {
+    "front_wing_angle": 18.0,
+    "rear_wing_angle": 24.0,
+    "ride_height_front": 32.0,
+    "ride_height_rear": 42.0,
+    "yaw_angle": 1.5,
+    "vehicle_speed": 250.0,
+    "tyre_grip": 1.75,
+    "mass": 810.0
+  },
+  "scenario_overrides": {
+    "rear_wing_angle": 26.0,
+    "ride_height_front": 31.0
+  },
+  "provenance": {
+    "label": "Synthetic engineering configuration",
+    "track": "Autodromo Nazionale Monza",
+    "season_regulation": "2024"
+  }
+}
