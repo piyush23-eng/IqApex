@@ -1,0 +1,111 @@
+# ApexIQ — Synthetic Aerodynamic & Vehicle Performance Configuration
+# Strictly labeled: Synthetic engineering dataset / Physics-based synthetic model
+# NOT real F1 CFD, wind-tunnel, vehicle-dynamics, or team data.
+
+constants:
+  air_density_kg_m3: 1.225            # Sea-level standard atmospheric density (rho)
+  reference_area_m2: 1.60             # Frontal / planform aerodynamic reference area (S)
+  baseline_vehicle_mass_kg: 798.0     # Minimum technical regulation car mass (m)
+  gravity_m_s2: 9.80665               # Standard acceleration due to gravity (g)
+  wheelbase_m: 3.60                   # Front-to-rear axle distance
+  engine_peak_power_kw: 745.7         # Synthetic ICE + MGU-K net delivered power (~1000 hp)
+  rolling_resistance_coeff: 0.015     # Coefficient of rolling resistance (C_rr)
+  drivetrain_efficiency: 0.94         # Mechanical transmission efficiency
+
+baseline_aero:
+  cl_front_base: 0.85                 # Front wing baseline lift coefficient
+  cl_rear_base: 1.25                  # Rear wing baseline lift coefficient
+  cl_floor_base: 1.70                 # Underfloor / diffuser baseline ground effect coefficient
+  cd_base: 0.70                       # Zero-lift parasite drag coefficient (C_d0)
+  induced_drag_factor_k: 0.082        # Induced drag multiplier (C_d = C_d0 + k * C_l^2)
+  front_wing_lift_slope_per_deg: 0.045
+  front_wing_drag_slope_per_deg: 0.016
+  rear_wing_lift_slope_per_deg: 0.052
+  rear_wing_drag_slope_per_deg: 0.024
+  ground_effect_ride_height_opt_mm: 30.0   # Optimal front ride height for max underfloor suction
+  ground_effect_decay_rate: 0.008          # Suction loss per mm away from optimal ride height
+  rake_lift_slope_per_mm: 0.006            # Aerodynamic rake sensitivity (diffuser expansion)
+  yaw_lift_decay_per_deg: 0.028            # Lift reduction due to crossflow flow detachment
+  yaw_drag_increase_per_deg: 0.018         # Drag penalty due to vortex breakdown & crossflow
+
+parameter_ranges:
+  front_wing_angle:
+    name: "front_wing_angle"
+    unit: "deg"
+    minimum: 10.0
+    maximum: 35.0
+    step: 0.5
+    default: 18.0
+    source: "DIRECT ENGINEERING INPUT"
+    description: "Front wing flap angle of attack"
+  rear_wing_angle:
+    name: "rear_wing_angle"
+    unit: "deg"
+    minimum: 15.0
+    maximum: 40.0
+    step: 0.5
+    default: 24.0
+    source: "DIRECT ENGINEERING INPUT"
+    description: "Rear wing mainplane & flap combined inclination angle"
+  ride_height_front:
+    name: "ride_height_front"
+    unit: "mm"
+    minimum: 25.0
+    maximum: 45.0
+    step: 0.5
+    default: 32.0
+    source: "DIRECT ENGINEERING INPUT"
+    description: "Front reference splitter clearance above ground plane"
+  ride_height_rear:
+    name: "ride_height_rear"
+    unit: "mm"
+    minimum: 30.0
+    maximum: 60.0
+    step: 0.5
+    default: 42.0
+    source: "DIRECT ENGINEERING INPUT"
+    description: "Rear diffuser throat / skid block clearance above ground plane"
+  yaw_angle:
+    name: "yaw_angle"
+    unit: "deg"
+    minimum: 0.0
+    maximum: 6.0
+    step: 0.2
+    default: 1.5
+    source: "DIRECT ENGINEERING INPUT"
+    description: "Vehicle aerodynamic slip angle during corner entry / transition"
+  vehicle_speed:
+    name: "vehicle_speed"
+    unit: "km/h"
+    minimum: 80.0
+    maximum: 355.0
+    step: 5.0
+    default: 250.0
+    source: "DIRECT ENGINEERING INPUT"
+    description: "Freestream velocity relative to chassis"
+  tyre_grip:
+    name: "tyre_grip"
+    unit: "scalar"
+    minimum: 1.40
+    maximum: 2.10
+    step: 0.02
+    default: 1.75
+    source: "DIRECT ENGINEERING INPUT"
+    description: "Pneumatic tyre friction coefficient (mu) at nominal operating temperature"
+  mass:
+    name: "mass"
+    unit: "kg"
+    minimum: 798.0
+    maximum: 850.0
+    step: 1.0
+    default: 810.0
+    source: "DIRECT ENGINEERING INPUT"
+    description: "Total vehicle mass including driver and fuel load"
+
+doe_sampling:
+  default_sample_count: 1200
+  default_random_seed: 42871
+  sampling_method: "Latin Hypercube Sampling"
+  noise_std_cl: 0.025
+  noise_std_cd: 0.015
+  noise_std_aero_balance: 0.005

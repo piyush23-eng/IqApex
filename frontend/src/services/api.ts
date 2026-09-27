@@ -326,7 +326,99 @@ class ApiService {
       `/api/sensitivity/matrix?session_id=${encodeURIComponent(sessionId)}`
     );
   }
+
+  // --- STAGE 6: VEHICLE PERFORMANCE & AERO SURROGATE APIS ---
+
+  async getVehicleParameters(): Promise<import('../types/vehiclePerformance').ParameterListResponse> {
+    return this.request<import('../types/vehiclePerformance').ParameterListResponse>(
+      '/api/vehicle-performance/parameters'
+    );
+  }
+
+  async evaluateVehicleConfig(
+    config: import('../types/vehiclePerformance').VehicleConfig
+  ): Promise<import('../types/vehiclePerformance').AeroEvaluationResponse> {
+    return this.request<import('../types/vehiclePerformance').AeroEvaluationResponse>(
+      '/api/vehicle-performance/evaluate',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+      }
+    );
+  }
+
+  async compareVehicleConfigs(
+    baseline: import('../types/vehiclePerformance').VehicleConfig,
+    scenario: import('../types/vehiclePerformance').VehicleConfig
+  ): Promise<import('../types/vehiclePerformance').VehicleComparisonResponse> {
+    return this.request<import('../types/vehiclePerformance').VehicleComparisonResponse>(
+      '/api/vehicle-performance/compare',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ baseline, scenario }),
+      }
+    );
+  }
+
+  async getAeroParetoFrontier(
+    maxPoints = 120
+  ): Promise<import('../types/vehiclePerformance').ParetoFrontierResponse> {
+    return this.request<import('../types/vehiclePerformance').ParetoFrontierResponse>(
+      `/api/vehicle-performance/pareto-frontier?max_points=${maxPoints}`
+    );
+  }
+
+  async getAeroResponseSurface2D(
+    target = 'downforce_n',
+    xFeature = 'front_wing_angle',
+    yFeature = 'rear_wing_angle',
+    gridResolution = 25
+  ): Promise<import('../types/vehiclePerformance').ResponseSurface2DVehicleResponse> {
+    const params = new URLSearchParams({
+      target,
+      x_feature: xFeature,
+      y_feature: yFeature,
+      grid_resolution: String(gridResolution),
+    });
+    return this.request<import('../types/vehiclePerformance').ResponseSurface2DVehicleResponse>(
+      `/api/vehicle-performance/response-surface-2d?${params.toString()}`
+    );
+  }
+
+  async simulateTrackPerformance(
+    config: import('../types/vehiclePerformance').VehicleConfig
+  ): Promise<import('../types/vehiclePerformance').TrackSimulationResponse> {
+    return this.request<import('../types/vehiclePerformance').TrackSimulationResponse>(
+      '/api/vehicle-performance/track-simulation',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+      }
+    );
+  }
+
+  async runAeroMonteCarlo(
+    config: import('../types/vehiclePerformance').VehicleConfig,
+    iterations = 500,
+    seed = 42871
+  ): Promise<import('../types/vehiclePerformance').AeroMonteCarloResponse> {
+    return this.request<import('../types/vehiclePerformance').AeroMonteCarloResponse>(
+      '/api/vehicle-performance/monte-carlo',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          config,
+          iterations,
+          simulation_seed: seed,
+        }),
+      }
+    );
+  }
 }
 
-
 export const api = new ApiService();
+

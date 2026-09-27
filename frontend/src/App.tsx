@@ -6,6 +6,7 @@ import { DataRunsPage } from './pages/DataRunsPage';
 import { LapAnalysisPage } from './pages/LapAnalysisPage';
 import { SensitivityPage } from './pages/SensitivityPage';
 import { OptimizationPage } from './pages/OptimizationPage';
+import { VehiclePerformancePage } from './pages/VehiclePerformancePage';
 import { UninitializedModule } from './components/UninitializedModule';
 import { api } from './services/api';
 import {
@@ -304,12 +305,15 @@ export const App: React.FC = () => {
         <OptimizationPage initialCorner={optCorner} initialParam={optParam} />
       )}
 
+      {activeModule === 'vehicle-performance' && <VehiclePerformancePage />}
+
       {activeModule !== 'overview' &&
         activeModule !== 'telemetry' &&
         activeModule !== 'data-runs' &&
         activeModule !== 'lap-analysis' &&
         activeModule !== 'sensitivity' &&
-        activeModule !== 'optimization' && (
+        activeModule !== 'optimization' &&
+        activeModule !== 'vehicle-performance' && (
           <UninitializedModule
             module={activeModule}
             onReturnToOverview={() => setActiveModule('overview')}

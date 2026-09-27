@@ -12,6 +12,7 @@ from app.api.v1 import (
     statistics,
     telemetry,
     telemetry_pipeline,
+    vehicle_performance,
 )
 
 api_router = APIRouter()
@@ -27,4 +28,5 @@ api_router.include_router(decomposition.router)
 api_router.include_router(statistics.router)
 api_router.include_router(optimization.router)
 api_router.include_router(sensitivity.router)
+api_router.include_router(vehicle_performance.router)
 
