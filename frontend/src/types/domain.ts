@@ -112,6 +112,78 @@ export interface TelemetryResponse {
   points: TelemetryPoint[];
 }
 
+export interface ProcessingRun {
+  processing_run_id: string;
+  source_file: string;
+  source_hash: string;
+  processed_at: string;
+  pipeline_version: string;
+  mapping_version: string;
+  status: string;
+  quality_score: number;
+  resampling_resolution: number;
+}
+
+export interface TelemetryInspectionResult {
+  file_format: string;
+  row_count: int_number;
+  column_count: int_number;
+  available_channels: string[];
+  core_channels_found: string[];
+  core_channels_missing: string[];
+  optional_channels_found: string[];
+  detected_units: Record<string, string>;
+  timestamp_range: [number, number] | null;
+  distance_range: [number, number] | null;
+  sampling_interval_mean: number | null;
+  estimated_sampling_frequency: number | null;
+  warnings: string[];
+}
+
+type int_number = number;
+
+export interface IngestionResult {
+  processing_run_id: string;
+  session_id: string;
+  run_id: string;
+  lap_id: string;
+  raw_points: number;
+  resampled_points: number;
+  data_label: string;
+  quality: DataQualityResult;
+  lineage: ProcessingRun;
+  raw_storage_path: string;
+  processed_storage_path: string;
+}
+
+export interface LapMetadataResponse {
+  lap_id: string;
+  run_id: string;
+  session_id: string;
+  data_label: string;
+  raw_points_count: number;
+  lineage: ProcessingRun | null;
+}
+
+export interface LapChannelsResponse {
+  lap_id: string;
+  channels: string[];
+  channel_units: Record<string, string>;
+}
+
+export interface LapComparisonResponse {
+  reference_lap_id: string;
+  comparison_lap_id: string;
+  point_count: number;
+  distance: number[];
+  reference_speed: number[];
+  comparison_speed: number[];
+  speed_delta: number[];
+  reference_time: number[];
+  comparison_time: number[];
+  time_delta: number[];
+}
+
 export type NavModule =
   | 'overview'
   | 'telemetry'

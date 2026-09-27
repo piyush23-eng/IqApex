@@ -1,0 +1,95 @@
+version: "1.0.0"
+
+# Canonical Channel Mapping Table
+# Maps arbitrary logger/export channel names to canonical engineering identifiers.
+core_channels:
+  timestamp:
+    aliases: ["time", "timestamp", "session_time", "t", "time_s", "Time", "Timestamp", "SessionTime"]
+    default_unit: "s"
+    type: "float"
+
+  distance:
+    aliases: ["lapdist", "distance", "slap", "track_distance", "dist", "Distance", "LapDistance", "LapDist"]
+    default_unit: "m"
+    type: "float"
+
+  speed:
+    aliases: ["vcar", "speed_kph", "vehicle_speed", "speed", "car_speed", "velocityx", "gps_speed", "Speed", "v_car"]
+    default_unit: "km/h"
+    type: "float"
+
+  throttle:
+    aliases: ["rthrottlepedal", "throttle_position", "throttle", "pedal_throttle", "aps", "Throttle", "r_throttle", "pedal_pos"]
+    default_unit: "%"
+    type: "float"
+
+  brake:
+    aliases: ["pbrakef", "p_brake_f", "brake", "brake_pressure", "brake_pedal", "Brake", "p_brake_r", "brake_pos"]
+    default_unit: "%"
+    type: "float"
+
+  gear:
+    aliases: ["ngear", "gear", "current_gear", "gear_num", "Gear", "n_gear"]
+    default_unit: "index"
+    type: "int"
+
+  rpm:
+    aliases: ["nengine", "rpm", "engine_rpm", "engine_speed", "RPM", "EngineSpeed", "n_engine"]
+    default_unit: "RPM"
+    type: "int"
+
+  drs:
+    aliases: ["drs", "drs_status", "drs_active", "DRS", "drs_state"]
+    default_unit: "state"
+    type: "int"
+
+  lateral_acceleration:
+    aliases: ["lataccel", "ay", "latg", "glat", "a_y", "lateral_accel", "accellateral", "LatAccel", "G_Lat"]
+    default_unit: "G"
+    type: "float"
+
+  longitudinal_acceleration:
+    aliases: ["longaccel", "ax", "longg", "glong", "a_x", "longitudinal_accel", "accellongitudinal", "LongAccel", "G_Long"]
+    default_unit: "G"
+    type: "float"
+
+optional_channels:
+  steering_angle:
+    aliases: ["steer", "steering", "steering_angle", "handwheel_angle", "SteeringAngle", "SteerAngle"]
+    default_unit: "deg"
+    type: "float"
+
+  wheel_speed_fl:
+    aliases: ["ws_fl", "wheelspeed_fl", "vwheel_fl", "WheelSpeedFL"]
+    default_unit: "km/h"
+    type: "float"
+
+  wheel_speed_fr:
+    aliases: ["ws_fr", "wheelspeed_fr", "vwheel_fr", "WheelSpeedFR"]
+    default_unit: "km/h"
+    type: "float"
+
+  wheel_speed_rl:
+    aliases: ["ws_rl", "wheelspeed_rl", "vwheel_rl", "WheelSpeedRL"]
+    default_unit: "km/h"
+    type: "float"
+
+  wheel_speed_rr:
+    aliases: ["ws_rr", "wheelspeed_rr", "vwheel_rr", "WheelSpeedRR"]
+    default_unit: "km/h"
+    type: "float"
+
+  engine_temperature:
+    aliases: ["t_engine", "engine_temp", "water_temp", "coolant_temp", "EngineTemp"]
+    default_unit: "degC"
+    type: "float"
+
+  brake_temperature:
+    aliases: ["t_brake", "brake_temp", "disc_temp", "BrakeTemp"]
+    default_unit: "degC"
+    type: "float"
+
+  tyre_temperature:
+    aliases: ["t_tyre", "tyre_temp", "tire_temp", "carcass_temp", "TyreTemp"]
+    default_unit: "degC"
+    type: "float"

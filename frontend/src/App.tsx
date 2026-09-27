@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { WorkstationLayout } from './layouts/WorkstationLayout';
 import { OverviewPage } from './pages/OverviewPage';
+import { TelemetryPage } from './pages/TelemetryPage';
+import { DataRunsPage } from './pages/DataRunsPage';
 import { UninitializedModule } from './components/UninitializedModule';
 import { api } from './services/api';
 import {
@@ -11,24 +13,31 @@ import {
   TelemetryResponse,
   NavModule,
   HealthResponse,
+  LapMetadataResponse,
+  LapChannelsResponse,
 } from './types/domain';
 
 export const App: React.FC = () => {
   const [activeModule, setActiveModule] = useState<NavModule>('overview');
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
+  const [isLoadingTelem, setIsLoadingTelem] = useState<boolean>(false);
 
   // Engineering Context State
   const [isSynthetic, setIsSynthetic] = useState<boolean>(false);
   const [dataStatus, setDataStatus] = useState<string>('No data loaded');
+  const [sessions, setSessions] = useState<Session[]>([]);
   const [session, setSession] = useState<Session | null>(null);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
   const [referenceDriver, setReferenceDriver] = useState<Driver | null>(null);
   const [runs, setRuns] = useState<Run[]>([]);
   const [selectedRun, setSelectedRun] = useState<Run | null>(null);
+  const [laps, setLaps] = useState<Lap[]>([]);
   const [selectedLap, setSelectedLap] = useState<Lap | null>(null);
   const [telemetryData, setTelemetryData] = useState<TelemetryResponse | null>(null);
+  const [lapMetadata, setLapMetadata] = useState<LapMetadataResponse | null>(null);
+  const [lapChannels, setLapChannels] = useState<LapChannelsResponse | null>(null);
 
   // Health ping
   const checkHealth = useCallback(async () => {
@@ -50,6 +59,84 @@ export const App: React.FC = () => {
     return () => clearInterval(interval);
   }, [checkHealth]);
 
+  // Load available sessions list on startup
+  useEffect(() => {
+    api.getSessions().then(setSessions).catch(() => setSessions([]));
+  }, []);
+
+  // Telemetry Workflow Selection Handlers
+  const handleSelectSession = useCallback(async (sessionId: string) => {
+    if (!sessionId) {
+      setSession(null);
+      setRuns([]);
+      setSelectedRun(null);
+      setLaps([]);
+      setSelectedLap(null);
+      return;
+    }
+    try {
+      const detail = await api.getSession(sessionId);
+      setSession(detail.session);
+      setDrivers(detail.drivers);
+      setRuns(detail.runs);
+      if (detail.runs.length > 0) {
+        setSelectedRun(detail.runs[0]);
+        const runDetail = await api.getRun(detail.runs[0].run_id);
+        setLaps(runDetail.laps);
+        if (runDetail.laps.length > 0) {
+          setSelectedLap(runDetail.laps[0]);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to select session:', err);
+    }
+  }, []);
+
+  const handleSelectRun = useCallback(async (runId: string) => {
+    const r = runs.find((item) => item.run_id === runId) || null;
+    setSelectedRun(r);
+    if (r) {
+      try {
+        const runDetail = await api.getRun(r.run_id);
+        setLaps(runDetail.laps);
+        if (runDetail.laps.length > 0) {
+          setSelectedLap(runDetail.laps[0]);
+        }
+      } catch (err) {
+        console.error('Failed to select run:', err);
+      }
+    } else {
+      setLaps([]);
+      setSelectedLap(null);
+    }
+  }, [runs]);
+
+  const handleSelectLap = useCallback((lapId: string) => {
+    const l = laps.find((item) => item.lap_id === lapId) || null;
+    setSelectedLap(l);
+  }, [laps]);
+
+  const handleLoadTelemetry = useCallback(async () => {
+    if (!selectedLap) return;
+    setIsLoadingTelem(true);
+    try {
+      const [telem, meta, chs] = await Promise.all([
+        api.getTelemetry(selectedLap.lap_id),
+        api.getLapMetadata(selectedLap.lap_id),
+        api.getLapChannels(selectedLap.lap_id),
+      ]);
+      setTelemetryData(telem);
+      setLapMetadata(meta);
+      setLapChannels(chs);
+      setIsSynthetic(telem.data_label.includes('Synthetic'));
+      setDataStatus('Active (' + telem.returned_points + ' pts)');
+    } catch (err) {
+      console.error('Failed to load telemetry:', err);
+    } finally {
+      setIsLoadingTelem(false);
+    }
+  }, [selectedLap]);
+
   // Load Synthetic Demonstration Dataset
   const loadDemoData = useCallback(async () => {
     try {
@@ -68,12 +155,19 @@ export const App: React.FC = () => {
 
       if (r1) {
         const runDetail = await api.getRun(r1.run_id);
+        setLaps(runDetail.laps);
         const l1 = runDetail.laps[0] || null;
         setSelectedLap(l1);
 
         if (l1) {
-          const telem = await api.getTelemetry(l1.lap_id);
+          const [telem, meta, chs] = await Promise.all([
+            api.getTelemetry(l1.lap_id),
+            api.getLapMetadata(l1.lap_id),
+            api.getLapChannels(l1.lap_id),
+          ]);
           setTelemetryData(telem);
+          setLapMetadata(meta);
+          setLapChannels(chs);
         }
       }
 
@@ -91,8 +185,11 @@ export const App: React.FC = () => {
     setReferenceDriver(null);
     setRuns([]);
     setSelectedRun(null);
+    setLaps([]);
     setSelectedLap(null);
     setTelemetryData(null);
+    setLapMetadata(null);
+    setLapChannels(null);
     setIsSynthetic(false);
     setDataStatus('No data loaded');
   }, []);
@@ -104,16 +201,6 @@ export const App: React.FC = () => {
       loadDemoData();
     }
   }, [isSynthetic, loadDemoData, unloadDemoData]);
-
-  // Handle Driver change
-  const handleSelectDriver = useCallback((driver: Driver) => {
-    setSelectedDriver(driver);
-  }, []);
-
-  // Handle Run change
-  const handleSelectRun = useCallback((run: Run) => {
-    setSelectedRun(run);
-  }, []);
 
   // Global hotkeys for workstation module switching (F1-F11)
   useEffect(() => {
@@ -155,12 +242,12 @@ export const App: React.FC = () => {
       latencyMs={latencyMs}
       bufferPointCount={telemetryData?.returned_points || 0}
       downsampleActive={telemetryData?.downsampled || false}
-      onSelectDriver={handleSelectDriver}
-      onSelectRun={handleSelectRun}
+      onSelectDriver={setSelectedDriver}
+      onSelectRun={setSelectedRun}
       onSelectModule={setActiveModule}
       onToggleDemoData={toggleDemoData}
     >
-      {activeModule === 'overview' ? (
+      {activeModule === 'overview' && (
         <OverviewPage
           session={session}
           selectedDriver={selectedDriver}
@@ -170,12 +257,38 @@ export const App: React.FC = () => {
           isSynthetic={isSynthetic}
           onLoadSyntheticData={loadDemoData}
         />
-      ) : (
-        <UninitializedModule
-          module={activeModule}
-          onReturnToOverview={() => setActiveModule('overview')}
+      )}
+
+      {activeModule === 'telemetry' && (
+        <TelemetryPage
+          sessions={sessions}
+          currentSession={session}
+          runs={runs}
+          currentRun={selectedRun}
+          laps={laps}
+          currentLap={selectedLap}
+          telemetryData={telemetryData}
+          metadata={lapMetadata}
+          channelsData={lapChannels}
+          isSynthetic={isSynthetic}
+          onSelectSession={handleSelectSession}
+          onSelectRun={handleSelectRun}
+          onSelectLap={handleSelectLap}
+          onLoadTelemetry={handleLoadTelemetry}
+          isLoading={isLoadingTelem}
         />
       )}
+
+      {activeModule === 'data-runs' && <DataRunsPage />}
+
+      {activeModule !== 'overview' &&
+        activeModule !== 'telemetry' &&
+        activeModule !== 'data-runs' && (
+          <UninitializedModule
+            module={activeModule}
+            onReturnToOverview={() => setActiveModule('overview')}
+          />
+        )}
     </WorkstationLayout>
   );
 };
