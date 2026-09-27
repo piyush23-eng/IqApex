@@ -11,6 +11,7 @@ import {
   GitBranch,
   FolderTree,
   ShieldCheck,
+  Layers,
 } from 'lucide-react';
 import { NavModule } from '../types/domain';
 
@@ -38,6 +39,7 @@ const NAV_ITEMS: NavItemConfig[] = [
   { id: 'strategy', label: 'Strategy', icon: GitBranch, shortcut: 'F9' },
   { id: 'data-runs', label: 'Data & Runs', icon: FolderTree, shortcut: 'F10' },
   { id: 'model-health', label: 'Model Health', icon: ShieldCheck, shortcut: 'F11' },
+  { id: 'engineering-analysis', label: 'Decision Support', icon: Layers, shortcut: 'F12' },
 ];
 
 export const LeftNav: React.FC<LeftNavProps> = ({ activeModule, onSelectModule }) => {

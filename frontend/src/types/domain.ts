@@ -286,7 +286,8 @@ export type NavModule =
   | 'optimization'
   | 'strategy'
   | 'data-runs'
-  | 'model-health';
+  | 'model-health'
+  | 'engineering-analysis';
 
 export interface EngineeringContext {
   session: Session | null;

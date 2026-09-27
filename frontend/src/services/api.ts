@@ -522,6 +522,125 @@ class ApiService {
       }
     );
   }
+
+  // --- STAGE 8: ENGINEERING DECISION SUPPORT & CROSS-MODULE APIS ---
+
+  async analyzeLapLoss(
+    referenceLapId = 'lap_ref_1',
+    comparisonLapId = 'lap_comp_1',
+    sector?: number,
+    cornerId?: string
+  ): Promise<import('../types/engineeringAnalysis').LapLossAnalysisResponse> {
+    return this.request<import('../types/engineeringAnalysis').LapLossAnalysisResponse>(
+      '/api/engineering-analysis/lap-loss',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reference_lap_id: referenceLapId,
+          comparison_lap_id: comparisonLapId,
+          sector,
+          corner_id: cornerId,
+        }),
+      }
+    );
+  }
+
+  async evaluateSetupScenario(
+    baselineSetup: Record<string, number>,
+    parameterChanges: Record<string, number>
+  ): Promise<import('../types/engineeringAnalysis').SetupScenarioResponse> {
+    return this.request<import('../types/engineeringAnalysis').SetupScenarioResponse>(
+      '/api/engineering-analysis/setup-scenario',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          baseline_setup: baselineSetup,
+          parameter_changes: parameterChanges,
+        }),
+      }
+    );
+  }
+
+  async evaluateSetupStrategy(
+    baselineSetup: Record<string, number>,
+    scenarioSetup: Record<string, number>,
+    strategyId = 'strat_1stop_med_hard',
+    weather = 'DRY',
+    safetyCar = 'GREEN',
+    traffic = 'LIGHT_TRAFFIC'
+  ): Promise<import('../types/engineeringAnalysis').SetupStrategyResponse> {
+    return this.request<import('../types/engineeringAnalysis').SetupStrategyResponse>(
+      '/api/engineering-analysis/setup-strategy',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          baseline_setup: baselineSetup,
+          scenario_setup: scenarioSetup,
+          strategy_id: strategyId,
+          weather,
+          safety_car: safetyCar,
+          traffic,
+        }),
+      }
+    );
+  }
+
+  async runFullCrossModulePipeline(
+    referenceLapId = 'lap_ref_1',
+    comparisonLapId = 'lap_comp_1',
+    baselineSetup?: Record<string, number>,
+    parameterChanges?: Record<string, number>,
+    strategyId = 'strat_1stop_med_hard',
+    weather = 'DRY',
+    safetyCar = 'GREEN',
+    traffic = 'LIGHT_TRAFFIC'
+  ): Promise<import('../types/engineeringAnalysis').EngineeringAnalysis> {
+    return this.request<import('../types/engineeringAnalysis').EngineeringAnalysis>(
+      '/api/engineering-analysis/full-pipeline',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reference_lap_id: referenceLapId,
+          comparison_lap_id: comparisonLapId,
+          baseline_setup: baselineSetup,
+          parameter_changes: parameterChanges,
+          strategy_id: strategyId,
+          weather,
+          safety_car: safetyCar,
+          traffic,
+        }),
+      }
+    );
+  }
+
+  async getEngineeringFindings(): Promise<import('../types/engineeringAnalysis').EngineeringFinding[]> {
+    return this.request<import('../types/engineeringAnalysis').EngineeringFinding[]>(
+      '/api/engineering-analysis/findings'
+    );
+  }
+
+  async generateEngineeringReport(
+    analysis: import('../types/engineeringAnalysis').EngineeringAnalysis
+  ): Promise<import('../types/engineeringAnalysis').EngineeringReportResponse> {
+    return this.request<import('../types/engineeringAnalysis').EngineeringReportResponse>(
+      '/api/engineering-analysis/report',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(analysis),
+      }
+    );
+  }
+
+  async getDefaultEngineeringReport(): Promise<import('../types/engineeringAnalysis').EngineeringReportResponse> {
+    return this.request<import('../types/engineeringAnalysis').EngineeringReportResponse>(
+      '/api/engineering-analysis/report/default'
+    );
+  }
 }
 
 export const api = new ApiService();

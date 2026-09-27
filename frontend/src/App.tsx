@@ -8,6 +8,7 @@ import { SensitivityPage } from './pages/SensitivityPage';
 import { OptimizationPage } from './pages/OptimizationPage';
 import { VehiclePerformancePage } from './pages/VehiclePerformancePage';
 import { StrategyPage } from './pages/StrategyPage';
+import { EngineeringAnalysisPage } from './pages/EngineeringAnalysisPage';
 import { UninitializedModule } from './components/UninitializedModule';
 import { api } from './services/api';
 import {
@@ -226,6 +227,7 @@ export const App: React.FC = () => {
         F9: 'strategy',
         F10: 'data-runs',
         F11: 'model-health',
+        F12: 'engineering-analysis',
       };
       if (keyMap[e.key]) {
         e.preventDefault();
@@ -308,6 +310,7 @@ export const App: React.FC = () => {
 
       {activeModule === 'vehicle-performance' && <VehiclePerformancePage />}
       {activeModule === 'strategy' && <StrategyPage />}
+      {activeModule === 'engineering-analysis' && <EngineeringAnalysisPage />}
 
       {activeModule !== 'overview' &&
         activeModule !== 'telemetry' &&
@@ -316,7 +319,8 @@ export const App: React.FC = () => {
         activeModule !== 'sensitivity' &&
         activeModule !== 'optimization' &&
         activeModule !== 'vehicle-performance' &&
-        activeModule !== 'strategy' && (
+        activeModule !== 'strategy' &&
+        activeModule !== 'engineering-analysis' && (
           <UninitializedModule
             module={activeModule}
             onReturnToOverview={() => setActiveModule('overview')}

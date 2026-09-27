@@ -59,6 +59,11 @@ const MODULE_DESCRIPTIONS: Record<NavModule, { title: string; stage: string; spe
     stage: 'Stage 4 Diagnostics Engine',
     spec: 'Model error distributions, Kalman filter residual checks, sensor calibration drift.',
   },
+  'engineering-analysis': {
+    title: 'Cross-Module Engineering Decision Support & Pipeline',
+    stage: 'Stage 8 Decision Support Layer',
+    spec: 'Evidence attribution, surrogate what-if propagation, strategy coupling, and reproducible reporting.',
+  },
 };
 
 export const UninitializedModule: React.FC<UninitializedModuleProps> = ({
