@@ -21,7 +21,16 @@ class FeasibleStrategyDefinition:
 class StrategyGenerator:
     """
     Deterministically generates physically and regulatorily feasible pit strategies for Monza (53 laps).
-    Enforces FIA two-compound mandatory usage rule and tyre viability limits.
+    
+    Regulatory Reference:
+        Source: 2024 FIA Formula One Sporting Regulations, Article 30.5 (Dry weather race tyre usage).
+        Rule Represented: During a dry race, each competitor must use at least two different specifications
+        of dry-weather tyres (compounds). Hence, strategies must include >= 2 distinct compound types.
+        
+    Limitations:
+        - Wet / Intermediate mandatory rules and discretionary pit exceptions are not modeled.
+        - Sprint race formats and parc fermé operational tyre allocations are not represented.
+        - Does not represent complete F1 sporting/technical regulations; strictly encodes the 2-compound mandate.
     """
 
     def __init__(self, config_path: Path | None = None) -> None:

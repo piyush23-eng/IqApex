@@ -9,6 +9,7 @@ import { OptimizationPage } from './pages/OptimizationPage';
 import { VehiclePerformancePage } from './pages/VehiclePerformancePage';
 import { StrategyPage } from './pages/StrategyPage';
 import { EngineeringAnalysisPage } from './pages/EngineeringAnalysisPage';
+import { ModelHealthPage } from './pages/ModelHealthPage';
 import { UninitializedModule } from './components/UninitializedModule';
 import { api } from './services/api';
 import {
@@ -311,6 +312,7 @@ export const App: React.FC = () => {
       {activeModule === 'vehicle-performance' && <VehiclePerformancePage />}
       {activeModule === 'strategy' && <StrategyPage />}
       {activeModule === 'engineering-analysis' && <EngineeringAnalysisPage />}
+      {activeModule === 'model-health' && <ModelHealthPage />}
 
       {activeModule !== 'overview' &&
         activeModule !== 'telemetry' &&
@@ -320,7 +322,7 @@ export const App: React.FC = () => {
         activeModule !== 'optimization' &&
         activeModule !== 'vehicle-performance' &&
         activeModule !== 'strategy' &&
-        activeModule !== 'engineering-analysis' && (
+        activeModule !== 'engineering-analysis' && activeModule !== 'model-health' && (
           <UninitializedModule
             module={activeModule}
             onReturnToOverview={() => setActiveModule('overview')}

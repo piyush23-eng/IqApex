@@ -1,3 +1,4 @@
+import csv
 import io
 from pathlib import Path
 from typing import BinaryIO
@@ -31,10 +32,16 @@ class CSVTelemetryAdapter(TelemetrySourceAdapter):
 
         try:
             self.raw_df = pd.read_csv(buffer, sep=None, engine="python", comment="#")
-        except (ValueError, TypeError, pd.errors.ParserError):
+        except (ValueError, TypeError, pd.errors.ParserError, pd.errors.EmptyDataError, csv.Error):
             if isinstance(buffer, io.BytesIO):
                 buffer.seek(0)
-            self.raw_df = pd.read_csv(buffer, sep=",")
+            try:
+                self.raw_df = pd.read_csv(buffer, sep=",")
+            except Exception as e:
+                raise ValueError(f"Unable to parse CSV telemetry data: {e}") from e
+
+        if self.raw_df is None or self.raw_df.empty:
+            raise ValueError("CSV telemetry data is empty or invalid.")
 
         self.source_metadata = {
             "format": "CSV",

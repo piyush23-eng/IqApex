@@ -276,18 +276,21 @@ class EngineeringAnalysisEngine:
 
         domain_status, warning = self.check_domain_status(scenario_setup)
 
+        clean_base = {**DEFAULT_BASELINE_SETUP, **baseline_setup}
+        clean_scen = {**DEFAULT_BASELINE_SETUP, **scenario_setup}
+
         # Predict aero targets
-        df_base = self.surrogates["downforce_n"].predict_single(baseline_setup)
-        df_scen = self.surrogates["downforce_n"].predict_single(scenario_setup)
+        df_base = self.surrogates["downforce_n"].predict_single(clean_base)
+        df_scen = self.surrogates["downforce_n"].predict_single(clean_scen)
 
-        dr_base = self.surrogates["drag_n"].predict_single(baseline_setup)
-        dr_scen = self.surrogates["drag_n"].predict_single(scenario_setup)
+        dr_base = self.surrogates["drag_n"].predict_single(clean_base)
+        dr_scen = self.surrogates["drag_n"].predict_single(clean_scen)
 
-        cl_base = float(self.surrogates["cl"].predict_single(baseline_setup).prediction)
-        cd_base = float(self.surrogates["cd"].predict_single(baseline_setup).prediction)
-        cl_scen = float(self.surrogates["cl"].predict_single(scenario_setup).prediction)
-        cd_scen = float(self.surrogates["cd"].predict_single(scenario_setup).prediction)
-        bal_scen = float(self.surrogates["aero_balance_pct"].predict_single(scenario_setup).prediction)
+        cl_base = float(self.surrogates["cl"].predict_single(clean_base).prediction)
+        cd_base = float(self.surrogates["cd"].predict_single(clean_base).prediction)
+        cl_scen = float(self.surrogates["cl"].predict_single(clean_scen).prediction)
+        cd_scen = float(self.surrogates["cd"].predict_single(clean_scen).prediction)
+        bal_scen = float(self.surrogates["aero_balance_pct"].predict_single(clean_scen).prediction)
 
         l_over_d = cl_scen / cd_scen if cd_scen > 0 else 0.0
 
@@ -366,11 +369,14 @@ class EngineeringAnalysisEngine:
             {"compound": "HARD", "laps": 29},
         ]
 
+        clean_base = {**DEFAULT_BASELINE_SETUP, **baseline_setup}
+        clean_scen = {**DEFAULT_BASELINE_SETUP, **scenario_setup}
+
         # Get CL/CD proxies from surrogates
-        cl_base = float(self.surrogates["cl"].predict_single(baseline_setup).prediction)
-        cd_base = float(self.surrogates["cd"].predict_single(baseline_setup).prediction)
-        cl_scen = float(self.surrogates["cl"].predict_single(scenario_setup).prediction)
-        cd_scen = float(self.surrogates["cd"].predict_single(scenario_setup).prediction)
+        cl_base = float(self.surrogates["cl"].predict_single(clean_base).prediction)
+        cd_base = float(self.surrogates["cd"].predict_single(clean_base).prediction)
+        cl_scen = float(self.surrogates["cl"].predict_single(clean_scen).prediction)
+        cd_scen = float(self.surrogates["cd"].predict_single(clean_scen).prediction)
 
         # Baseline race
         race_base = self.strategy_engine.simulate_race(

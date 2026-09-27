@@ -27,7 +27,7 @@ export const StrategyComparisonTable: React.FC<StrategyComparisonTableProps> = (
     return (
       <div className="bg-workstation-panel border border-workstation-border rounded p-4 font-mono text-2xs animate-pulse text-workstation-textMuted flex items-center justify-center space-x-2 h-44">
         <Layers className="w-4 h-4 animate-spin text-workstation-accentCyan" />
-        <span>ENUMERATING FEASIBLE FIA-COMPLIANT STRATEGIES...</span>
+        <span>ENUMERATING REGULATION-CONSTRAINED STRATEGIES (2024 FIA ART. 30.5)...</span>
       </div>
     );
   }
@@ -42,11 +42,11 @@ export const StrategyComparisonTable: React.FC<StrategyComparisonTableProps> = (
         <div className="flex items-center space-x-2">
           <Layers className="w-3.5 h-3.5 text-workstation-accentCyan" />
           <span className="font-bold text-workstation-textBright uppercase tracking-wider text-xs">
-            FEASIBLE STRATEGY MATRIX (53 LAPS — MONZA)
+            REGULATION-CONSTRAINED STRATEGY MATRIX (53 LAPS — MONZA)
           </span>
         </div>
         <span className="text-3xs text-workstation-textMuted">
-          {strategies.length} FIA-LEGAL COMBINATIONS EVALUATED
+          {strategies.length} REGULATION-CONSTRAINED COMBINATIONS (2024 FIA ART. 30.5)
         </span>
       </div>
 
@@ -60,7 +60,7 @@ export const StrategyComparisonTable: React.FC<StrategyComparisonTableProps> = (
               <th className="py-1.5 px-2">PIT LAPS</th>
               <th className="py-1.5 px-2 text-right">MODELLED TIME</th>
               <th className="py-1.5 px-2 text-right">DELTA TO BEST</th>
-              <th className="py-1.5 px-2 text-center">FIA LEGAL</th>
+              <th className="py-1.5 px-2 text-center" title="Mandatory usage of at least 2 distinct dry weather compound specifications per 2024 FIA F1 Sporting Regulations Article 30.5">REG COMPLIANT</th>
               <th className="py-1.5 px-2 text-center">ACTION</th>
             </tr>
           </thead>
