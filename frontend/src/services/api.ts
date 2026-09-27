@@ -228,6 +228,104 @@ class ApiService {
       `/api/analysis/statistics/sensitivity?ref_lap_id=${encodeURIComponent(refLapId)}&comp_lap_id=${encodeURIComponent(compLapId)}`
     );
   }
+
+  // Stage 5 Performance Sensitivity & Optimization Engine Methods
+  async getParameters(): Promise<import('../types/optimization').ParameterDefinition[]> {
+    return this.request<import('../types/optimization').ParameterDefinition[]>('/api/optimization/parameters');
+  }
+
+  async getResponseCurve(
+    sessionId = 'demo-session-monza-2026',
+    cornerId = 'T9',
+    parameterName = 'corner_exit_speed',
+    targetName = 'corner_time',
+    baselineValue = 181.2,
+    scenarioValue = 183.0
+  ): Promise<import('../types/optimization').ResponseCurveResponse> {
+    const params = new URLSearchParams({
+      session_id: sessionId,
+      corner_id: cornerId,
+      parameter_name: parameterName,
+      target_name: targetName,
+      baseline_value: String(baselineValue),
+      scenario_value: String(scenarioValue),
+    });
+    return this.request<import('../types/optimization').ResponseCurveResponse>(
+      `/api/optimization/response-curve?${params.toString()}`
+    );
+  }
+
+  async getResponseSurface2D(
+    sessionId = 'demo-session-monza-2026',
+    cornerId = 'T9',
+    featureX1 = 'corner_minimum_speed',
+    featureX2 = 'corner_exit_speed',
+    targetName = 'corner_time'
+  ): Promise<import('../types/optimization').ResponseSurface2DResponse> {
+    const params = new URLSearchParams({
+      session_id: sessionId,
+      corner_id: cornerId,
+      feature_x1: featureX1,
+      feature_x2: featureX2,
+      target_name: targetName,
+    });
+    return this.request<import('../types/optimization').ResponseSurface2DResponse>(
+      `/api/optimization/response-surface-2d?${params.toString()}`
+    );
+  }
+
+  async getParameterSweep(
+    sessionId = 'demo-session-monza-2026',
+    cornerId = 'T9',
+    parameterName = 'corner_exit_speed',
+    targetName = 'corner_time',
+    baselineValue = 181.2
+  ): Promise<import('../types/optimization').ParameterSweepResponse> {
+    const params = new URLSearchParams({
+      session_id: sessionId,
+      corner_id: cornerId,
+      parameter_name: parameterName,
+      target_name: targetName,
+      baseline_value: String(baselineValue),
+    });
+    return this.request<import('../types/optimization').ParameterSweepResponse>(
+      `/api/optimization/sweep?${params.toString()}`
+    );
+  }
+
+  async runMonteCarlo(
+    req: import('../types/optimization').MonteCarloSimulationRequest
+  ): Promise<import('../types/optimization').MonteCarloSimulationResponse> {
+    return this.request<import('../types/optimization').MonteCarloSimulationResponse>(
+      '/api/optimization/monte-carlo',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req),
+      }
+    );
+  }
+
+  async runOptimization(
+    req: import('../types/optimization').ConstrainedOptimizationRequest
+  ): Promise<import('../types/optimization').ConstrainedOptimizationResponse> {
+    return this.request<import('../types/optimization').ConstrainedOptimizationResponse>(
+      '/api/optimization/optimize',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req),
+      }
+    );
+  }
+
+  async getSensitivityMatrix(
+    sessionId = 'demo-session-monza-2026'
+  ): Promise<import('../types/optimization').SensitivityMatrixResponse> {
+    return this.request<import('../types/optimization').SensitivityMatrixResponse>(
+      `/api/sensitivity/matrix?session_id=${encodeURIComponent(sessionId)}`
+    );
+  }
 }
 
 

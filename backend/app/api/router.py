@@ -5,7 +5,9 @@ from app.api.v1 import (
     decomposition,
     health,
     laps,
+    optimization,
     runs,
+    sensitivity,
     sessions,
     statistics,
     telemetry,
@@ -23,4 +25,6 @@ api_router.include_router(telemetry_pipeline.router)
 api_router.include_router(analysis.router)
 api_router.include_router(decomposition.router)
 api_router.include_router(statistics.router)
+api_router.include_router(optimization.router)
+api_router.include_router(sensitivity.router)
 

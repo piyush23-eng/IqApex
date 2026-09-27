@@ -1,0 +1,127 @@
+parameters:
+  - name: "corner_entry_speed"
+    unit: "km/h"
+    minimum: 50.0
+    maximum: 360.0
+    step: 0.5
+    source: "telemetry"
+    allowed_perturbation: [-5.0, 5.0]
+    description: "Speed at corner entry threshold point"
+
+  - name: "corner_minimum_speed"
+    unit: "km/h"
+    minimum: 40.0
+    maximum: 320.0
+    step: 0.5
+    source: "telemetry"
+    allowed_perturbation: [-5.0, 5.0]
+    description: "Minimum speed recorded through corner apex"
+
+  - name: "corner_exit_speed"
+    unit: "km/h"
+    minimum: 60.0
+    maximum: 360.0
+    step: 0.5
+    source: "telemetry"
+    allowed_perturbation: [-5.0, 5.0]
+    description: "Speed at corner exit track-out point"
+
+  - name: "braking_point"
+    unit: "m"
+    minimum: -150.0
+    maximum: 150.0
+    step: 1.0
+    source: "telemetry"
+    allowed_perturbation: [-15.0, 15.0]
+    description: "Distance offset of initial brake pressure rise relative to reference"
+
+  - name: "throttle_application_distance"
+    unit: "m"
+    minimum: -100.0
+    maximum: 100.0
+    step: 1.0
+    source: "telemetry"
+    allowed_perturbation: [-15.0, 15.0]
+    description: "Distance offset of positive throttle re-application relative to apex"
+
+  - name: "corner_duration"
+    unit: "s"
+    minimum: 0.5
+    maximum: 15.0
+    step: 0.05
+    source: "telemetry"
+    allowed_perturbation: [-0.5, 0.5]
+    description: "Total transit duration across corner entry to exit"
+
+  - name: "tyre_age"
+    unit: "laps"
+    minimum: 1.0
+    maximum: 50.0
+    step: 1.0
+    source: "metadata"
+    allowed_perturbation: [-10.0, 10.0]
+    description: "Cumulative completed laps on current tyre set"
+
+  - name: "track_temperature"
+    unit: "°C"
+    minimum: 15.0
+    maximum: 65.0
+    step: 1.0
+    source: "session"
+    allowed_perturbation: [-10.0, 10.0]
+    description: "Asphalt track surface temperature"
+
+  # Optional future parameters
+  - name: "ride_height"
+    unit: "mm"
+    minimum: 20.0
+    maximum: 80.0
+    step: 0.5
+    source: "proxy"
+    allowed_perturbation: [-5.0, 5.0]
+    description: "Dynamic reference ride height proxy"
+
+  - name: "front_wing"
+    unit: "deg"
+    minimum: 10.0
+    maximum: 40.0
+    step: 0.5
+    source: "proxy"
+    allowed_perturbation: [-3.0, 3.0]
+    description: "Front wing aerodynamic flap angle"
+
+  - name: "rear_wing"
+    unit: "deg"
+    minimum: 10.0
+    maximum: 45.0
+    step: 0.5
+    source: "proxy"
+    allowed_perturbation: [-3.0, 3.0]
+    description: "Rear wing aerodynamic flap angle"
+
+  - name: "downforce_proxy"
+    unit: "N"
+    minimum: 2000.0
+    maximum: 25000.0
+    step: 100.0
+    source: "proxy"
+    allowed_perturbation: [-1000.0, 1000.0]
+    description: "Aerodynamic downforce proxy at 250 km/h"
+
+  - name: "drag_proxy"
+    unit: "N"
+    minimum: 500.0
+    maximum: 8000.0
+    step: 50.0
+    source: "proxy"
+    allowed_perturbation: [-500.0, 500.0]
+    description: "Aerodynamic drag proxy at 250 km/h"
+
+  - name: "fuel_load_proxy"
+    unit: "kg"
+    minimum: 5.0
+    maximum: 110.0
+    step: 1.0
+    source: "proxy"
+    allowed_perturbation: [-20.0, 20.0]
+    description: "Estimated on-board fuel mass"

@@ -4,6 +4,8 @@ import { OverviewPage } from './pages/OverviewPage';
 import { TelemetryPage } from './pages/TelemetryPage';
 import { DataRunsPage } from './pages/DataRunsPage';
 import { LapAnalysisPage } from './pages/LapAnalysisPage';
+import { SensitivityPage } from './pages/SensitivityPage';
+import { OptimizationPage } from './pages/OptimizationPage';
 import { UninitializedModule } from './components/UninitializedModule';
 import { api } from './services/api';
 import {
@@ -23,6 +25,10 @@ export const App: React.FC = () => {
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
   const [isLoadingTelem, setIsLoadingTelem] = useState<boolean>(false);
+
+  // Stage 5 Optimization Navigation State
+  const [optCorner, setOptCorner] = useState<string>('T9');
+  const [optParam, setOptParam] = useState<string>('corner_exit_speed');
 
   // Engineering Context State
   const [isSynthetic, setIsSynthetic] = useState<boolean>(false);
@@ -284,10 +290,26 @@ export const App: React.FC = () => {
 
       {activeModule === 'lap-analysis' && <LapAnalysisPage />}
 
+      {activeModule === 'sensitivity' && (
+        <SensitivityPage
+          onNavigateToOptimization={(cornerId, paramName) => {
+            setOptCorner(cornerId);
+            setOptParam(paramName);
+            setActiveModule('optimization');
+          }}
+        />
+      )}
+
+      {activeModule === 'optimization' && (
+        <OptimizationPage initialCorner={optCorner} initialParam={optParam} />
+      )}
+
       {activeModule !== 'overview' &&
         activeModule !== 'telemetry' &&
         activeModule !== 'data-runs' &&
-        activeModule !== 'lap-analysis' && (
+        activeModule !== 'lap-analysis' &&
+        activeModule !== 'sensitivity' &&
+        activeModule !== 'optimization' && (
           <UninitializedModule
             module={activeModule}
             onReturnToOverview={() => setActiveModule('overview')}
