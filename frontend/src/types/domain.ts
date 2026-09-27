@@ -184,6 +184,97 @@ export interface LapComparisonResponse {
   time_delta: number[];
 }
 
+export interface CircuitCornerDefinition {
+  corner_id: string;
+  name: string;
+  turn_number: number;
+  entry_distance: number;
+  apex_distance: number;
+  exit_distance: number;
+  circuit: string;
+}
+
+export interface CornerMetric {
+  corner_id: string;
+  corner_name: string;
+  turn_number: number;
+  entry_distance: number;
+  apex_distance: number;
+  exit_distance: number;
+  ref_entry_speed: number;
+  comp_entry_speed: number;
+  entry_speed_delta: number;
+  ref_min_speed: number;
+  comp_min_speed: number;
+  min_speed_delta: number;
+  ref_apex_distance: number;
+  comp_apex_distance: number;
+  ref_exit_speed: number;
+  comp_exit_speed: number;
+  exit_speed_delta: number;
+  ref_braking_point: number | null;
+  comp_braking_point: number | null;
+  braking_point_delta: number | null;
+  ref_throttle_pickup: number | null;
+  comp_throttle_pickup: number | null;
+  throttle_pickup_delta: number | null;
+  ref_corner_time: number;
+  comp_corner_time: number;
+  corner_time_delta: number;
+  cumulative_time_delta_exit: number;
+}
+
+export interface SectorComparison {
+  sector: number;
+  start_distance: number;
+  end_distance: number;
+  ref_time: number;
+  comp_time: number;
+  delta: number;
+}
+
+export interface LapComparisonSummary {
+  reference_lap_id: string;
+  comparison_lap_id: string;
+  data_label: string;
+  reference_driver: Driver | null;
+  comparison_driver: Driver | null;
+  reference_run: Run | null;
+  comparison_run: Run | null;
+  reference_lap: Lap;
+  comparison_lap: Lap;
+  reference_quality_score: number;
+  comparison_quality_score: number;
+  lap_time_delta: number;
+  sectors: SectorComparison[];
+  corners: CornerMetric[];
+}
+
+export interface AlignedChannelsResponse {
+  reference_lap_id: string;
+  comparison_lap_id: string;
+  point_count: number;
+  distance: number[];
+  ref_speed: number[];
+  comp_speed: number[];
+  ref_throttle: number[];
+  comp_throttle: number[];
+  ref_brake: number[];
+  comp_brake: number[];
+  ref_gear: number[];
+  comp_gear: number[];
+  ref_rpm: number[];
+  comp_rpm: number[];
+  ref_drs: number[];
+  comp_drs: number[];
+  ref_lat_g: number[];
+  comp_lat_g: number[];
+  ref_long_g: number[];
+  comp_long_g: number[];
+  time_delta: number[];
+  speed_delta: number[];
+}
+
 export type NavModule =
   | 'overview'
   | 'telemetry'

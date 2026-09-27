@@ -11,6 +11,10 @@ import {
   LapChannelsResponse,
   DataQualityResult,
   LapComparisonResponse,
+  CircuitCornerDefinition,
+  CornerMetric,
+  LapComparisonSummary,
+  AlignedChannelsResponse,
 } from '../types/domain';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
@@ -116,6 +120,39 @@ class ApiService {
       }),
     });
   }
+
+  // Stage 3 Analysis Workstation Methods
+  async getCircuitCorners(circuit = 'monza'): Promise<CircuitCornerDefinition[]> {
+    return this.request<CircuitCornerDefinition[]>(`/api/analysis/corners/${encodeURIComponent(circuit)}`);
+  }
+
+  async getLapComparisonSummary(refLapId: string, compLapId: string): Promise<LapComparisonSummary> {
+    return this.request<LapComparisonSummary>(
+      `/api/analysis/compare/summary?ref_lap_id=${encodeURIComponent(refLapId)}&comp_lap_id=${encodeURIComponent(compLapId)}`
+    );
+  }
+
+  async getCornerComparison(
+    refLapId: string,
+    compLapId: string,
+    sortBy = 'turn_number',
+    sortOrder = 'asc'
+  ): Promise<CornerMetric[]> {
+    return this.request<CornerMetric[]>(
+      `/api/analysis/compare/corners?ref_lap_id=${encodeURIComponent(refLapId)}&comp_lap_id=${encodeURIComponent(compLapId)}&sort_by=${sortBy}&sort_order=${sortOrder}`
+    );
+  }
+
+  async getAlignedChannels(
+    refLapId: string,
+    compLapId: string,
+    distanceStep = 1.0
+  ): Promise<AlignedChannelsResponse> {
+    return this.request<AlignedChannelsResponse>(
+      `/api/analysis/compare/aligned-channels?ref_lap_id=${encodeURIComponent(refLapId)}&comp_lap_id=${encodeURIComponent(compLapId)}&distance_step=${distanceStep}`
+    );
+  }
 }
+
 
 export const api = new ApiService();
