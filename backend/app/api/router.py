@@ -10,6 +10,7 @@ from app.api.v1 import (
     sensitivity,
     sessions,
     statistics,
+    strategy,
     telemetry,
     telemetry_pipeline,
     vehicle_performance,
@@ -29,4 +30,6 @@ api_router.include_router(statistics.router)
 api_router.include_router(optimization.router)
 api_router.include_router(sensitivity.router)
 api_router.include_router(vehicle_performance.router)
+api_router.include_router(strategy.router)
+
 

@@ -7,6 +7,7 @@ import { LapAnalysisPage } from './pages/LapAnalysisPage';
 import { SensitivityPage } from './pages/SensitivityPage';
 import { OptimizationPage } from './pages/OptimizationPage';
 import { VehiclePerformancePage } from './pages/VehiclePerformancePage';
+import { StrategyPage } from './pages/StrategyPage';
 import { UninitializedModule } from './components/UninitializedModule';
 import { api } from './services/api';
 import {
@@ -306,6 +307,7 @@ export const App: React.FC = () => {
       )}
 
       {activeModule === 'vehicle-performance' && <VehiclePerformancePage />}
+      {activeModule === 'strategy' && <StrategyPage />}
 
       {activeModule !== 'overview' &&
         activeModule !== 'telemetry' &&
@@ -313,7 +315,8 @@ export const App: React.FC = () => {
         activeModule !== 'lap-analysis' &&
         activeModule !== 'sensitivity' &&
         activeModule !== 'optimization' &&
-        activeModule !== 'vehicle-performance' && (
+        activeModule !== 'vehicle-performance' &&
+        activeModule !== 'strategy' && (
           <UninitializedModule
             module={activeModule}
             onReturnToOverview={() => setActiveModule('overview')}

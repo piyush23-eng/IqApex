@@ -418,7 +418,112 @@ class ApiService {
       }
     );
   }
+
+  // --- STAGE 7: RACE STRATEGY & SCENARIO SIMULATION APIS ---
+
+  async getStrategyConfig(): Promise<Record<string, unknown>> {
+    return this.request<Record<string, unknown>>('/api/strategy/config');
+  }
+
+  async getTyreCompoundCurve(
+    compound: string,
+    maxLaps = 40,
+    weatherThermalMult = 1.0
+  ): Promise<import('../types/strategy').CompoundCurveResponse> {
+    const params = new URLSearchParams({
+      max_laps: String(maxLaps),
+      weather_thermal_mult: String(weatherThermalMult),
+    });
+    return this.request<import('../types/strategy').CompoundCurveResponse>(
+      `/api/strategy/tyres/${encodeURIComponent(compound)}?${params.toString()}`
+    );
+  }
+
+  async getFeasibleStrategies(maxStops = 2): Promise<import('../types/strategy').StrategyListResponse> {
+    return this.request<import('../types/strategy').StrategyListResponse>(
+      `/api/strategy/generate?max_stops=${maxStops}`
+    );
+  }
+
+  async simulateRace(
+    strategyId: string,
+    stints: import('../types/strategy').StintDefinition[],
+    weather = 'DRY',
+    safetyCar = 'GREEN',
+    traffic = 'LIGHT_TRAFFIC'
+  ): Promise<import('../types/strategy').RaceSimulationResponse> {
+    return this.request<import('../types/strategy').RaceSimulationResponse>(
+      '/api/strategy/simulate-race',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          strategy_id: strategyId,
+          stints,
+          weather,
+          safety_car: safetyCar,
+          traffic,
+        }),
+      }
+    );
+  }
+
+  async runStrategyMonteCarlo(
+    strategyId: string,
+    stints: import('../types/strategy').StintDefinition[],
+    iterations = 1000,
+    seed = 42871,
+    refRaceTime?: number
+  ): Promise<import('../types/strategy').StrategyMonteCarloResponse> {
+    return this.request<import('../types/strategy').StrategyMonteCarloResponse>(
+      '/api/strategy/monte-carlo',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          strategy_id: strategyId,
+          stints,
+          iterations,
+          simulation_seed: seed,
+          ref_race_time_s: refRaceTime,
+        }),
+      }
+    );
+  }
+
+  async getPitWindowSensitivity(
+    stints: import('../types/strategy').StintDefinition[],
+    stintIndex = 0,
+    offsets = [-3, -2, -1, 0, 1, 2, 3]
+  ): Promise<import('../types/strategy').PitWindowResponse> {
+    return this.request<import('../types/strategy').PitWindowResponse>(
+      '/api/strategy/pit-window',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          stints,
+          stint_index: stintIndex,
+          offsets,
+        }),
+      }
+    );
+  }
+
+  async getScenarioMatrix(
+    stints: import('../types/strategy').StintDefinition[]
+  ): Promise<import('../types/strategy').ScenarioMatrixResponse> {
+    return this.request<import('../types/strategy').ScenarioMatrixResponse>(
+      '/api/strategy/scenarios',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stints }),
+      }
+    );
+  }
 }
 
 export const api = new ApiService();
+
 

@@ -1,0 +1,110 @@
+# ApexIQ — Stage 7: Race Strategy & Scenario Simulation Configuration
+# Explicitly labeled: SYNTHETIC ENGINEERING DATASET / MODELLED SCENARIO — NOT REAL F1 RACE DATA
+
+race:
+  circuit: "Autodromo Nazionale Monza"
+  total_laps: 53
+  lap_distance_m: 5793.0
+  starting_fuel_kg: 105.0
+  fuel_mass_per_lap_kg: 1.85
+  base_vehicle_mass_kg: 798.0
+  baseline_cl: 3.20
+  baseline_cd: 1.10
+
+pit_stop:
+  pit_lane_time_s: 16.5
+  pit_entry_loss_s: 3.0
+  pit_exit_loss_s: 2.5
+  stationary_time_s: 2.5
+  additional_stop_penalty_s: 0.5
+  # Total green flag pit loss = 16.5 + 3.0 + 2.5 + 2.5 = 24.5s
+  vsc_pit_loss_discount_s: 10.0      # Under VSC, pit loss is ~14.5s
+  sc_pit_loss_discount_s: 13.0       # Under SC, pit loss is ~11.5s
+
+compounds:
+  SOFT:
+    name: "Soft (C4/C5 Synthetic)"
+    code: "SOFT"
+    color: "#ef4444"
+    initial_grip: 1.95
+    degradation_a: 0.0075            # Linear wear rate per lap
+    degradation_b: 0.00035           # Quadratic cliff acceleration
+    thermal_penalty_rate: 0.004      # Sensitivity to high track/ambient temp
+    warmup_laps: 1
+    max_viable_laps: 22
+    minimum_viable_grip: 1.45
+  MEDIUM:
+    name: "Medium (C3 Synthetic)"
+    code: "MEDIUM"
+    color: "#eab308"
+    initial_grip: 1.80
+    degradation_a: 0.0042
+    degradation_b: 0.00015
+    thermal_penalty_rate: 0.002
+    warmup_laps: 2
+    max_viable_laps: 34
+    minimum_viable_grip: 1.42
+  HARD:
+    name: "Hard (C1/C2 Synthetic)"
+    code: "HARD"
+    color: "#ffffff"
+    initial_grip: 1.68
+    degradation_a: 0.0024
+    degradation_b: 0.00007
+    thermal_penalty_rate: 0.001
+    warmup_laps: 3
+    max_viable_laps: 46
+    minimum_viable_grip: 1.40
+
+traffic_scenarios:
+  CLEAR_AIR:
+    name: "Clear Air"
+    penalty_s_per_lap: 0.0
+    traffic_probability: 0.0
+  LIGHT_TRAFFIC:
+    name: "Light Traffic"
+    penalty_s_per_lap: 0.40
+    traffic_probability: 0.20
+  HEAVY_TRAFFIC:
+    name: "Heavy Traffic (Backmarkers/DRS Train)"
+    penalty_s_per_lap: 1.10
+    traffic_probability: 0.45
+
+interruptions:
+  GREEN:
+    name: "Full Green Racing"
+    lap_time_multiplier: 1.00
+    pit_loss_override_s: 24.5
+  VSC:
+    name: "Virtual Safety Car (VSC)"
+    lap_time_multiplier: 1.35
+    pit_loss_override_s: 14.5
+  SAFETY_CAR:
+    name: "Full Safety Car (SC)"
+    lap_time_multiplier: 1.55
+    pit_loss_override_s: 11.5
+
+weather:
+  DRY:
+    name: "Standard Dry (25°C Ambient / 35°C Track)"
+    grip_multiplier: 1.00
+    thermal_deg_multiplier: 1.00
+  COOL_DRY:
+    name: "Cool Dry (18°C Ambient / 24°C Track)"
+    grip_multiplier: 0.98
+    thermal_deg_multiplier: 0.85
+  HOT_DRY:
+    name: "Hot Dry (34°C Ambient / 52°C Track)"
+    grip_multiplier: 0.99
+    thermal_deg_multiplier: 1.40
+  LIGHT_RAIN:
+    name: "Light Rain / Damp"
+    grip_multiplier: 0.82
+    thermal_deg_multiplier: 0.50
+
+monte_carlo:
+  default_simulations: 1000
+  default_random_seed: 42871
+  tyre_deg_std_pct: 0.08
+  pit_stationary_std_s: 0.35
+  traffic_penalty_std_s: 0.20
