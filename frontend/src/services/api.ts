@@ -152,6 +152,82 @@ class ApiService {
       `/api/analysis/compare/aligned-channels?ref_lap_id=${encodeURIComponent(refLapId)}&comp_lap_id=${encodeURIComponent(compLapId)}&distance_step=${distanceStep}`
     );
   }
+
+  // Stage 4 Lap-Time Decomposition & Statistics Methods
+  async getLapDecomposition(
+    compLapId: string,
+    refLapId?: string,
+    referenceMethod = 'selected_lap',
+    sessionId = 'demo-session-monza-2026',
+    driverId?: string
+  ): Promise<import('../types/decomposition').LapDecompositionResult> {
+    const params = new URLSearchParams({
+      comp_lap_id: compLapId,
+      reference_method: referenceMethod,
+      session_id: sessionId,
+    });
+    if (refLapId) params.append('ref_lap_id', refLapId);
+    if (driverId) params.append('driver_id', driverId);
+
+    return this.request<import('../types/decomposition').LapDecompositionResult>(
+      `/api/analysis/decomposition?${params.toString()}`
+    );
+  }
+
+  async getRepeatedLapsStatistics(
+    sessionId = 'demo-session-monza-2026',
+    driverId?: string,
+    metric = 'lap_time'
+  ): Promise<import('../types/decomposition').RepeatedLapsStatisticsResponse> {
+    const params = new URLSearchParams({ session_id: sessionId, metric });
+    if (driverId) params.append('driver_id', driverId);
+
+    return this.request<import('../types/decomposition').RepeatedLapsStatisticsResponse>(
+      `/api/analysis/statistics/repeated-laps?${params.toString()}`
+    );
+  }
+
+  async getCorrelation(
+    sessionId = 'demo-session-monza-2026',
+    featureX = 'sector_1',
+    featureY = 'lap_time'
+  ): Promise<import('../types/decomposition').CorrelationResult> {
+    const params = new URLSearchParams({
+      session_id: sessionId,
+      feature_x: featureX,
+      feature_y: featureY,
+    });
+    return this.request<import('../types/decomposition').CorrelationResult>(
+      `/api/analysis/statistics/correlation?${params.toString()}`
+    );
+  }
+
+  async getRegression(
+    sessionId = 'demo-session-monza-2026',
+    featureMetric = 'tyre_age',
+    targetMetric = 'lap_time',
+    driverId?: string
+  ): Promise<import('../types/decomposition').RegressionResult> {
+    const params = new URLSearchParams({
+      session_id: sessionId,
+      feature_metric: featureMetric,
+      target_metric: targetMetric,
+    });
+    if (driverId) params.append('driver_id', driverId);
+
+    return this.request<import('../types/decomposition').RegressionResult>(
+      `/api/analysis/statistics/regression?${params.toString()}`
+    );
+  }
+
+  async getSensitivity(
+    refLapId = 'lap-demo-02',
+    compLapId = 'lap-demo-03'
+  ): Promise<import('../types/decomposition').SensitivityItem[]> {
+    return this.request<import('../types/decomposition').SensitivityItem[]>(
+      `/api/analysis/statistics/sensitivity?ref_lap_id=${encodeURIComponent(refLapId)}&comp_lap_id=${encodeURIComponent(compLapId)}`
+    );
+  }
 }
 
 

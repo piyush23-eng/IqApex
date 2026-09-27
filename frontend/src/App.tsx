@@ -3,6 +3,7 @@ import { WorkstationLayout } from './layouts/WorkstationLayout';
 import { OverviewPage } from './pages/OverviewPage';
 import { TelemetryPage } from './pages/TelemetryPage';
 import { DataRunsPage } from './pages/DataRunsPage';
+import { LapAnalysisPage } from './pages/LapAnalysisPage';
 import { UninitializedModule } from './components/UninitializedModule';
 import { api } from './services/api';
 import {
@@ -281,9 +282,12 @@ export const App: React.FC = () => {
 
       {activeModule === 'data-runs' && <DataRunsPage />}
 
+      {activeModule === 'lap-analysis' && <LapAnalysisPage />}
+
       {activeModule !== 'overview' &&
         activeModule !== 'telemetry' &&
-        activeModule !== 'data-runs' && (
+        activeModule !== 'data-runs' &&
+        activeModule !== 'lap-analysis' && (
           <UninitializedModule
             module={activeModule}
             onReturnToOverview={() => setActiveModule('overview')}

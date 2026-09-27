@@ -79,40 +79,6 @@ class TelemetryDataStore:
             end_time="2026-09-04T15:35:00Z",
         )
 
-        # Lap 1: Hamilton Reference (80.418s)
-        lap_id = "lap-demo-02"
-        lap = Lap(
-            lap_id=lap_id,
-            run_id=run_id,
-            lap_number=2,
-            lap_time=80.418,
-            sector_1=26.754,
-            sector_2=27.112,
-            sector_3=26.552,
-            valid=True,
-        )
-        self.laps[lap_id] = lap
-        self.telemetry_points[lap_id] = self._generate_monza_points(
-            lap.lap_time, delta_factor=1.0
-        )
-
-        # Lap 2: Leclerc Comparison (80.624s)
-        lap_2_id = "lap-demo-03"
-        lap_2 = Lap(
-            lap_id=lap_2_id,
-            run_id=run_2,
-            lap_number=3,
-            lap_time=80.624,
-            sector_1=26.820,
-            sector_2=27.194,
-            sector_3=26.610,
-            valid=True,
-        )
-        self.laps[lap_2_id] = lap_2
-        self.telemetry_points[lap_2_id] = self._generate_monza_points(
-            lap_2.lap_time, delta_factor=0.985
-        )
-
         # Initial Processing Lineage for synthetic demonstration data
         pr_id = "pr-demo-baseline-001"
         pr = ProcessingRun(
@@ -127,8 +93,37 @@ class TelemetryDataStore:
             resampling_resolution=1.0,
         )
         self.processing_runs[pr_id] = pr
-        self.lap_lineage[lap_id] = pr_id
-        self.lap_lineage[lap_2_id] = pr_id
+
+        # Stint Laps definition: (lap_id, run_id, lap_num, lap_time, s1, s2, s3, valid, factor)
+        stint_specs = [
+            ("lap-demo-01", run_id, 1, 80.520, 26.780, 27.140, 26.600, True, 0.998),
+            ("lap-demo-02", run_id, 2, 80.418, 26.754, 27.112, 26.552, True, 1.000),  # Baseline Ref
+            ("lap-demo-03", run_2, 3, 80.624, 26.820, 27.194, 26.610, True, 0.985),   # Baseline Comp
+            ("lap-demo-04", run_id, 3, 80.680, 26.830, 27.190, 26.660, True, 0.994),
+            ("lap-demo-05", run_id, 4, 80.820, 26.880, 27.230, 26.710, True, 0.990),
+            ("lap-demo-06", run_id, 5, 81.040, 26.950, 27.290, 26.800, True, 0.983),
+            ("lap-demo-07", run_id, 6, 82.950, 27.500, 28.100, 27.350, True, 0.930),  # Outlier lap
+            ("lap-demo-11", run_2, 1, 80.750, 26.860, 27.220, 26.670, True, 0.988),
+            ("lap-demo-12", run_2, 2, 80.690, 26.840, 27.200, 26.650, True, 0.989),
+            ("lap-demo-14", run_2, 4, 80.790, 26.870, 27.240, 26.680, True, 0.982),
+            ("lap-demo-15", run_2, 5, 80.950, 26.920, 27.280, 26.750, True, 0.978),
+            ("lap-demo-16", run_2, 6, 81.180, 27.010, 27.350, 26.820, True, 0.971),
+        ]
+
+        for lid, rid, lnum, ltime, s1, s2, s3, val, factor in stint_specs:
+            lap_obj = Lap(
+                lap_id=lid,
+                run_id=rid,
+                lap_number=lnum,
+                lap_time=ltime,
+                sector_1=s1,
+                sector_2=s2,
+                sector_3=s3,
+                valid=val,
+            )
+            self.laps[lid] = lap_obj
+            self.telemetry_points[lid] = self._generate_monza_points(ltime, delta_factor=factor)
+            self.lap_lineage[lid] = pr_id
 
     def _generate_monza_points(
         self, lap_time: float, delta_factor: float = 1.0

@@ -1,0 +1,26 @@
+braking:
+  min_brake_pressure: 5.0 # % threshold for active braking onset
+  deceleration_threshold: -0.5 # G threshold for longitudinal deceleration
+
+acceleration:
+  min_throttle: 15.0 # % threshold for throttle pickup
+  longitudinal_accel_threshold: 0.2 # G threshold for acceleration
+
+cornering:
+  lateral_accel_threshold: 1.0 # G threshold for cornering load
+  entry_margin_meters: 20.0 # meters before entry boundary to search for braking
+  exit_margin_meters: 25.0 # meters after exit boundary to search for acceleration
+
+outliers:
+  method: "iqr" # "iqr" or "robust_z_score"
+  iqr_multiplier: 1.5 # standard Tukey fence multiplier
+  z_score_threshold: 2.5 # MAD-based robust z-score threshold
+  min_samples: 4 # minimum samples required before performing outlier exclusion
+
+confidence:
+  confidence_level: 0.95 # 95% confidence interval
+  min_samples_ci: 3 # minimum observations required for statistical confidence interval
+
+sensitivity:
+  speed_step_kmh: 1.0 # delta step for speed sensitivity evaluation
+  distance_step_m: 5.0 # delta step for distance sensitivity evaluation
