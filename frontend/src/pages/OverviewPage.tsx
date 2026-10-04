@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { Session, Driver, Run, Lap, TelemetryResponse, NavModule } from '../types/domain';
 import { formatLapTime } from '../utils/formatters';
-import { MonzaTrackMap } from '../components/common/MonzaTrackMap';
+import { CornerKinematicsSpectrum } from '../components/common/CornerKinematicsSpectrum';
 
 interface OverviewPageProps {
   session: Session | null;
@@ -128,11 +128,11 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
         </div>
       </div>
 
-      {/* 2. CENTERPIECE: ANIMATED MATRIX CIRCUIT RADAR + LIVE SECTOR SPLITS */}
+      {/* 2. CENTERPIECE: 11-TURN KINEMATICS SPECTRUM & LIVE SECTOR SPLITS */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        {/* Left: Monza Interactive Track Map (Col span 7) */}
+        {/* Left: Monza Interactive Kinematics Spectrum (Col span 7) */}
         <div className="lg:col-span-7">
-          <MonzaTrackMap
+          <CornerKinematicsSpectrum
             onSelectCorner={() => {
               if (onNavigateModule) onNavigateModule('lap-analysis');
             }}

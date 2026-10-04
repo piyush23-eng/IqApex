@@ -34,8 +34,8 @@ import {
 import { SynchronizedTelemetryWorkspace } from '../components/telemetry/SynchronizedTelemetryWorkspace';
 import { CornerAnalysisTable } from '../components/telemetry/CornerAnalysisTable';
 import { CornerContextInspector } from '../components/telemetry/CornerContextInspector';
-import { MonzaTrackMap } from '../components/common/MonzaTrackMap';
-import { MapPin } from 'lucide-react';
+import { CornerKinematicsSpectrum } from '../components/common/CornerKinematicsSpectrum';
+import { Gauge } from 'lucide-react';
 
 interface TelemetryPageProps {
   sessions: Session[];
@@ -344,8 +344,8 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
                 : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D]'
             }`}
           >
-            <MapPin className="w-3.5 h-3.5" />
-            <span>{showTrackMap ? '[ RADAR MAP: ON ]' : '[ RADAR MAP: OFF ]'}</span>
+            <Gauge className="w-3.5 h-3.5" />
+            <span>{showTrackMap ? '[ KINEMATICS SPECTRUM: ON ]' : '[ KINEMATICS SPECTRUM: OFF ]'}</span>
           </button>
 
           <div className="flex items-center space-x-1 font-mono text-2xs">
@@ -378,17 +378,16 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
       {/* 2. SYNCHRONIZED WORKSTATION VIEW */}
       {activeTab === 'workstation' && (
         <div className="space-y-3">
-          {/* Animated Circuit Radar Map */}
+          {/* 11-Turn Kinematics Spectrum */}
           {showTrackMap && (
             <div className="mb-3">
-              <MonzaTrackMap
+              <CornerKinematicsSpectrum
                 selectedCornerId={selectedCornerId}
                 onSelectCorner={(cid) => {
                   setSelectedCornerId(cid);
                   const found = cornerMetrics.find((c) => c.corner_id === cid);
                   if (found) handleSelectCorner(found);
                 }}
-                showDetails={true}
               />
             </div>
           )}

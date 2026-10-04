@@ -20,7 +20,6 @@ import { EngineeringFindingsPanel } from '../components/decision/EngineeringFind
 import { MultiObjectiveTradeoffPlot } from '../components/decision/MultiObjectiveTradeoffPlot';
 import { EngineeringReportModal } from '../components/decision/EngineeringReportModal';
 import { DecisionProvenancePanel } from '../components/decision/DecisionProvenancePanel';
-import { MonzaTrackMap } from '../components/common/MonzaTrackMap';
 import { Layers, Activity, FileText, AlertTriangle } from 'lucide-react';
 
 export const EngineeringAnalysisPage: React.FC = () => {
@@ -295,10 +294,8 @@ export const EngineeringAnalysisPage: React.FC = () => {
 
         {/* Two-Column Engineering Layout */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
-          {/* LEFT COLUMN: Track Radar, Lap Loss & Setup What-If */}
+          {/* LEFT COLUMN: Lap Loss & Setup What-If */}
           <div className="space-y-4">
-            <MonzaTrackMap showDetails={false} className="w-full" />
-
             <LapLossDecompositionPanel lapLoss={lapLoss} isLoading={isLoading} />
 
             <SetupWhatIfChainPanel scenario={setupScenario} isLoading={isLoading} />
