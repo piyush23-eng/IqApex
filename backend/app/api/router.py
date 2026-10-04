@@ -4,6 +4,7 @@ from app.api.v1 import (
     analysis,
     decomposition,
     engineering_analysis,
+    export,
     health,
     laps,
     optimization,
@@ -33,5 +34,6 @@ api_router.include_router(sensitivity.router)
 api_router.include_router(vehicle_performance.router)
 api_router.include_router(strategy.router)
 api_router.include_router(engineering_analysis.router)
+api_router.include_router(export.router)
 
 
