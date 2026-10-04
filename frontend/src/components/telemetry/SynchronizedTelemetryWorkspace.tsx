@@ -201,14 +201,14 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
     ctx.resetTransform();
     ctx.scale(dpr, dpr);
 
-    // Dark background
-    ctx.fillStyle = '#0f172a'; // workstation-surface
+    // Canvas background - crisp white
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, width, height);
 
     // Track sector backgrounds
     SECTOR_BOUNDARIES.forEach((s) => {
       const sx = distToX(s.distance, width);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.strokeStyle = '#999999';
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
@@ -218,21 +218,21 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
       ctx.setLineDash([]);
     });
 
-    // Top Track Ribbon
-    ctx.fillStyle = '#1e293b';
+    // Top Track Ribbon (Retro Grey Title Bar)
+    ctx.fillStyle = '#1E3A8A';
     ctx.fillRect(0, 0, width, topHeaderHeight);
-    ctx.strokeStyle = '#334155';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
     ctx.strokeRect(0, 0, width, topHeaderHeight);
 
     // Sector labels on ribbon
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '10px monospace';
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 9px monospace';
     const s1X = distToX(1842.0, width);
     const s2X = distToX(3611.0, width);
-    ctx.fillText('SECTOR 1', 10, 18);
-    if (s1X < width) ctx.fillText('SECTOR 2', s1X + 10, 18);
-    if (s2X < width) ctx.fillText('SECTOR 3', s2X + 10, 18);
+    ctx.fillText('[ SECTOR 1 ]', 10, 18);
+    if (s1X < width) ctx.fillText('[ SECTOR 2 ]', s1X + 10, 18);
+    if (s2X < width) ctx.fillText('[ SECTOR 3 ]', s2X + 10, 18);
 
     // Render Corner Flag Badges along ribbon
     corners.forEach((c) => {
@@ -243,26 +243,26 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
         if (isSelected) {
           const entryX = distToX(c.entry_distance, width);
           const exitX = distToX(c.exit_distance, width);
-          ctx.fillStyle = 'rgba(56, 189, 248, 0.12)';
+          ctx.fillStyle = 'rgba(0, 98, 255, 0.25)';
           ctx.fillRect(entryX, 0, exitX - entryX, height);
         }
 
         // Apex marker pin on ribbon
-        ctx.fillStyle = isSelected ? '#38bdf8' : '#64748b';
+        ctx.fillStyle = isSelected ? '#00F0FF' : '#1E3A8A';
         ctx.fillRect(apexX - 1, 0, 2, topHeaderHeight);
 
         // Badge pill
-        ctx.fillStyle = isSelected ? 'rgba(56, 189, 248, 0.9)' : 'rgba(30, 41, 59, 0.9)';
-        ctx.strokeStyle = isSelected ? '#38bdf8' : '#475569';
-        ctx.lineWidth = 1;
+        ctx.fillStyle = isSelected ? '#0062FF' : '#070E22';
+        ctx.strokeStyle = isSelected ? '#00F0FF' : '#1E3A8A';
+        ctx.lineWidth = 1.2;
         const text = c.corner_id;
         const tw = ctx.measureText(text).width;
         ctx.beginPath();
-        ctx.roundRect(apexX - tw / 2 - 4, 4, tw + 8, 18, 3);
+        ctx.rect(apexX - tw / 2 - 4, 3, tw + 8, 18);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = isSelected ? '#000000' : '#e2e8f0';
+        ctx.fillStyle = isSelected ? '#FFFFFF' : '#93C5FD';
         ctx.font = 'bold 9px monospace';
         ctx.fillText(text, apexX - tw / 2, 16);
       }
@@ -275,13 +275,13 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
       const chHeight = ch.height;
       const bottomY = currentY + chHeight;
 
-      // Channel background alternating subtle tint
-      ctx.fillStyle = idx % 2 === 0 ? 'rgba(15, 23, 42, 0.8)' : 'rgba(23, 31, 51, 0.8)';
+      // Channel background alternating subtle matrix blueprint tint
+      ctx.fillStyle = idx % 2 === 0 ? '#030712' : '#070E22';
       ctx.fillRect(0, currentY, width, chHeight);
 
-      // Channel separator bottom border
-      ctx.strokeStyle = '#334155';
-      ctx.lineWidth = 1;
+      // Channel separator bottom border (Cobalt border)
+      ctx.strokeStyle = '#1E3A8A';
+      ctx.lineWidth = 1.0;
       ctx.beginPath();
       ctx.moveTo(0, bottomY);
       ctx.lineTo(width, bottomY);
@@ -290,9 +290,9 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
       // Zero baseline for G-forces and Deltas
       if (ch.minY < 0 && ch.maxY > 0) {
         const zeroY = bottomY - ((0 - ch.minY) / (ch.maxY - ch.minY)) * chHeight;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.strokeStyle = 'rgba(0, 98, 255, 0.45)';
         ctx.lineWidth = 1;
-        ctx.setLineDash([2, 2]);
+        ctx.setLineDash([3, 3]);
         ctx.beginPath();
         ctx.moveTo(0, zeroY);
         ctx.lineTo(width, zeroY);
@@ -300,19 +300,19 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
         ctx.setLineDash([]);
       }
 
-      // Channel Y-Axis Labels
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '9px monospace';
-      ctx.fillText(`${ch.label} [${ch.unit}]`, 8, currentY + 12);
+      // Channel Y-Axis Labels (Pure Solid White)
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 9px monospace';
+      ctx.fillText(`${ch.label} [${ch.unit}]`, 8, currentY + 13);
 
       ch.ticks.forEach((t) => {
         const ty = bottomY - ((t - ch.minY) / (ch.maxY - ch.minY)) * chHeight;
-        ctx.fillStyle = '#64748b';
-        ctx.font = '8px monospace';
+        ctx.fillStyle = '#60A5FA';
+        ctx.font = 'bold 8px monospace';
         ctx.fillText(`${t}`, 8, ty - 2);
 
-        // Subtle horizontal gridline
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+        // Subtle horizontal matrix gridline
+        ctx.strokeStyle = 'rgba(30, 58, 138, 0.3)';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(35, ty);
@@ -330,12 +330,13 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
         return bottomY - ((clamped - ch.minY) / (ch.maxY - ch.minY)) * chHeight;
       };
 
-      // Handle Delta Channel specially (Fill Green/Amber)
+      // Handle Delta Channel specially (MoTeC/ATLAS Split Gradient Fill)
       if (ch.key === 'delta') {
         const deltaVals = deltaMode === 'time' ? data.time_delta : data.speed_delta;
+        const topY = currentY;
         const zeroY = yValToCoord(0);
 
-        // Fill area between delta and zero baseline
+        // Fill area between delta and zero baseline with dual-split gradient
         ctx.beginPath();
         let started = false;
         for (let i = 0; i < n; i++) {
@@ -353,11 +354,19 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
           const lastD = Math.min(zoomSpan.max, distances[n - 1]);
           ctx.lineTo(distToX(lastD, width), zeroY);
           ctx.closePath();
-          ctx.fillStyle = 'rgba(245, 158, 11, 0.15)'; // Amber fill
+
+          // Dual-gradient: Solid Crimson above zero (loss), Solid Green below zero (gain)
+          const grad = ctx.createLinearGradient(0, topY, 0, bottomY);
+          const zeroRatio = Math.max(0.01, Math.min(0.99, (zeroY - topY) / chHeight));
+          grad.addColorStop(0, 'rgba(255, 51, 102, 0.35)'); // Crimson upper (loss)
+          grad.addColorStop(Math.max(0, zeroRatio - 0.02), 'rgba(255, 51, 102, 0.05)');
+          grad.addColorStop(Math.min(1, zeroRatio + 0.02), 'rgba(0, 230, 118, 0.05)');
+          grad.addColorStop(1, 'rgba(0, 230, 118, 0.35)'); // Green lower (gain)
+          ctx.fillStyle = grad;
           ctx.fill();
         }
 
-        // Stroke Delta Line
+        // Stroke Delta Line (Laser Cyan)
         ctx.beginPath();
         started = false;
         for (let i = 0; i < n; i++) {
@@ -372,8 +381,8 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
             ctx.lineTo(x, y);
           }
         }
-        ctx.strokeStyle = '#f59e0b';
-        ctx.lineWidth = 1.8;
+        ctx.strokeStyle = '#00F0FF';
+        ctx.lineWidth = 2.0;
         ctx.stroke();
       } else {
         // Standard Reference vs Comparison channels
@@ -415,7 +424,7 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
             break;
         }
 
-        // Draw Comparison Lap Trace (Amber - drawn first so Reference sits on top)
+        // Draw Comparison Lap Trace (Pure Solid White #FFFFFF)
         ctx.beginPath();
         let compStarted = false;
         let lastCompY = 0;
@@ -438,11 +447,11 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
           }
           lastCompY = y;
         }
-        ctx.strokeStyle = '#f59e0b'; // Amber
-        ctx.lineWidth = 1.6;
+        ctx.strokeStyle = '#FFFFFF'; // Solid Pure White (Comp Lap #16)
+        ctx.lineWidth = 2.0;
         ctx.stroke();
 
-        // Draw Reference Lap Trace (Cyan)
+        // Draw Reference Lap Trace (Solid Electric Cobalt Blue #0062FF)
         ctx.beginPath();
         let refStarted = false;
         let lastRefY = 0;
@@ -465,8 +474,8 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
           }
           lastRefY = y;
         }
-        ctx.strokeStyle = '#38bdf8'; // Cyan
-        ctx.lineWidth = 1.6;
+        ctx.strokeStyle = '#0062FF'; // Solid Electric Cobalt Blue (Ref Lap #44)
+        ctx.lineWidth = 2.4;
         ctx.stroke();
       }
 
@@ -474,13 +483,14 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
     });
 
     // Bottom distance scale ticks
-    ctx.fillStyle = '#64748b';
-    ctx.font = '9px monospace';
+    ctx.fillStyle = '#93C5FD';
+    ctx.font = 'bold 9px monospace';
     const distStep = (zoomSpan.max - zoomSpan.min) / 10;
     for (let s = zoomSpan.min; s <= zoomSpan.max; s += distStep) {
       const sx = distToX(s, width);
       ctx.fillText(`${Math.round(s)}m`, sx - 15, height - 6);
-      ctx.strokeStyle = '#334155';
+      ctx.strokeStyle = '#1E3A8A';
+      ctx.lineWidth = 1.0;
       ctx.beginPath();
       ctx.moveTo(sx, height - 20);
       ctx.lineTo(sx, height - 16);
@@ -528,35 +538,44 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, width, height);
 
-    // Box Zoom Drag Box
+    // Box Zoom Drag Box (Laser Cyan / Blue Glow)
     if (isDragging && dragStartDist !== null && dragCurrentDist !== null) {
       const x1 = distToX(Math.min(dragStartDist, dragCurrentDist), width);
       const x2 = distToX(Math.max(dragStartDist, dragCurrentDist), width);
-      ctx.fillStyle = 'rgba(56, 189, 248, 0.18)';
+      ctx.fillStyle = 'rgba(0, 98, 255, 0.25)';
       ctx.fillRect(x1, 0, x2 - x1, height);
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#00F0FF';
+      ctx.lineWidth = 1.8;
       ctx.strokeRect(x1, 0, x2 - x1, height);
     }
 
-    // Crosshair Hairline
+    // Crosshair Laser Hairline (Glowing Laser Cyan)
     if (cursorX !== null && cursorX >= 0 && cursorX <= width) {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#00F0FF';
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = '#00F0FF';
+      ctx.shadowBlur = 8;
       ctx.beginPath();
       ctx.moveTo(cursorX, 0);
       ctx.lineTo(cursorX, height);
       ctx.stroke();
+      ctx.shadowBlur = 0;
 
-      // Small hairline distance flag at top
+      // Top distance flag badge (Solid White & Blue Matrix HUD)
       const dist = xToDist(cursorX, width);
-      const flagText = `${Math.round(dist)} m`;
+      const flagText = `[ s = ${Math.round(dist)}m ]`;
       ctx.font = 'bold 9px monospace';
       const tw = ctx.measureText(flagText).width;
-      ctx.fillStyle = '#0284c7';
-      ctx.fillRect(cursorX - tw / 2 - 3, 2, tw + 6, 14);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(flagText, cursorX - tw / 2, 12);
+      const boxW = tw + 10;
+      const boxH = 17;
+      const boxX = Math.max(2, Math.min(width - boxW - 2, cursorX - boxW / 2));
+      ctx.fillStyle = '#0062FF';
+      ctx.fillRect(boxX, 1, boxW, boxH);
+      ctx.strokeStyle = '#00F0FF';
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(boxX, 1, boxW, boxH);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(flagText, boxX + 5, 13);
     }
   }, [cursorX, isDragging, dragStartDist, dragCurrentDist, distToX, xToDist, totalCanvasHeight]);
 
@@ -727,7 +746,7 @@ export const SynchronizedTelemetryWorkspace: React.FC<SynchronizedTelemetryWorks
   return (
     <div
       ref={containerRef}
-      className="relative bg-workstation-panel border border-workstation-border rounded overflow-hidden select-none cursor-crosshair"
+      className="relative bg-[#070E22] border border-[#1E3A8A] shadow-md overflow-hidden select-none cursor-crosshair"
       onMouseMove={handleMouseMove}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}

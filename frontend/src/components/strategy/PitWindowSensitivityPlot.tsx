@@ -15,17 +15,17 @@ export const PitWindowSensitivityPlot: React.FC<PitWindowSensitivityPlotProps> =
 
   if (isLoading) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-4 font-mono text-2xs animate-pulse text-workstation-textMuted flex items-center justify-center space-x-2 h-52">
-        <SlidersHorizontal className="w-4 h-4 animate-spin text-workstation-accentCyan" />
-        <span>EVALUATING PIT WINDOW SENSITIVITY CURVE (±3 LAPS OFFSET)...</span>
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-4 font-mono text-2xs text-[#FFFFFF] flex items-center justify-center space-x-2 h-52 shadow-md">
+        <SlidersHorizontal className="w-4 h-4 animate-spin text-[#FFFFFF]" />
+        <span className="font-bold uppercase">[ EVALUATING PIT WINDOW SENSITIVITY CURVE (±3 LAPS OFFSET)... ]</span>
       </div>
     );
   }
 
   if (!pitWindowData || pitWindowData.sensitivity_curve.length === 0) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-4 font-mono text-2xs text-workstation-textMuted flex items-center justify-center h-52">
-        <span>No pit window sensitivity data.</span>
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-4 font-mono text-2xs text-[#94A3B8] flex items-center justify-center h-52 shadow-md">
+        <span>[ NO PIT WINDOW SENSITIVITY DATA ]</span>
       </div>
     );
   }
@@ -61,28 +61,28 @@ export const PitWindowSensitivityPlot: React.FC<PitWindowSensitivityPlotProps> =
   );
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs space-y-2">
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-1.5">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2 shadow-md">
+      {/* Titanium Header */}
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-2 bg-[#070E22] p-2 -mx-3 -mt-3 mb-2">
         <div className="flex items-center space-x-2">
-          <SlidersHorizontal className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright uppercase tracking-wider text-xs">
-            PIT STOP WINDOW SENSITIVITY (NOMINAL LAP {scheduled_pit_lap})
+          <SlidersHorizontal className="w-3.5 h-3.5 text-[#FFFFFF]" />
+          <span className="font-bold text-[#FFFFFF] uppercase tracking-wider text-xs">
+            [ PIT STOP WINDOW SENSITIVITY (NOMINAL LAP {scheduled_pit_lap}) ]
           </span>
         </div>
 
-        <div className="flex items-center space-x-3 text-3xs">
-          <span>
-            OPTIMAL PIT LAP: <strong className="text-workstation-accentCyan">L{bestPoint.actual_pit_lap}</strong>
+        <div className="flex items-center space-x-2 text-3xs">
+          <span className="bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5 text-[#FFFFFF] font-bold">
+            OPTIMAL: L{bestPoint.actual_pit_lap}
           </span>
-          <span>
-            DELTA: <strong className={bestPoint.delta_race_time_s <= 0 ? 'text-emerald-400' : 'text-amber-400'}>
-              {bestPoint.delta_race_time_s >= 0 ? '+' : ''}{bestPoint.delta_race_time_s.toFixed(2)}s
-            </strong>
+          <span className={`px-1.5 py-0.5 border border-[#1E3A8A] font-bold ${bestPoint.delta_race_time_s <= 0 ? 'bg-[#00F0FF] text-[#FFFFFF]' : 'bg-[#0E1A3D] text-[#FBBF24] border border-[#FBBF24]/50 text-[#FFB000]'}`}>
+            DELTA: {bestPoint.delta_race_time_s >= 0 ? '+' : ''}{bestPoint.delta_race_time_s.toFixed(2)}s
           </span>
         </div>
       </div>
 
-      <div className="relative">
+      {/* SVG Canvas */}
+      <div className="relative bg-[#070E22] border border-[#1E3A8A] p-2 shadow">
         <svg viewBox={`0 0 ${chartDims.width} ${chartDims.height}`} className="w-full h-40 select-none">
           {/* Zero delta horizontal line */}
           <line
@@ -90,17 +90,17 @@ export const PitWindowSensitivityPlot: React.FC<PitWindowSensitivityPlotProps> =
             y1={zeroY}
             x2={chartDims.width - chartDims.padX}
             y2={zeroY}
-            stroke="#475569"
-            strokeWidth="1"
-            strokeDasharray="2,2"
+            stroke="#0062FF"
+            strokeWidth="1.5"
+            strokeDasharray="3,3"
           />
           <text
             x={chartDims.padX - 4}
             y={zeroY + 3}
             textAnchor="end"
-            fill="#94A3B8"
-            fontSize="6"
-            className="font-mono"
+            fill="#93C5FD"
+            fontSize="6.5"
+            className="font-mono font-bold"
           >
             0.0s (Nominal)
           </text>
@@ -115,16 +115,16 @@ export const PitWindowSensitivityPlot: React.FC<PitWindowSensitivityPlotProps> =
                   y1={chartDims.height - chartDims.padY}
                   x2={xPos}
                   y2={chartDims.height - chartDims.padY + 4}
-                  stroke="#475569"
-                  strokeWidth="1"
+                  stroke="#1E3A8A"
+                  strokeWidth="1.5"
                 />
                 <text
                   x={xPos}
                   y={chartDims.height - chartDims.padY + 12}
                   textAnchor="middle"
-                  fill="#94A3B8"
+                  fill="#93C5FD"
                   fontSize="7"
-                  className="font-mono"
+                  className="font-mono font-bold"
                 >
                   {pt.pit_lap_offset > 0 ? `+${pt.pit_lap_offset}` : pt.pit_lap_offset} (L{pt.actual_pit_lap})
                 </text>
@@ -132,8 +132,8 @@ export const PitWindowSensitivityPlot: React.FC<PitWindowSensitivityPlotProps> =
             );
           })}
 
-          {/* Curve */}
-          <path d={curvePath} fill="none" stroke="#0EA5E9" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Curve (Laser Cyan) */}
+          <path d={curvePath} fill="none" stroke="#00F0FF" strokeWidth="2.5" strokeLinecap="round" />
 
           {/* Points */}
           {sensitivity_curve.map((pt) => {
@@ -147,17 +147,17 @@ export const PitWindowSensitivityPlot: React.FC<PitWindowSensitivityPlotProps> =
                 <circle
                   cx={x}
                   cy={y}
-                  r={isBest ? 5 : 3.5}
-                  fill={isBest ? '#10B981' : isNominal ? '#06B6D4' : '#0F172A'}
-                  stroke={isBest ? '#10B981' : '#0EA5E9'}
+                  r={isBest ? 5.5 : 4}
+                  fill={isBest ? '#00E676' : isNominal ? '#0062FF' : '#0A132E'}
+                  stroke={isBest ? '#FFFFFF' : isNominal ? '#00F0FF' : '#1E3A8A'}
                   strokeWidth="2"
                 />
                 <text
                   x={x}
-                  y={y - 7}
+                  y={y - 8}
                   textAnchor="middle"
-                  fill={pt.delta_race_time_s <= 0 ? '#10B981' : '#F87171'}
-                  fontSize="6.5"
+                  fill={pt.delta_race_time_s <= 0 ? '#00E676' : '#FF3366'}
+                  fontSize="7"
                   className="font-mono font-bold"
                 >
                   {pt.delta_race_time_s >= 0 ? `+${pt.delta_race_time_s.toFixed(2)}` : pt.delta_race_time_s.toFixed(2)}s
@@ -169,12 +169,12 @@ export const PitWindowSensitivityPlot: React.FC<PitWindowSensitivityPlotProps> =
       </div>
 
       {/* Explanatory footer */}
-      <div className="flex items-center justify-between text-3xs border-t border-workstation-borderSubtle pt-1 text-workstation-textMuted">
+      <div className="flex items-center justify-between text-3xs border-t border-[#1E3A8A] pt-2 text-[#94A3B8]">
         <div className="flex items-center space-x-1">
-          <Info className="w-3 h-3 text-workstation-accentCyan" />
-          <span>Negative offset: Undercut attempt (pit earlier). Positive offset: Overcut attempt (extend stint).</span>
+          <Info className="w-3.5 h-3.5 text-[#FFFFFF]" />
+          <span className="text-[#E2E8F0] font-bold">Negative offset: Undercut (pit earlier). Positive offset: Overcut (extend stint).</span>
         </div>
-        <div className="text-4xs text-workstation-textSecondary">
+        <div className="text-4xs text-[#CBD5E1] font-bold bg-[#0A0D15] px-2 py-0.5 border border-[#1E3A8A]">
           Stint 2 Final Tyre Age: {bestPoint.final_tyre_age} Laps
         </div>
       </div>

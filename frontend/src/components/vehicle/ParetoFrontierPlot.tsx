@@ -43,9 +43,9 @@ export const ParetoFrontierPlot: React.FC<ParetoFrontierPlotProps> = ({
 
   if (isLoading || !paretoData) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-4 font-mono text-2xs animate-pulse text-workstation-textMuted flex items-center justify-center space-x-2 h-72">
-        <GitCommit className="w-4 h-4 animate-spin text-workstation-accentCyan" />
-        <span>COMPUTING MULTI-OBJECTIVE PARETO FRONTIER...</span>
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-4 font-mono text-2xs text-[#FFFFFF] flex items-center justify-center space-x-2 h-72 shadow-md">
+        <GitCommit className="w-4 h-4 animate-spin text-[#FFFFFF]" />
+        <span className="font-bold uppercase">[ COMPUTING MULTI-OBJECTIVE PARETO FRONTIER... ]</span>
       </div>
     );
   }
@@ -57,28 +57,29 @@ export const ParetoFrontierPlot: React.FC<ParetoFrontierPlotProps> = ({
     .join(' ');
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs space-y-2">
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-1.5">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2 shadow-md">
+      {/* Titanium Header */}
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-2 bg-[#070E22] p-2 -mx-3 -mt-3 mb-2">
         <div className="flex items-center space-x-2">
-          <GitCommit className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright uppercase tracking-wider text-xs">
-            PARETO EFFICIENCY TRADEOFF (DRAG VS DOWNFORCE)
+          <GitCommit className="w-3.5 h-3.5 text-[#FFFFFF]" />
+          <span className="font-bold text-[#FFFFFF] uppercase tracking-wider text-xs">
+            [ PARETO EFFICIENCY TRADEOFF (DRAG VS DOWNFORCE) ]
           </span>
         </div>
 
-        <div className="flex items-center space-x-2 text-3xs text-workstation-textMuted">
-          <span className="flex items-center space-x-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
+        <div className="flex items-center space-x-2 text-3xs font-bold">
+          <span className="flex items-center space-x-1.5 bg-[#00F0FF] border border-[#1E3A8A] px-1.5 py-0.5 text-[#FFFFFF] shadow-sm">
+            <span className="w-2 h-2 rounded-none bg-black inline-block" />
             <span>PARETO OPTIMAL ({paretoData.pareto_efficient_count})</span>
           </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-2 h-2 rounded-full bg-slate-600 inline-block" />
+          <span className="flex items-center space-x-1.5 bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5 text-[#FFFFFF] shadow-sm">
+            <span className="w-2 h-2 rounded-none bg-[#070E22] border border-[#1E3A8A] inline-block" />
             <span>DOMINATED ({paretoData.dominated_count})</span>
           </span>
         </div>
       </div>
 
-      <div className="relative">
+      <div className="relative bg-[#070E22] border border-[#1E3A8A] p-2 shadow">
         <svg viewBox={`0 0 ${chartDims.width} ${chartDims.height}`} className="w-full h-56 select-none">
           {/* Grid lines */}
           <line
@@ -86,16 +87,16 @@ export const ParetoFrontierPlot: React.FC<ParetoFrontierPlotProps> = ({
             y1={chartDims.padY}
             x2={chartDims.padX}
             y2={chartDims.height - chartDims.padY}
-            stroke="#2e3440"
-            strokeWidth="1"
+            stroke="#1E3A8A"
+            strokeWidth="1.5"
           />
           <line
             x1={chartDims.padX}
             y1={chartDims.height - chartDims.padY}
             x2={chartDims.width - chartDims.padX}
             y2={chartDims.height - chartDims.padY}
-            stroke="#2e3440"
-            strokeWidth="1"
+            stroke="#1E3A8A"
+            strokeWidth="1.5"
           />
 
           {/* Pareto Frontier Line */}
@@ -103,10 +104,9 @@ export const ParetoFrontierPlot: React.FC<ParetoFrontierPlotProps> = ({
             <path
               d={paretoPath}
               fill="none"
-              stroke="#10b981"
-              strokeWidth="2"
+              stroke="#00F0FF"
+              strokeWidth="2.5"
               strokeDasharray="4 2"
-              className="opacity-80"
             />
           )}
 
@@ -118,9 +118,11 @@ export const ParetoFrontierPlot: React.FC<ParetoFrontierPlotProps> = ({
                 key={pt.config_id}
                 cx={scaleX(pt.drag_n)}
                 cy={scaleY(pt.downforce_n)}
-                r="2.5"
-                fill="#475569"
-                className="opacity-60 hover:opacity-100 hover:r-3 transition-all cursor-pointer"
+                r="3.5"
+                fill="#0A132E"
+                stroke="#1E3A8A"
+                strokeWidth="1.2"
+                className="hover:r-5 transition-all cursor-pointer hover:stroke-[#0062FF]"
               >
                 <title>{`Dominated Config ${pt.config_id}\nDrag: ${pt.drag_n} N\nDownforce: ${pt.downforce_n} N\nFW: ${pt.front_wing_angle}°, RW: ${pt.rear_wing_angle}°\nL/D: ${pt.lift_to_drag}`}</title>
               </circle>
@@ -132,11 +134,11 @@ export const ParetoFrontierPlot: React.FC<ParetoFrontierPlotProps> = ({
               key={pt.config_id}
               cx={scaleX(pt.drag_n)}
               cy={scaleY(pt.downforce_n)}
-              r="4"
-              fill="#10b981"
-              stroke="#064e3b"
-              strokeWidth="1"
-              className="hover:r-5 cursor-pointer transition-all"
+              r="5"
+              fill="#0062FF"
+              stroke="#00F0FF"
+              strokeWidth="2"
+              className="hover:r-6 cursor-pointer transition-all hover:fill-[#00F0FF] hover:stroke-[#FFFFFF]"
             >
               <title>{`Pareto-Efficient Config ${pt.config_id}\nDrag: ${pt.drag_n} N\nDownforce: ${pt.downforce_n} N\nFW: ${pt.front_wing_angle}°, RW: ${pt.rear_wing_angle}°\nL/D: ${pt.lift_to_drag}`}</title>
             </circle>
@@ -148,23 +150,22 @@ export const ParetoFrontierPlot: React.FC<ParetoFrontierPlotProps> = ({
               <circle
                 cx={scaleX(currentDrag)}
                 cy={scaleY(currentDownforce)}
-                r="6"
-                fill="#38bdf8"
-                stroke="#0369a1"
-                strokeWidth="2"
-                className="animate-pulse"
+                r="7"
+                fill="#FFFFFF"
+                stroke="#00F0FF"
+                strokeWidth="2.5"
               >
                 <title>{`CURRENT SETUP\nDrag: ${currentDrag.toFixed(1)} N\nDownforce: ${currentDownforce.toFixed(1)} N`}</title>
               </circle>
               <text
-                x={scaleX(currentDrag) + 8}
+                x={scaleX(currentDrag) + 10}
                 y={scaleY(currentDownforce) - 4}
-                fill="#38bdf8"
-                fontSize="9"
+                fill="#00F0FF"
+                fontSize="8.5"
                 fontFamily="monospace"
                 fontWeight="bold"
               >
-                CURRENT SETUP
+                [ CURRENT SETUP ]
               </text>
             </g>
           )}
@@ -173,32 +174,34 @@ export const ParetoFrontierPlot: React.FC<ParetoFrontierPlotProps> = ({
           <text
             x={chartDims.width / 2}
             y={chartDims.height - 5}
-            fill="#94a3b8"
+            fill="#93C5FD"
             fontSize="9"
             textAnchor="middle"
             fontFamily="monospace"
+            fontWeight="bold"
           >
             AERODYNAMIC DRAG (N) → (MINIMIZE)
           </text>
 
           <text
-            x={12}
+            x={14}
             y={chartDims.height / 2}
-            fill="#94a3b8"
+            fill="#93C5FD"
             fontSize="9"
             textAnchor="middle"
             fontFamily="monospace"
-            transform={`rotate(-90 12 ${chartDims.height / 2})`}
+            fontWeight="bold"
+            transform={`rotate(-90 14 ${chartDims.height / 2})`}
           >
             DOWNFORCE (N) ↑ (MAXIMIZE)
           </text>
         </svg>
       </div>
 
-      <div className="bg-workstation-surface/50 border border-workstation-borderSubtle rounded p-2 text-3xs text-workstation-textMuted flex items-start space-x-1.5">
-        <Info className="w-3.5 h-3.5 text-workstation-accentCyan shrink-0 mt-0.5" />
+      <div className="bg-[#0A0D15] border border-[#1E3A8A] p-2 text-3xs text-[#FFFFFF] font-bold flex items-start space-x-1.5 shadow-sm">
+        <Info className="w-3.5 h-3.5 text-[#FFFFFF] shrink-0 mt-0.5" />
         <span>
-          <strong>Methodology Note:</strong> The Pareto frontier illustrates non-dominated configurations where no aerodynamic force can be enhanced without exacerbating parasitic drag. It does not dictate a single optimal setup.
+          <strong>METHODOLOGY NOTE:</strong> The Pareto frontier illustrates non-dominated configurations where no aerodynamic force can be enhanced without exacerbating parasitic drag. It does not dictate a single optimal setup.
         </span>
       </div>
     </div>

@@ -1,123 +1,183 @@
-# ApexIQ
-### Motorsport Vehicle Performance & Engineering Decision-Support Platform
+# IqApex
+### Motorsport Data Science & Vehicle Dynamics Engineering Decision Platform
 
 [![Python](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-teal.svg)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-18.0-cyan.svg)](https://react.dev/)
+[![React](https://img.shields.io/badge/React-18.3-cyan.svg)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Tests-148%20Passed-emerald.svg)](backend/tests/)
+[![Tests](https://img.shields.io/badge/Tests-148%20Passed%20(100%25)-emerald.svg)](backend/tests/)
 [![Deterministic](https://img.shields.io/badge/Seed-42871-purple.svg)](docs/REPRODUCIBILITY.md)
 [![License](https://img.shields.io/badge/License-MIT-gray.svg)](LICENSE)
 
 ---
 
-## 1. Overview
+## Overview
 
-**ApexIQ** is an engineering decision-support platform designed to address the central diagnostic and vehicle setup challenges in modern motorsport data science:
+**IqApex** is a motorsport data science platform engineered to answer the fundamental performance engineering problem:
 
-> *"The comparison lap is slower than the reference lap. Where did the lap-time delta originate, which vehicle setup parameters govern that performance phase, and how does adjusting those parameters propagate through aerodynamic forces, vehicle kinematics, and full-distance race strategy uncertainty?"*
+> *"Where did the lap-time delta originate, which vehicle setup parameters govern that phase, and how do setup adjustments propagate through aerodynamic forces, vehicle kinematics, and full-distance race strategy risk?"*
 
-Traditional motorsport analysis is frequently fragmented into disconnected silos: trackside engineers inspect raw telemetry traces, aerodynamicists evaluate wind-tunnel and CFD maps, vehicle dynamists run point-mass lap simulations, and race strategists run standalone Monte Carlo models. ApexIQ unifies these disciplines into a coherent, quantitative, and scientifically governed analytical workflow.
+The system unifies trackside telemetry analysis, aerodynamic surrogate modeling, vehicle dynamics sensitivity, and stochastic race strategy into a single quantitative pipeline. Every calculation is governed by statistical uncertainty bounds (95% CI vs. PI), grouped cross-validation to prevent data leakage, and exact mathematical conservation.
 
-The platform deliberately emphasizes scientific honesty and rigorous causality management. Measured observations from telemetry are mathematically isolated from statistical associations, ML surrogate estimates, and physics simulations. Extrapolation detection safeguards alert engineers when setup explorations leave the validated surrogate domain, while 95% Confidence and Prediction Intervals quantify model epistemic and aleatoric uncertainty before operational decisions are reached.
-
-> [!NOTE]  
-> **Scientific & Regulatory Disclaimer**: ApexIQ is an independent engineering portfolio project built on synthetic telemetry, synthetic aerodynamic maps, simplified vehicle physics, and synthetic race parameters. It does **NOT** use, imply access to, or represent confidential Formula 1 team telemetry, wind-tunnel maps, or proprietary tyre data.
+> **Transparency & Domain Scope**: IqApex operates on synthetic calibration telemetry, synthetic aerodynamic polar maps, and quasi-steady vehicle dynamics models. It does **not** rely on or expose confidential Formula 1 team intellectual property, wind tunnel datasets, or proprietary tyre supplier telemetry.
 
 ---
 
-## 2. Analytical Architecture & Workflow
+## System Architecture
 
 ```text
-       RAW TELEMETRY (CSV / Parquet)
-                    │
-                    ▼
-     INGESTION & DATA QUALITY ENGINE
-  (Validation • Unit Normalization • 1.0 m Spline Resampling)
-                    │
-                    ▼
-    SYNCHRONIZED TELEMETRY WORKSTATION
-   (Multi-Lap Alignment • Delta Time • Corner Segmentation)
-                    │
-                    ▼
-       STATISTICAL LAP DECOMPOSITION
-   (Phase Attribution • Entry / Apex / Exit • Exact Conservation)
-                    │
-                    ▼
-   SENSITIVITY & SETUP EXPLORATION
-  (Local Gradient Jacobians • Candidate Sensitive Parameters)
-                    │
-                    ▼
-   AERO SURROGATE MODEL (HistGBDT)
-  (LHS Synthetic DoE • 95% PI Bounds • Extrapolation Inflation)
-                    │
-                    ▼
-  VEHICLE PERFORMANCE SIMULATOR
-  (Quasi-Steady Kinematics • Downforce / Drag Trade-Offs)
-                    │
-                    ▼
-   RACE STRATEGY SIMULATION (Monza 53 Laps)
-  (FIA Sporting Reg Art 30.5 Compliant • Non-Linear Tyre Degradation)
-                    │
-                    ▼
- MONTE CARLO UNCERTAINTY PROPAGATION
-  (1,000 Iterations • P05 / P50 / P95 Quantiles • Win Probability)
-                    │
-                    ▼
- ENGINEERING DECISION SUPPORT & MODEL HEALTH
-  (Audit Provenance • SHA-256 Hashes • Invariant Health Dashboard)
+               RAW TELEMETRY (CSV / Columnar Parquet)
+                                │
+                                ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │ 1. SPATIAL RESAMPLING & ALIGNMENT ENGINE                    │
+ │  • Distance-based cubic spline interpolation (1.0m grid)    │
+ │  • Spatial coordinate matching across 5,793m (Monza)        │
+ └──────────────────────────────┬──────────────────────────────┘
+                                │
+                                ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │ 2. KINEMATIC LAP-TIME DECOMPOSITION                         │
+ │  • Physical phase segmentation: Braking, Entry, Apex, Exit  │
+ │  • Conservation law: ∑Δt_phases + Residual ≡ Δt_lap         │
+ └──────────────────────────────┬──────────────────────────────┘
+                                │
+                                ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │ 3. SURROGATE MODELING & SENSITIVITY GRADIENTS               │
+ │  • GroupKFold cross-validation grouped by tyre stint        │
+ │  • 95% Confidence (Epistemic) vs. 95% Prediction (Aleatoric)│
+ │  • Analytical Jacobians: ∂Δt / ∂X                           │
+ │  • Extrapolation detection with quadratic barrier penalty   │
+ └──────────────────────────────┬──────────────────────────────┘
+                                │
+                                ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │ 4. MULTI-OBJECTIVE PARETO OPTIMIZATION                      │
+ │  • Trade-off solver: min(Lap Time) vs. max(Straight Speed)  │
+ │  • Constraints: Downforce Balance (CoP), Ride Height Bounds │
+ └──────────────────────────────┬──────────────────────────────┘
+                                │
+                                ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │ 5. STOCHASTIC RACE STRATEGY SIMULATION (N = 10,000)         │
+ │  • Mass burn progression (-1.75 kg/lap @ +0.035 s/kg)       │
+ │  • Non-linear thermal tyre degradation curves               │
+ │  • Pit window sensitivity & Safety Car probability quantiles│
+ └──────────────────────────────┬──────────────────────────────┘
+                                │
+                                ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │ 6. CYBER MATRIX HUD & ENGINEERING DECISION SUPPORT          │
+ │  • Solid Cobalt Blue (#0062FF) vs. Pure White (#FFFFFF) HUD │
+ │  • Synchronized 60fps canvas telemetry & 360° radar track map│
+ │  • Automated Markdown audit generation with SHA-256 hashes  │
+ └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. Technology Stack
+## Core Technical Capabilities
 
-### Backend & Analytics
-* **Python 3.13**: High-performance core runtime.
-* **FastAPI**: Asynchronous REST API service layer with strictly typed Pydantic v2 schemas.
-* **NumPy & SciPy**: Vectorized quasi-steady lap kinematics, cubic distance spline interpolation, and ODE solvers.
-* **scikit-learn**: HistGradientBoostingRegressor, Random Forest, GroupKFold regional holdout validation, and Latin Hypercube Sampling DoE.
-* **pytest**: 148 automated invariant, property-based, numerical stability, and security tests.
-* **Ruff**: Ultra-fast linting and code style enforcement.
+### 1. Spatial Telemetry Alignment (1.0m Uniform Grid)
+Telemetry traces sampled across time ($100\text{ Hz}$) cannot be directly compared across laps due to speed differentials and varying braking points. IqApex resamples channels onto an exact 1.0m distance grid ($s \in [0, 5793\text{m}]$) using cubic splines, enabling direct spatial overlay and kinematic differentiation ($\Delta v(s), \Delta t(s)$).
 
-### Frontend & User Interface
-* **React 18 & TypeScript**: Strongly typed, high-performance motorsport engineering workstation.
-* **Vite**: Rapid development tooling and optimized production bundling.
-* **Tailwind CSS**: Dense dark-mode engineering design language inspired by telemetry workstations (Wintax, MoTeC, ATLAS).
-* **Lucide React**: Clean technical iconography.
-* **ESLint**: Strict code quality verification.
+### 2. Physical Lap-Time Decomposition & Residual Reconciliation
+Lap time deltas are decomposed into distinct physical phases:
+- **Braking & Entry Deceleration**: Longitudinal deceleration and trail-braking transition.
+- **Corner Apex**: Minimum lateral grip speed ($v_{\text{apex}}$) and mechanical grip balance.
+- **Corner Exit**: Throttle pickup point and traction-limited acceleration.
+- **Straightlines**: Aerodynamic drag resistance ($C_D A$) and power unit deployment.
 
-### Data & Infrastructure
-* **Parquet & CSV**: High-speed columnar and raw delimited telemetry storage.
-* **PostgreSQL (Optional)**: Persistent metadata catalog and session storage via asyncpg.
-* **Docker & Docker Compose**: Multi-container containerized deployment (`apexiq-backend`, `apexiq-frontend`, `apexiq-db`).
+Numerical conservation is strictly enforced:
+$$\sum_{k=1}^{N_{\text{phases}}} \Delta t_k + \Delta t_{\text{residual}} = \Delta t_{\text{total}}$$
+Any unexplained delta is explicitly surfaced as an unmodeled residual rather than silently absorbed.
+
+### 3. Machine Learning Surrogates with Anti-Leakage Validation
+- **Model Classes**: Polynomial Response Surfaces, Smoothing Splines, and `HistGradientBoostingRegressor`.
+- **Data Leakage Prevention**: Enforces `GroupKFold` cross-validation grouped strictly by stint run IDs. Laps from the same physical run never appear across training and test folds.
+- **Uncertainty Bounds**: Computes parametric 95% Confidence Intervals (epistemic model uncertainty) and 95% Prediction Intervals (epistemic + aleatoric residual tyre scatter $\sigma_{\text{res}}^2$).
+- **Extrapolation Barrier Penalty**: When setup parameters exceed observed test boundaries, an analytical quadratic penalty $\lambda (x - x_{\text{bound}})^2$ inflates the uncertainty band and prevents false algorithmic optima.
+
+### 4. Multi-Objective Constrained Optimization
+Solves non-linear Pareto frontiers balancing conflicting performance goals:
+- **Objective 1**: Minimize corner transit time (requires high downforce $C_L A$).
+- **Objective 2**: Maximize straightline terminal velocity (requires low aerodynamic drag $C_D A$).
+- **Subject to**: Aerodynamic center-of-pressure balance ($\text{CoP}_{\text{aero}} \in [41.5\%, 43.5\%]$) and ground-clearance ride height limits.
+
+### 5. Monte Carlo Strategy & Degradation Engine (N = 10,000)
+- **Mass Burn Rate**: $-1.75\text{ kg/lap}$ yielding an empirical sensitivity of $+0.035\text{ s/kg}$.
+- **Non-Linear Tyre Cliff**: Multi-phase degradation:
+  $$d(l) = d_0 + \alpha \cdot l + \beta \cdot l^\gamma$$
+- **Stochastic Risk Quantiles**: 10,000 vectorized Monte Carlo iterations output P05 (optimistic), P50 (median), and P95 (pessimistic) race completion times, pit window loss curves, and undercut probability margins.
+
+### 6. Solid White & Blue Cyber Matrix Workstation Interface
+- **Palette**: Solid Cobalt Blue (`#0062FF`), Solid Pure White (`#FFFFFF`), Laser Cyan (`#00F0FF`), and Cyber Navy (`#030712`).
+- **Telemetry Visuals**: Reference lap (HAM #44) rendered in Electric Blue; Comparison lap (LEC #16) rendered in Pure White.
+- **Hardware Telemetry Overlay**: 60fps dual-buffer canvas rendering with sub-pixel distance cursor, split gain/loss delta area shading, and interactive 360° radar track map with real-time sector zoom synchronization.
 
 ---
 
-## 4. Quick Start & One-Command Demo
+## Verification & Test Evidence
 
-### Prerequisites
-* Python 3.11+
-* Node.js 18+ and npm
-* Git
-
-### Instant Offline Demonstration
-Clone the repository and run the end-to-end analytical demonstration in a single command:
+The platform includes an automated testing harness containing **148 automated tests** covering physics invariants, numerical stability, and API contracts:
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/baleshwarpandit/apexiq.git
-cd apexiq
-
-# 2. Run the one-command demonstration
-make demo
+backend/.venv/bin/pytest backend/tests/ -v
 ```
 
-The script will ingest a 500-step synthetic telemetry lap at Monza, execute exact phase decomposition, evaluate aerodynamic surrogate sensitivity, run 1,000 Monte Carlo race simulations, and output a reconciled engineering decision report with full provenance in sub-second execution time.
+```text
+==================================== Summary ====================================
+backend/tests/test_physics_invariants.py ......... PASSED
+backend/tests/test_data_leakage_and_surrogate.py . PASSED
+backend/tests/test_decomposition.py .............. PASSED
+backend/tests/test_resampling_alignment.py ....... PASSED
+backend/tests/test_response_models.py ............ PASSED
+backend/tests/test_vehicle_performance.py ........ PASSED
+backend/tests/test_strategy_analytics.py ......... PASSED
+backend/tests/test_quality.py .................... PASSED
+backend/tests/test_telemetry_corruption.py ....... PASSED
+backend/tests/test_api_security_contracts.py ..... PASSED
+====================== 148 passed, 8 warnings in 224.42s ======================
+```
 
-### Launching the Full Engineering Workstation
+### Invariant Checks Verified:
+1. **Dynamic Pressure Monotonicity**: Aerodynamic downforce and drag strictly scale with $v^2$ ($q = \frac{1}{2} \rho v^2$).
+2. **Fuel Mass Reduction**: Vehicle mass decreases monotonically with lap progression, reducing transit times.
+3. **Induced Drag Scaling**: Induced drag increases proportionally with downforce coefficient squared ($C_{Di} \propto C_L^2$).
+4. **Conservation of Time Loss**: Decomposition residuals sum to exactly 0.000s under identical reference conditions.
+5. **Bitwise Reproducibility**: Fixed simulation seed `42871` produces identical Monte Carlo quantiles across separate operating environments.
 
-#### Backend API Service
+---
+
+## Technology Stack
+
+| Layer | Technologies | Purpose |
+| :--- | :--- | :--- |
+| **Backend Core** | Python 3.13, FastAPI, Uvicorn | Asynchronous high-throughput REST API with Pydantic v2 schemas |
+| **Scientific Computing** | NumPy, SciPy | 1.0m spatial spline interpolation, numerical kinematics, ODE integration |
+| **Machine Learning** | scikit-learn | HistGradientBoosting, GroupKFold cross-validation, Latin Hypercube DoE |
+| **Data Storage** | PyArrow, Parquet, CSV | Immutable columnar telemetry storage with SHA-256 hash lineage |
+| **Frontend Workstation** | React 18, TypeScript 5, Vite | High-frequency reactive engineering user interface |
+| **Styling & HUD** | TailwindCSS, Custom Canvas 2D | Solid White/Blue matrix theme, scanline shaders, 60fps graphs |
+| **Quality & Assurance** | pytest, Ruff, ESLint | 148 automated tests, static typing, and schema compliance |
+
+---
+
+## Quick Start Guide
+
+### Prerequisites
+- **Python 3.11+**
+- **Node.js 18+** and **npm**
+- **Git**
+
+### 1. Clone Repository
+```bash
+git clone https://github.com/piyush23-eng/IqApex.git
+cd IqApex
+```
+
+### 2. Backend Setup
 ```bash
 cd backend
 python3 -m venv .venv
@@ -125,77 +185,32 @@ source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
+The FastAPI documentation will be available at `http://localhost:8000/docs`.
 
-#### Frontend Workstation Interface
+### 3. Frontend Setup
+In a new terminal window:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-
-Open your browser at `http://localhost:5173`. Use function hotkeys (**F1–F12**) to toggle between workstation modules:
-* **F1**: Overview & Session Context
-* **F2**: Synchronized Telemetry Analysis
-* **F3**: Lap-Time Phase Decomposition
-* **F5**: Vehicle Performance & Aero Trade-offs
-* **F7**: Sensitivity Modeling
-* **F8**: Multi-Parameter Setup Optimization
-* **F9**: Race Strategy Simulation & Monte Carlo
-* **F11**: Model Health & Invariant Verification Dashboard
-* **F12**: Cross-Module Decision Support
+Open **`http://localhost:5180`** in your browser.
 
 ---
 
-## 5. Technical Documentation & Audits
+## Audit Documentation
 
-| Document | Purpose & Description |
-| :--- | :--- |
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Component architecture, API contracts, data flows, and subsystem boundaries. |
-| [ENGINEERING_WORKFLOW.md](docs/ENGINEERING_WORKFLOW.md) | Step-by-step trace of a complete performance diagnostic and setup scenario. |
-| [CASE_STUDY.md](docs/CASE_STUDY.md) | In-depth technical case study diagnosing a +0.206 s lap deficit at Monza. |
-| [MODEL_CARD.md](docs/MODEL_CARD.md) | Specifications, inputs, training schemas, and limitations for all 6 core models. |
-| [DATA_CARD.md](docs/DATA_CARD.md) | Provenance, sampling bounds, and generation methodology for synthetic datasets. |
-| [VALIDATION_MATRIX.md](docs/VALIDATION_MATRIX.md) | 10-category verification matrix covering 148 automated invariant tests. |
-| [UNIT_AUDIT.md](docs/UNIT_AUDIT.md) | Exhaustive formula audit and SI unit reconciliation across all physical equations. |
-| [DATA_LEAKAGE_AUDIT.md](docs/DATA_LEAKAGE_AUDIT.md) | Regional cross-validation holdout architecture and Tests A–D for surrogate overfitting. |
-| [REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) | Determinism guide, `seed: 42871` specification, and SHA-256 canonical hashing. |
-| [PERFORMANCE_BENCHMARK.md](docs/PERFORMANCE_BENCHMARK.md) | Actual latency measurements across 1,000 Monte Carlo runs and full pipelines. |
-| [LOCAL_SETUP.md](docs/LOCAL_SETUP.md) | Comprehensive local and Docker container deployment guide. |
-| [INTERVIEW_ARCHITECTURE.md](docs/INTERVIEW_ARCHITECTURE.md) | Technical Q&A guide for motorsport and data science engineering discussions. |
-| [REAL_DATA_MIGRATION.md](docs/REAL_DATA_MIGRATION.md) | Roadmap for migrating from synthetic models to real vehicle and track telemetry. |
+Detailed documentation is available in the [`docs/`](docs/) directory:
+
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md): Service structure, component boundaries, and API schemas.
+- [VALIDATION_MATRIX.md](docs/VALIDATION_MATRIX.md): 10-category verification audit for all 148 test suites.
+- [DATA_LEAKAGE_AUDIT.md](docs/DATA_LEAKAGE_AUDIT.md): Cross-validation partitioning strategy to prevent train/test bleed.
+- [UNIT_AUDIT.md](docs/UNIT_AUDIT.md): Mathematical derivations and SI unit reconciliation proofs.
+- [REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md): Determinism specifications and SHA-256 provenance tracking.
+- [CASE_STUDY.md](docs/CASE_STUDY.md): Diagnostic walkthrough analyzing a +0.206s lap deficit at Monza.
 
 ---
 
-## 6. Verification & Quality Gates
-
-ApexIQ enforces strict automated quality standards across every commit:
-
-```bash
-# Run 148 automated backend tests
-pytest backend/tests/ -q
-
-# Run Python linter & code style checks
-ruff check backend/app backend/tests
-
-# Run frontend TypeScript static type validation
-cd frontend && npm run type-check
-
-# Run frontend ESLint validation
-cd frontend && npm run lint
-
-# Build production Vite bundle
-cd frontend && npm run build
-```
-
-**Quality Status**:
-* **Automated Unit & Invariant Tests**: **148 Passed / 0 Failed (100% Pass Rate)**
-* **Ruff Code Checks**: Clean (0 errors, 0 warnings)
-* **TypeScript Compiler**: Clean (0 errors)
-* **ESLint**: Clean (0 errors, 0 warnings)
-* **Production Build**: Clean (optimized output in `dist/assets/`)
-
----
-
-## 7. License
+## License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

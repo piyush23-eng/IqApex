@@ -29,25 +29,25 @@ export const DecompositionSummaryHeader: React.FC<DecompositionSummaryHeaderProp
 }) => {
   const totalDelta = decomposition?.total_lap_delta ?? 0.0;
   const isDeltaNegative = totalDelta < 0;
-  const deltaColor = isDeltaNegative ? 'text-workstation-telemetryGreen' : 'text-workstation-telemetryAmber';
   const deltaSign = totalDelta > 0 ? '+' : '';
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs select-none space-y-2.5">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs select-none space-y-2.5 shadow-md">
       {/* Top Bar: Circuit Info & Synthetic Dataset Notice */}
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-2 text-3xs">
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-2 text-3xs">
         <div className="flex items-center space-x-2">
-          <span className="font-bold text-workstation-textBright tracking-wider uppercase">
-            LAP-TIME DECOMPOSITION & PERFORMANCE PHASE ENGINE
+          <span className="w-2.5 h-2.5 bg-[#00F0FF] border border-[#1E3A8A] animate-pulse" />
+          <span className="font-extrabold text-[#FFFFFF] tracking-wider uppercase text-2xs">
+            [ LAP-TIME DECOMPOSITION &amp; PERFORMANCE PHASE ENGINE ]
           </span>
-          <span className="text-workstation-border">|</span>
-          <span className="text-workstation-textMuted">CIRCUIT: AUTODROMO NAZIONALE MONZA (5,793m)</span>
+          <span className="text-[#FFFFFF] font-bold">|</span>
+          <span className="text-[#94A3B8] font-bold">CIRCUIT: AUTODROMO NAZIONALE MONZA (5,793m)</span>
         </div>
 
         <div className="flex items-center space-x-2">
-          <span className="px-2 py-0.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 font-semibold rounded flex items-center space-x-1">
-            <AlertCircle className="w-3 h-3" />
-            <span>SYNTHETIC DEMONSTRATION DATASET</span>
+          <span className="px-2 py-0.5 bg-[#00F0FF] text-[#FFFFFF] border border-[#1E3A8A] font-extrabold text-4xs shadow-sm flex items-center space-x-1">
+            <AlertCircle className="w-3 h-3 text-[#FFFFFF] stroke-[2.5]" />
+            <span>SYNTHETIC CALIBRATION DATASET ✕</span>
           </span>
         </div>
       </div>
@@ -55,21 +55,21 @@ export const DecompositionSummaryHeader: React.FC<DecompositionSummaryHeaderProp
       {/* Main Workflow Strip */}
       <div className="grid grid-cols-12 gap-3 items-center">
         {/* Reference Methodology & Lap Selection */}
-        <div className="col-span-5 bg-workstation-surface/80 border-l-2 border-workstation-accentCyan p-2 rounded-r space-y-1.5">
-          <div className="flex items-center justify-between text-3xs text-workstation-textMuted uppercase">
-            <span className="text-workstation-accentCyan font-bold flex items-center space-x-1">
-              <Compass className="w-3 h-3" />
+        <div className="col-span-5 bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow space-y-1.5">
+          <div className="flex items-center justify-between text-3xs text-[#94A3B8] uppercase">
+            <span className="text-[#FFFFFF] font-extrabold flex items-center space-x-1">
+              <Compass className="w-3.5 h-3.5 text-[#FFFFFF] stroke-[2.5]" />
               <span>REFERENCE METHODOLOGY</span>
             </span>
-            <span className="px-1.5 py-0.2 bg-workstation-surface border border-workstation-borderSubtle text-workstation-telemetryGreen rounded">
-              VALIDATED
+            <span className="px-1.5 py-0.2 bg-[#00F0FF] border border-[#1E3A8A] text-[#FFFFFF] font-bold text-4xs">
+              VALIDATED ✕
             </span>
           </div>
 
           <div className="flex items-center space-x-2">
             <select
               aria-label="Select Reference Method"
-              className="bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-1 rounded text-2xs focus:outline-none focus:border-workstation-accentCyan"
+              className="bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-1 font-mono text-2xs font-bold focus:outline-none focus:bg-[#00F0FF]"
               value={referenceMethod}
               onChange={(e) => onSelectReferenceMethod(e.target.value as ReferenceMethod)}
             >
@@ -82,7 +82,7 @@ export const DecompositionSummaryHeader: React.FC<DecompositionSummaryHeaderProp
             {referenceMethod === 'selected_lap' && (
               <select
                 aria-label="Select Reference Lap"
-                className="bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-1 rounded text-2xs focus:outline-none focus:border-workstation-accentCyan"
+                className="bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-1 font-mono text-2xs font-bold focus:outline-none focus:bg-[#00F0FF]"
                 value={referenceLapId}
                 onChange={(e) => onSelectReferenceLap(e.target.value)}
               >
@@ -95,28 +95,28 @@ export const DecompositionSummaryHeader: React.FC<DecompositionSummaryHeaderProp
             )}
           </div>
 
-          <div className="text-3xs text-workstation-textMuted flex items-center justify-between">
+          <div className="text-3xs text-[#94A3B8] flex items-center justify-between font-bold">
             <span>Ref Lap: {decomposition?.reference_lap_id || referenceLapId}</span>
             <span>Grid: 1.0 m uniform</span>
           </div>
         </div>
 
         {/* Comparison Lap Selector */}
-        <div className="col-span-4 bg-workstation-surface/80 border-l-2 border-workstation-telemetryAmber p-2 rounded-r space-y-1.5">
-          <div className="flex items-center justify-between text-3xs text-workstation-textMuted uppercase">
-            <span className="text-workstation-telemetryAmber font-bold flex items-center space-x-1">
-              <GitCommit className="w-3 h-3" />
+        <div className="col-span-4 bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow space-y-1.5">
+          <div className="flex items-center justify-between text-3xs text-[#94A3B8] uppercase">
+            <span className="text-[#FFFFFF] font-extrabold flex items-center space-x-1">
+              <GitCommit className="w-3.5 h-3.5 text-[#FFB000] stroke-[2.5]" />
               <span>COMPARISON LAP</span>
             </span>
-            <span className="px-1.5 py-0.2 bg-workstation-surface border border-workstation-borderSubtle text-workstation-telemetryGreen rounded">
-              VALIDATED
+            <span className="px-1.5 py-0.2 bg-[#FFB000] border border-[#1E3A8A] text-[#FFFFFF] font-bold text-4xs">
+              EVALUATING ✕
             </span>
           </div>
 
           <div>
             <select
               aria-label="Select Comparison Lap"
-              className="bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-1 rounded text-2xs focus:outline-none focus:border-workstation-telemetryAmber w-full"
+              className="bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-1 font-mono text-2xs font-bold focus:outline-none focus:bg-[#FFB000] w-full"
               value={comparisonLapId}
               onChange={(e) => onSelectComparisonLap(e.target.value)}
             >
@@ -128,22 +128,22 @@ export const DecompositionSummaryHeader: React.FC<DecompositionSummaryHeaderProp
             </select>
           </div>
 
-          <div className="text-3xs text-workstation-textMuted flex items-center justify-between">
+          <div className="text-3xs text-[#94A3B8] flex items-center justify-between font-bold">
             <span>Comp Lap: {decomposition?.comparison_lap_id || comparisonLapId}</span>
             <span>Status: Evaluated</span>
           </div>
         </div>
 
         {/* Total Measured Lap Delta */}
-        <div className="col-span-3 bg-workstation-surface/90 border border-workstation-borderSubtle p-2.5 rounded text-center">
-          <div className="text-3xs text-workstation-textMuted uppercase flex items-center justify-center space-x-1">
-            <Timer className="w-3 h-3 text-workstation-accentCyan" />
+        <div className="col-span-3 bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow text-center">
+          <div className="text-3xs text-[#94A3B8] uppercase font-bold flex items-center justify-center space-x-1">
+            <Timer className="w-3.5 h-3.5 text-[#FFFFFF] stroke-[2.5]" />
             <span>MEASURED TOTAL LAP DELTA</span>
           </div>
-          <div className={`text-xl font-bold mt-1 ${deltaColor}`}>
+          <div className={`text-xl font-extrabold mt-1 ${isDeltaNegative ? 'text-[#00E676]' : 'text-[#FFB000]'}`}>
             {isLoading ? '...' : `${deltaSign}${totalDelta.toFixed(3)} s`}
           </div>
-          <div className="text-3xs text-workstation-textMuted mt-0.5">
+          <div className="text-3xs text-[#94A3B8] font-bold mt-0.5">
             {totalDelta < 0 ? 'Comparison Faster' : totalDelta > 0 ? 'Comparison Slower' : 'Identical Pace'}
           </div>
         </div>

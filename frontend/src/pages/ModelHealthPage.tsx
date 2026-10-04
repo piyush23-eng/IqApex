@@ -153,101 +153,103 @@ export const ModelHealthPage: React.FC = () => {
     : VALIDATION_DATA.filter((item) => item.category === filterCategory);
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-slate-950 text-slate-100 font-mono text-xs">
+    <div className="flex-1 flex flex-col overflow-hidden bg-[#030712] text-[#FFFFFF] font-mono text-2xs p-3 space-y-3 select-none">
       {/* Top Banner */}
-      <div className="border-b border-slate-800 bg-slate-900/80 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="p-2 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-            <ShieldCheck size={20} />
+      <div className="matrix-hud-card scanline-container bg-[#0A132E] border border-[#1E3A8A] px-4 py-3 flex flex-wrap items-center justify-between shadow-md relative gap-3">
+        <div className="scan-beam" />
+        <div className="flex items-center space-x-3 relative z-10">
+          <div className="p-1.5 bg-[#0062FF] border border-[#00F0FF] shadow-matrix-glow">
+            <ShieldCheck size={18} className="text-[#FFFFFF] stroke-[2.5]" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-bold text-sm tracking-wider uppercase text-slate-100">
-                Model Health &amp; Scientific Validation Dashboard
+              <span className="w-2 h-2 bg-[#00F0FF] rounded-full animate-ping shadow-[0_0_8px_#00F0FF]" />
+              <span className="font-black text-xs tracking-wider uppercase text-[#FFFFFF] font-mono">
+                [ MODEL HEALTH &amp; SCIENTIFIC VALIDATION MATRIX ]
               </span>
-              <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                STAGE 9 PRODUCTION HARDENED
+              <span className="px-2 py-0.5 bg-[#0062FF] text-[#FFFFFF] border border-[#00F0FF] font-black text-4xs shadow-matrix-glow">
+                STAGE 9 PRODUCTION HARDENED ✕
               </span>
             </div>
-            <p className="text-slate-400 text-[11px] mt-0.5">
-              148 / 148 Invariant &amp; Adversarial Verification Tests Passing (100% Pass Rate)
+            <p className="text-[#93C5FD] text-3xs mt-0.5 font-bold">
+              148 / 148 Invariant &amp; Adversarial Verification Tests Passing (100% Deterministic Pass Rate)
             </p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="text-right">
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider">Deterministic Seed</div>
-            <div className="font-bold text-emerald-400">42871</div>
+        <div className="flex items-center space-x-3 relative z-10">
+          <div className="text-right px-2 py-1 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <div className="text-4xs text-[#94A3B8] font-bold uppercase tracking-wider">SEED</div>
+            <div className="font-extrabold text-[#FFFFFF]">42871</div>
           </div>
-          <div className="text-right border-l border-slate-800 pl-4">
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider">Equation Audit</div>
-            <div className="font-bold text-slate-200">SI Reconciled (1/2 ρ v²)</div>
+          <div className="text-right px-2 py-1 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <div className="text-4xs text-[#94A3B8] font-bold uppercase tracking-wider">EQUATIONS</div>
+            <div className="font-extrabold text-[#FFFFFF]">SI RECONCILED</div>
           </div>
-          <div className="text-right border-l border-slate-800 pl-4">
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider">FIA Compliance</div>
-            <div className="font-bold text-amber-400">Reg. Art 30.5 Constrained</div>
+          <div className="text-right px-2 py-1 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <div className="text-4xs text-[#94A3B8] font-bold uppercase tracking-wider">COMPLIANCE</div>
+            <div className="font-extrabold text-[#00E676]">ART 30.5</div>
           </div>
         </div>
       </div>
 
       {/* Main Grid */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden gap-3">
         {/* Left List */}
-        <div className="w-1/2 border-r border-slate-800 flex flex-col overflow-hidden bg-slate-950/50">
+        <div className="w-1/2 matrix-hud-card bg-[#0A132E] border border-[#1E3A8A] flex flex-col overflow-hidden shadow-md">
           {/* Category Filter Bar */}
-          <div className="px-4 py-2 border-b border-slate-800 bg-slate-900/40 flex items-center space-x-2 overflow-x-auto">
+          <div className="window-header-retro bg-[#070E22] border-b border-[#1E3A8A] px-3 py-1.5 flex items-center space-x-1.5 overflow-x-auto">
             {['ALL', 'PHYSICAL', 'NUMERICAL', 'STATISTICAL', 'DATA QUALITY', 'REPRODUCIBILITY', 'SECURITY'].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setFilterCategory(cat)}
-                className={`px-2 py-1 rounded text-[10px] font-semibold transition-colors ${
+                className={`px-2 py-0.5 text-3xs font-extrabold border transition-all ${
                   filterCategory === cat
-                    ? 'bg-slate-700 text-slate-100 border border-slate-600'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                    ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                    : 'bg-[#070E22] text-[#93C5FD] border-[#1E3A8A] hover:bg-[#0E1A3D]'
                 }`}
               >
-                {cat}
+                [ {cat} ]
               </button>
             ))}
           </div>
 
           {/* Test Items Table */}
-          <div className="flex-1 overflow-y-auto divide-y divide-slate-800/60">
+          <div className="flex-1 overflow-y-auto divide-y divide-[#1E3A8A] p-2 space-y-1.5">
             {filteredItems.map((item) => {
               const isSelected = selectedItem.id === item.id;
               return (
                 <div
                   key={item.id}
                   onClick={() => setSelectedItem(item)}
-                  className={`p-3 cursor-pointer transition-colors flex items-start justify-between ${
+                  className={`p-2.5 cursor-pointer border transition-all flex items-start justify-between ${
                     isSelected
-                      ? 'bg-slate-800/60 border-l-2 border-emerald-400'
-                      : 'hover:bg-slate-900/40'
+                      ? 'bg-[#0E1A3D] border-[#0062FF] border-l-4 border-l-[#00F0FF] shadow-matrix-glow'
+                      : 'bg-[#070E22] border-[#1E3A8A]/50 hover:bg-[#0A132E]'
                   }`}
                 >
-                  <div className="space-y-1 pr-3">
+                  <div className="space-y-1 pr-2">
                     <div className="flex items-center space-x-2">
-                      <span className="font-bold text-slate-300 text-[11px]">{item.component}</span>
-                      <span className="px-1.5 py-0.2 rounded text-[9px] bg-slate-800 text-slate-400 border border-slate-700">
+                      <span className="font-extrabold text-[#FFFFFF] text-2xs">{item.component}</span>
+                      <span className="px-1.5 py-0.2 text-4xs bg-[#070E22] text-[#FFFFFF] border border-[#1E3A8A] font-bold">
                         {item.stage}
                       </span>
-                      <span className="px-1.5 py-0.2 rounded text-[9px] bg-cyan-950/60 text-cyan-300 border border-cyan-800/50">
+                      <span className="px-1.5 py-0.2 text-4xs bg-[#00F0FF]/30 text-[#FFFFFF] border border-[#1E3A8A] font-bold">
                         {item.category}
                       </span>
                     </div>
-                    <div className="text-slate-400 text-[11px] font-medium">{item.invariant}</div>
-                    <div className="text-[10px] text-slate-500 font-mono">
-                      Test: <span className="text-slate-400">{item.testMethod}</span>
+                    <div className="text-[#E2E8F0] text-3xs font-medium">{item.invariant}</div>
+                    <div className="text-4xs text-[#94A3B8] font-mono">
+                      Test: <span className="text-[#FFFFFF] font-semibold">{item.testMethod}</span>
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-end space-y-2 shrink-0">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center space-x-1">
-                      <CheckCircle2 size={11} className="mr-1" />
+                  <div className="flex flex-col items-end space-y-1.5 shrink-0">
+                    <span className="px-2 py-0.5 text-3xs font-black bg-[#0062FF] text-[#FFFFFF] border border-[#00F0FF] shadow-matrix-glow flex items-center space-x-1">
+                      <CheckCircle2 size={11} className="mr-1 stroke-[2.5]" />
                       {item.status}
                     </span>
-                    <ChevronRight size={14} className={isSelected ? 'text-emerald-400' : 'text-slate-600'} />
+                    <ChevronRight size={14} className={isSelected ? 'text-[#00F0FF]' : 'text-[#888888]'} />
                   </div>
                 </div>
               );
@@ -256,35 +258,35 @@ export const ModelHealthPage: React.FC = () => {
         </div>
 
         {/* Right Detail Pane */}
-        <div className="w-1/2 flex flex-col overflow-y-auto p-5 bg-slate-900/20 space-y-5">
+        <div className="w-1/2 flex flex-col overflow-y-auto space-y-3">
           {/* Header Card */}
-          <div className="p-4 rounded-lg bg-slate-900/90 border border-slate-800 space-y-3">
+          <div className="matrix-hud-card bg-[#070E22] border border-[#1E3A8A] p-3 space-y-2 shadow-md">
             <div className="flex items-center justify-between">
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+              <span className="px-2 py-0.5 text-3xs font-black bg-[#0062FF] text-[#FFFFFF] border border-[#00F0FF] shadow-matrix-glow">
                 VERIFIED INVARIANT [{selectedItem.id}]
               </span>
-              <span className="text-slate-400 text-[11px]">{selectedItem.stage}</span>
+              <span className="text-[#94A3B8] text-3xs font-bold">{selectedItem.stage}</span>
             </div>
-            <h2 className="text-base font-bold text-slate-100">{selectedItem.component}</h2>
-            <p className="text-slate-300 text-xs leading-relaxed">{selectedItem.invariant}</p>
+            <h2 className="text-sm font-extrabold text-[#FFFFFF] uppercase">{selectedItem.component}</h2>
+            <p className="text-[#E2E8F0] text-2xs leading-relaxed font-medium">{selectedItem.invariant}</p>
           </div>
 
           {/* Test Method & Verification Proof */}
-          <div className="p-4 rounded-lg bg-slate-900/60 border border-slate-800 space-y-3">
-            <div className="flex items-center space-x-2 text-slate-300 font-semibold text-xs border-b border-slate-800 pb-2">
-              <Cpu size={14} className="text-cyan-400" />
+          <div className="matrix-hud-card bg-[#070E22] border border-[#1E3A8A] p-3 space-y-2 shadow">
+            <div className="flex items-center space-x-2 text-[#FFFFFF] font-extrabold text-2xs border-b border-[#1E3A8A] pb-1.5 uppercase">
+              <Cpu size={14} className="text-[#0062FF] stroke-[2.5]" />
               <span>Automated Verification Proof</span>
             </div>
-            <div className="space-y-2 text-xs">
+            <div className="space-y-2 text-2xs">
               <div>
-                <div className="text-slate-400 text-[10px] uppercase">Automated Pytest Harness</div>
-                <div className="font-mono text-emerald-400 bg-slate-950 p-2 rounded border border-slate-800 mt-1">
+                <div className="text-[#94A3B8] text-3xs uppercase font-bold">Automated Pytest Harness</div>
+                <div className="font-mono text-[#FFFFFF] bg-[#0A132E] p-2 border border-[#1E3A8A] font-semibold mt-1">
                   backend/tests/{selectedItem.testMethod}.py
                 </div>
               </div>
               <div>
-                <div className="text-slate-400 text-[10px] uppercase">Measured Invariant Result</div>
-                <div className="font-mono text-slate-200 bg-slate-950/80 p-2 rounded border border-slate-800 mt-1">
+                <div className="text-[#94A3B8] text-3xs uppercase font-bold">Measured Invariant Result</div>
+                <div className="font-mono text-[#FFFFFF] bg-[#0A132E] p-2 border border-[#1E3A8A] font-bold mt-1">
                   {selectedItem.result}
                 </div>
               </div>
@@ -292,42 +294,42 @@ export const ModelHealthPage: React.FC = () => {
           </div>
 
           {/* Known Limitations & Governance */}
-          <div className="p-4 rounded-lg bg-amber-950/20 border border-amber-900/40 space-y-2">
-            <div className="flex items-center space-x-2 text-amber-300 font-semibold text-xs">
-              <AlertTriangle size={14} className="text-amber-400" />
-              <span>Known Physical / Modeling Limitations</span>
+          <div className="matrix-hud-card bg-[#0E1A3D] border border-[#FBBF24]/40 p-3 space-y-1.5 shadow">
+            <div className="flex items-center space-x-2 text-[#FBBF24] font-extrabold text-2xs">
+              <AlertTriangle size={14} className="text-[#FBBF24] stroke-[2.5]" />
+              <span className="uppercase">[ Known Physical / Modeling Limitations ]</span>
             </div>
-            <p className="text-amber-200/90 text-xs leading-relaxed">
+            <p className="text-[#FDE68A] text-2xs leading-relaxed font-medium">
               {selectedItem.limitations}
             </p>
           </div>
 
           {/* Audit Trail & Governance Docs */}
-          <div className="p-4 rounded-lg bg-slate-900/40 border border-slate-800 space-y-3">
-            <div className="flex items-center space-x-2 text-slate-300 font-semibold text-xs border-b border-slate-800 pb-2">
-              <FileText size={14} className="text-purple-400" />
+          <div className="window-retro bg-[#070E22] border border-[#1E3A8A] p-3 space-y-2 shadow">
+            <div className="flex items-center space-x-2 text-[#FFFFFF] font-extrabold text-2xs border-b border-[#1E3A8A] pb-1.5 uppercase">
+              <FileText size={14} className="text-[#FFFFFF] stroke-[2.5]" />
               <span>Stage 9 Engineering Audit Deliverables</span>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-[11px]">
-              <div className="p-2 rounded bg-slate-950 border border-slate-800 text-slate-300 flex items-center justify-between">
+            <div className="grid grid-cols-2 gap-2 text-3xs">
+              <div className="p-2 bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] flex items-center justify-between font-bold">
                 <span>docs/VALIDATION_MATRIX.md</span>
-                <span className="text-emerald-400 text-[10px] font-bold">PASS</span>
+                <span className="text-[#00E676] font-extrabold">[ PASS ]</span>
               </div>
-              <div className="p-2 rounded bg-slate-950 border border-slate-800 text-slate-300 flex items-center justify-between">
+              <div className="p-2 bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] flex items-center justify-between font-bold">
                 <span>docs/UNIT_AUDIT.md</span>
-                <span className="text-emerald-400 text-[10px] font-bold">AUDITED</span>
+                <span className="text-[#00E676] font-extrabold">[ AUDITED ]</span>
               </div>
-              <div className="p-2 rounded bg-slate-950 border border-slate-800 text-slate-300 flex items-center justify-between">
+              <div className="p-2 bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] flex items-center justify-between font-bold">
                 <span>docs/DATA_LEAKAGE_AUDIT.md</span>
-                <span className="text-emerald-400 text-[10px] font-bold">ISOLATED</span>
+                <span className="text-[#00E676] font-extrabold">[ ISOLATED ]</span>
               </div>
-              <div className="p-2 rounded bg-slate-950 border border-slate-800 text-slate-300 flex items-center justify-between">
+              <div className="p-2 bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] flex items-center justify-between font-bold">
                 <span>docs/REPRODUCIBILITY_AUDIT.md</span>
-                <span className="text-emerald-400 text-[10px] font-bold">BITWISE</span>
+                <span className="text-[#00E676] font-extrabold">[ BITWISE ]</span>
               </div>
-              <div className="p-2 rounded bg-slate-950 border border-slate-800 text-slate-300 flex items-center justify-between col-span-2">
+              <div className="p-2 bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] flex items-center justify-between col-span-2 font-bold">
                 <span>docs/PERFORMANCE_BENCHMARK.md</span>
-                <span className="text-cyan-400 text-[10px] font-bold">&lt; 25 ms MC Latency</span>
+                <span className="text-[#FFFFFF] font-extrabold">&lt; 25 ms MC Latency</span>
               </div>
             </div>
           </div>

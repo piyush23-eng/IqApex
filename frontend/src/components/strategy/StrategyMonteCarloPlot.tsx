@@ -17,32 +17,32 @@ export const StrategyMonteCarloPlot: React.FC<StrategyMonteCarloPlotProps> = ({
 
   if (isLoading) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-4 font-mono text-2xs animate-pulse text-workstation-textMuted flex items-center justify-center space-x-2 h-52">
-        <Binary className="w-4 h-4 animate-spin text-workstation-accentCyan" />
-        <span>SIMULATING 1,000 STOCHASTIC SCENARIOS (TYRE VARIANCE, PIT UNCERTAINTY, TRAFFIC)...</span>
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-4 font-mono text-2xs text-[#FFFFFF] flex items-center justify-center space-x-2 h-52 shadow-md">
+        <Binary className="w-4 h-4 animate-spin text-[#FFFFFF]" />
+        <span className="font-bold uppercase">[ SIMULATING 1,000 STOCHASTIC SCENARIOS (TYRE VARIANCE, PIT UNCERTAINTY)... ]</span>
       </div>
     );
   }
 
   if (!monteCarloData) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-4 font-mono text-2xs text-workstation-textMuted flex items-center justify-between h-52">
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-4 font-mono text-2xs text-[#FFFFFF] flex items-center justify-between h-52 shadow-md">
         <div className="space-y-1">
-          <div className="text-workstation-textBright font-semibold flex items-center space-x-2">
-            <Binary className="w-4 h-4 text-workstation-accentCyan" />
-            <span>1,000-RUN MONTE CARLO RACE OUTCOME UNCERTAINTY</span>
+          <div className="text-[#FFFFFF] font-bold flex items-center space-x-2 text-xs uppercase">
+            <Binary className="w-4 h-4 text-[#FFFFFF]" />
+            <span>[ 1,000-RUN MONTE CARLO RACE OUTCOME UNCERTAINTY ]</span>
           </div>
-          <p className="text-3xs text-workstation-textMuted max-w-md">
+          <p className="text-3xs text-[#94A3B8] max-w-md">
             Execute 1,000 deterministic iterations propagating tyre wear rate variation (±12%), pit stop execution noise (±0.8s), and stochastic traffic interference into race completion distribution and quantiles.
           </p>
         </div>
 
         <button
           onClick={onRunMonteCarlo}
-          className="flex items-center space-x-1.5 px-3 py-1.5 rounded bg-workstation-accentCyan text-slate-950 font-bold hover:bg-sky-300 transition-colors text-xs"
+          className="btn-retro-primary text-xs flex items-center space-x-1.5"
         >
-          <Play className="w-3.5 h-3.5 fill-current" />
-          <span>RUN 1,000x MC</span>
+          <Play className="w-3.5 h-3.5 fill-current text-[#FFFFFF]" />
+          <span>[ RUN 1,000x MC ]</span>
         </button>
       </div>
     );
@@ -78,35 +78,43 @@ export const StrategyMonteCarloPlot: React.FC<StrategyMonteCarloPlotProps> = ({
   };
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs space-y-2">
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-1.5">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2 shadow-md">
+      {/* Titanium Header */}
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-2 bg-[#070E22] p-2 -mx-3 -mt-3 mb-2">
         <div className="flex items-center space-x-2">
-          <Binary className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright uppercase tracking-wider text-xs">
-            RACE OUTCOME UNCERTAINTY DISTRIBUTION ({iterations} RUNS)
+          <Binary className="w-3.5 h-3.5 text-[#FFFFFF]" />
+          <span className="font-bold text-[#FFFFFF] uppercase tracking-wider text-xs">
+            [ RACE OUTCOME UNCERTAINTY DISTRIBUTION ({iterations} RUNS) ]
           </span>
         </div>
 
-        <div className="flex items-center space-x-3 text-3xs">
-          <span>SEED: <strong className="text-workstation-accentCyan">{simulation_seed}</strong></span>
-          <span>MEAN: <strong className="text-workstation-textBright">{formatRaceTime(mean_race_time_s)}</strong></span>
-          <span>σ: <strong className="text-workstation-textMuted">±{std_dev_race_time_s.toFixed(2)}s</strong></span>
+        <div className="flex items-center space-x-2 text-3xs">
+          <span className="bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5 text-[#FFFFFF] font-bold">
+            SEED: {simulation_seed}
+          </span>
+          <span className="bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5 text-[#FFFFFF] font-bold">
+            MEAN: {formatRaceTime(mean_race_time_s)}
+          </span>
+          <span className="bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5 text-[#FFFFFF] font-bold">
+            σ: ±{std_dev_race_time_s.toFixed(2)}s
+          </span>
           {probability_beating_ref !== null && (
-            <span className="px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded font-semibold">
+            <span className="bg-[#00F0FF] border border-[#1E3A8A] px-1.5 py-0.5 text-[#FFFFFF] font-bold">
               P(Beat Ref): {(probability_beating_ref * 100).toFixed(1)}%
             </span>
           )}
           <button
             onClick={onRunMonteCarlo}
-            className="flex items-center space-x-1 px-2 py-0.5 rounded bg-workstation-surface border border-workstation-border text-workstation-textSecondary hover:text-workstation-textBright"
+            className="btn-retro text-3xs flex items-center space-x-1"
           >
-            <Play className="w-2.5 h-2.5" />
-            <span>RE-RUN</span>
+            <Play className="w-2.5 h-2.5 fill-current" />
+            <span>[ RE-RUN ]</span>
           </button>
         </div>
       </div>
 
-      <div className="relative">
+      {/* SVG Canvas */}
+      <div className="relative bg-[#070E22] border border-[#1E3A8A] p-2 shadow">
         <svg viewBox={`0 0 ${chartDims.width} ${chartDims.height}`} className="w-full h-40 select-none">
           {/* Baseline horizontal grid line */}
           <line
@@ -114,8 +122,8 @@ export const StrategyMonteCarloPlot: React.FC<StrategyMonteCarloPlotProps> = ({
             y1={chartDims.height - chartDims.padY}
             x2={chartDims.width - chartDims.padX}
             y2={chartDims.height - chartDims.padY}
-            stroke="#334155"
-            strokeWidth="1"
+            stroke="#1E3A8A"
+            strokeWidth="1.5"
           />
 
           {/* Histogram Bars */}
@@ -132,9 +140,10 @@ export const StrategyMonteCarloPlot: React.FC<StrategyMonteCarloPlotProps> = ({
                 y={y}
                 width={w}
                 height={h}
-                fill="#0EA5E9"
-                opacity="0.75"
-                className="hover:opacity-100 transition-opacity"
+                fill="#0A132E"
+                stroke="#1E3A8A"
+                strokeWidth="1"
+                className="hover:fill-[#0062FF] hover:stroke-[#00F0FF] transition-colors"
               >
                 <title>{`[${bin.bin_start.toFixed(1)}s - ${bin.bin_end.toFixed(1)}s]: ${bin.count} runs (${(bin.frequency * 100).toFixed(1)}%)`}</title>
               </rect>
@@ -148,35 +157,35 @@ export const StrategyMonteCarloPlot: React.FC<StrategyMonteCarloPlotProps> = ({
             y1={chartDims.padY}
             x2={scaleX(p05_race_time_s)}
             y2={chartDims.height - chartDims.padY}
-            stroke="#10B981"
-            strokeWidth="1.5"
+            stroke="#00E676"
+            strokeWidth="2"
             strokeDasharray="2,2"
           />
           <text
             x={scaleX(p05_race_time_s) - 3}
             y={chartDims.padY + 10}
             textAnchor="end"
-            fill="#10B981"
-            fontSize="6"
+            fill="#00E676"
+            fontSize="6.5"
             className="font-mono font-bold"
           >
             P05: {formatRaceTime(p05_race_time_s)}
           </text>
 
-          {/* P50 Median */}
+          {/* P50 Median (Solid Pure White) */}
           <line
             x1={scaleX(p50_race_time_s)}
             y1={chartDims.padY}
             x2={scaleX(p50_race_time_s)}
             y2={chartDims.height - chartDims.padY}
-            stroke="#38BDF8"
-            strokeWidth="2"
+            stroke="#FFFFFF"
+            strokeWidth="2.5"
           />
           <text
             x={scaleX(p50_race_time_s)}
             y={chartDims.padY - 4}
             textAnchor="middle"
-            fill="#38BDF8"
+            fill="#FFFFFF"
             fontSize="7"
             className="font-mono font-bold"
           >
@@ -189,16 +198,16 @@ export const StrategyMonteCarloPlot: React.FC<StrategyMonteCarloPlotProps> = ({
             y1={chartDims.padY}
             x2={scaleX(p95_race_time_s)}
             y2={chartDims.height - chartDims.padY}
-            stroke="#EF4444"
-            strokeWidth="1.5"
+            stroke="#FF3366"
+            strokeWidth="2"
             strokeDasharray="2,2"
           />
           <text
             x={scaleX(p95_race_time_s) + 3}
             y={chartDims.padY + 10}
             textAnchor="start"
-            fill="#EF4444"
-            fontSize="6"
+            fill="#FF3366"
+            fontSize="6.5"
             className="font-mono font-bold"
           >
             P95: {formatRaceTime(p95_race_time_s)}
@@ -207,26 +216,26 @@ export const StrategyMonteCarloPlot: React.FC<StrategyMonteCarloPlotProps> = ({
       </div>
 
       {/* Uncertainty Quantile Breakdown Table */}
-      <div className="grid grid-cols-5 gap-2 border-t border-workstation-borderSubtle pt-1.5 text-center text-3xs">
-        <div className="p-1 rounded bg-workstation-surface">
-          <span className="text-workstation-textMuted block text-4xs">OPTIMISTIC (P05)</span>
-          <span className="text-emerald-400 font-bold">{p05_race_time_s.toFixed(2)}s</span>
+      <div className="grid grid-cols-5 gap-2 border-t border-[#1E3A8A] pt-2 text-center text-3xs">
+        <div className="p-1.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+          <span className="text-[#94A3B8] block text-4xs font-bold uppercase">OPTIMISTIC (P05)</span>
+          <span className="text-[#00E676] font-bold">{p05_race_time_s.toFixed(2)}s</span>
         </div>
-        <div className="p-1 rounded bg-workstation-surface">
-          <span className="text-workstation-textMuted block text-4xs">LOWER QUARTILE (P25)</span>
-          <span className="text-workstation-textBright font-semibold">{monteCarloData.p25_race_time_s.toFixed(2)}s</span>
+        <div className="p-1.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+          <span className="text-[#94A3B8] block text-4xs font-bold uppercase">LOWER (P25)</span>
+          <span className="text-[#FFFFFF] font-bold">{monteCarloData.p25_race_time_s.toFixed(2)}s</span>
         </div>
-        <div className="p-1 rounded bg-workstation-surface border border-workstation-accentCyan/30">
-          <span className="text-workstation-accentCyan block text-4xs font-bold">MEDIAN (P50)</span>
-          <span className="text-workstation-accentCyan font-bold">{median_race_time_s.toFixed(2)}s</span>
+        <div className="p-1.5 bg-[#0062FF] border border-[#00F0FF] shadow-matrix-glow">
+          <span className="text-[#FFFFFF] block text-4xs font-bold uppercase">[ MEDIAN (P50) ]</span>
+          <span className="text-[#FFFFFF] font-black">{median_race_time_s.toFixed(2)}s</span>
         </div>
-        <div className="p-1 rounded bg-workstation-surface">
-          <span className="text-workstation-textMuted block text-4xs">UPPER QUARTILE (P75)</span>
-          <span className="text-workstation-textBright font-semibold">{monteCarloData.p75_race_time_s.toFixed(2)}s</span>
+        <div className="p-1.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+          <span className="text-[#94A3B8] block text-4xs font-bold uppercase">UPPER (P75)</span>
+          <span className="text-[#FFFFFF] font-bold">{monteCarloData.p75_race_time_s.toFixed(2)}s</span>
         </div>
-        <div className="p-1 rounded bg-workstation-surface">
-          <span className="text-workstation-textMuted block text-4xs">PESSIMISTIC (P95)</span>
-          <span className="text-red-400 font-bold">{p95_race_time_s.toFixed(2)}s</span>
+        <div className="p-1.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+          <span className="text-[#94A3B8] block text-4xs font-bold uppercase">PESSIMISTIC (P95)</span>
+          <span className="text-[#FFB000] font-bold">{p95_race_time_s.toFixed(2)}s</span>
         </div>
       </div>
     </div>

@@ -118,7 +118,7 @@ export const LapAnalysisPage: React.FC = () => {
   }, [fetchStatistics]);
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-y-auto bg-workstation-background p-3 space-y-3 font-mono text-2xs select-none">
+    <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[#030712] p-3 space-y-3 font-mono text-2xs select-none">
       {/* Top Header & Methodology Controller */}
       <DecompositionSummaryHeader
         decomposition={decomposition}
@@ -133,17 +133,17 @@ export const LapAnalysisPage: React.FC = () => {
       />
 
       {decompError && (
-        <div className="bg-red-950/40 border border-red-500/50 text-red-300 p-2.5 rounded flex items-center justify-between text-2xs">
+        <div className="bg-[#FF3366]/15 border border-[#1E3A8A] text-[#FF3366] p-2.5 flex items-center justify-between text-2xs shadow font-bold">
           <div className="flex items-center space-x-2">
-            <AlertCircle className="w-4 h-4 text-red-400" />
-            <span>Calculation Error: {decompError}</span>
+            <AlertCircle className="w-4 h-4 text-[#FF3366] stroke-[2.5]" />
+            <span>CALCULATION ERROR: {decompError}</span>
           </div>
           <button
             onClick={fetchDecomposition}
-            className="px-2 py-0.5 bg-red-900/50 hover:bg-red-800/60 border border-red-700/60 rounded flex items-center space-x-1"
+            className="btn-retro text-3xs font-extrabold flex items-center space-x-1"
           >
-            <RefreshCw className="w-3 h-3" />
-            <span>Retry</span>
+            <RefreshCw className="w-3 h-3 text-[#FFFFFF]" />
+            <span>[ RETRY ]</span>
           </button>
         </div>
       )}

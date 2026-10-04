@@ -15,16 +15,16 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
 
   if (isLoading) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-6 text-center font-mono text-xs text-workstation-textMuted">
-        Evaluating response model and prediction intervals...
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-6 text-center font-mono text-xs text-[#FFFFFF] font-bold shadow-md">
+        [ EVALUATING RESPONSE MODEL AND PREDICTION INTERVALS... ]
       </div>
     );
   }
 
   if (!curveData || curveData.points.length === 0) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-6 text-center font-mono text-xs text-workstation-textMuted">
-        No response curve data available.
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-6 text-center font-mono text-xs text-[#94A3B8] font-bold shadow-md">
+        [ NO RESPONSE CURVE DATA AVAILABLE ]
       </div>
     );
   }
@@ -87,45 +87,44 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
   const piLowerPath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${getX(p.x)} ${getY(p.pi_95_lower)}`).join(' ');
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs space-y-2">
-      {/* Header and Extrapolation Notice */}
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-1.5">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2 shadow-md">
+      {/* Titanium Header */}
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-2 bg-[#070E22] p-2 -mx-3 -mt-3 mb-2">
         <div className="flex items-center space-x-2">
-          <LineChart className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright tracking-wider uppercase">
-            RESPONSE CURVE & UNCERTAINTY BANDS (95% CI & PI)
+          <LineChart className="w-3.5 h-3.5 text-[#FFFFFF]" />
+          <span className="font-bold text-[#FFFFFF] tracking-wider uppercase text-xs">
+            [ RESPONSE CURVE & UNCERTAINTY BANDS (95% CI & PI) ]
           </span>
         </div>
 
-        <div className="flex items-center space-x-3 text-3xs text-workstation-textMuted">
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 bg-workstation-accentCyan/30 border border-workstation-accentCyan inline-block rounded-xs" />
+        <div className="flex items-center space-x-2 text-3xs font-bold">
+          <span className="flex items-center space-x-1.5 bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5">
+            <span className="w-2.5 h-2.5 bg-[#00F0FF]/40 border border-[#1E3A8A] inline-block" />
             <span>95% CI (Mean)</span>
           </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-3 h-0.5 border-t border-dashed border-zinc-500 inline-block" />
+          <span className="flex items-center space-x-1.5 bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5">
+            <span className="w-3 h-0.5 border-t-2 border-dashed border-[#1E3A8A] inline-block" />
             <span>95% PI (Single Lap)</span>
           </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-2 h-2 rounded-full bg-workstation-telemetryAmber inline-block" />
+          <span className="flex items-center space-x-1.5 bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5">
+            <span className="w-2.5 h-2.5 bg-[#FFB000] border border-[#1E3A8A] inline-block" />
             <span>Observed Laps</span>
           </span>
         </div>
       </div>
 
       {extrapolation_warning && (
-        <div className="bg-amber-950/30 border border-amber-500/40 text-amber-300 p-2 rounded flex items-center space-x-2 text-3xs">
-          <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-          <span>{extrapolation_warning}</span>
+        <div className="bg-[#0E1A3D] text-[#FBBF24] border border-[#FBBF24]/50 border border-[#1E3A8A] text-[#FFFFFF] font-bold p-2 flex items-center space-x-2 text-3xs shadow">
+          <AlertTriangle className="w-4 h-4 text-[#FFB000] shrink-0" />
+          <span>[ WARNING ]: {extrapolation_warning}</span>
         </div>
       )}
 
       {/* SVG Canvas */}
-      <div className="relative overflow-x-auto">
+      <div className="relative bg-[#070E22] border border-[#1E3A8A] p-2 shadow">
         <svg
           viewBox={`0 0 ${width} ${height}`}
           className="w-full h-auto select-none"
-          style={{ minWidth: '600px' }}
         >
           {/* Shaded Observed Range Box in Background */}
           <rect
@@ -133,11 +132,11 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
             y={pad.top}
             width={Math.max(2, getX(obsMax) - getX(obsMin))}
             height={h}
-            fill="#38bdf8"
-            fillOpacity="0.04"
-            stroke="#38bdf8"
-            strokeOpacity="0.2"
-            strokeDasharray="2,2"
+            fill="#0062FF"
+            fillOpacity="0.10"
+            stroke="#1E3A8A"
+            strokeWidth="1.5"
+            strokeDasharray="4,2"
           />
 
           {/* Grid lines */}
@@ -151,17 +150,18 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
                   y1={y}
                   x2={width - pad.right}
                   y2={y}
-                  stroke="#27272a"
-                  strokeWidth={0.5}
+                  stroke="#1E3A8A"
+                  strokeWidth={1}
                   strokeDasharray="2,2"
                 />
                 <text
                   x={pad.left - 6}
                   y={y + 3}
                   textAnchor="end"
-                  fill="#71717a"
+                  fill="#93C5FD"
                   fontSize="7.5"
                   fontFamily="monospace"
+                  fontWeight="bold"
                 >
                   {yVal.toFixed(3)}s
                 </text>
@@ -170,14 +170,14 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
           })}
 
           {/* 95% Confidence Interval band */}
-          <path d={ciAreaPath} fill="#38bdf8" fillOpacity="0.12" />
+          <path d={ciAreaPath} fill="#0062FF" fillOpacity="0.25" />
 
           {/* 95% Prediction Interval lines (dashed) */}
-          <path d={piUpperPath} fill="none" stroke="#71717a" strokeWidth="1" strokeDasharray="3,3" />
-          <path d={piLowerPath} fill="none" stroke="#71717a" strokeWidth="1" strokeDasharray="3,3" />
+          <path d={piUpperPath} fill="none" stroke="#00F0FF" strokeWidth="1.5" strokeDasharray="3,3" />
+          <path d={piLowerPath} fill="none" stroke="#00F0FF" strokeWidth="1.5" strokeDasharray="3,3" />
 
-          {/* Model Curve */}
-          <path d={modelLinePath} fill="none" stroke="#38bdf8" strokeWidth="2" />
+          {/* Model Curve (Solid Pure White) */}
+          <path d={modelLinePath} fill="none" stroke="#FFFFFF" strokeWidth="2.5" />
 
           {/* Observed telemetry scatter points */}
           {observed_data.map((d) => {
@@ -188,11 +188,11 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
                 key={d.lap_id}
                 cx={cx}
                 cy={cy}
-                r="3.5"
-                fill="#f59e0b"
-                stroke="#18181b"
-                strokeWidth="1"
-                className="cursor-pointer hover:r-5 transition-all"
+                r="4"
+                fill="#0062FF"
+                stroke="#00F0FF"
+                strokeWidth="1.5"
+                className="cursor-pointer hover:r-5 transition-all hover:fill-[#00F0FF] hover:stroke-[#FFFFFF]"
                 onMouseEnter={() =>
                   setHoveredPoint({
                     x: d.x_val,
@@ -211,14 +211,14 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
             y1={pad.top}
             x2={getX(baseline_x)}
             y2={pad.top + h}
-            stroke="#06b6d4"
+            stroke="#3B82F6"
             strokeWidth="1.5"
             strokeDasharray="4,2"
           />
           <text
             x={getX(baseline_x) + 4}
             y={pad.top + 10}
-            fill="#06b6d4"
+            fill="#93C5FD"
             fontSize="7"
             fontFamily="monospace"
             fontWeight="bold"
@@ -232,13 +232,13 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
             y1={pad.top}
             x2={getX(scenario_x)}
             y2={pad.top + h}
-            stroke={domain_status === 'EXTRAPOLATION' ? '#f59e0b' : '#10b981'}
-            strokeWidth="2"
+            stroke={domain_status === 'EXTRAPOLATION' ? '#FF3366' : '#00F0FF'}
+            strokeWidth="2.5"
           />
           <text
             x={getX(scenario_x) + 4}
             y={pad.top + 22}
-            fill={domain_status === 'EXTRAPOLATION' ? '#f59e0b' : '#10b981'}
+            fill={domain_status === 'EXTRAPOLATION' ? '#FF3366' : '#00F0FF'}
             fontSize="7"
             fontFamily="monospace"
             fontWeight="bold"
@@ -256,16 +256,17 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
                   y1={pad.top + h}
                   x2={getX(p.x)}
                   y2={pad.top + h + 4}
-                  stroke="#52525b"
-                  strokeWidth={1}
+                  stroke="#1E3A8A"
+                  strokeWidth={1.5}
                 />
                 <text
                   x={getX(p.x)}
                   y={pad.top + h + 13}
                   textAnchor="middle"
-                  fill="#71717a"
+                  fill="#93C5FD"
                   fontSize="7.5"
                   fontFamily="monospace"
+                  fontWeight="bold"
                 >
                   {p.x.toFixed(1)}
                 </text>
@@ -277,9 +278,10 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
             x={width / 2}
             y={height - 5}
             textAnchor="middle"
-            fill="#a1a1aa"
+            fill="#93C5FD"
             fontSize="8"
             fontFamily="monospace"
+            fontWeight="bold"
           >
             {parameter_name.toUpperCase()}
           </text>
@@ -288,9 +290,10 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
             y={12}
             transform="rotate(-90)"
             textAnchor="middle"
-            fill="#a1a1aa"
+            fill="#93C5FD"
             fontSize="8"
             fontFamily="monospace"
+            fontWeight="bold"
           >
             PREDICTED {target_name.toUpperCase()} (s)
           </text>
@@ -298,7 +301,7 @@ export const ResponseCurvePlot: React.FC<ResponseCurvePlotProps> = ({
 
         {/* Hover Readout Tooltip */}
         {hoveredPoint && (
-          <div className="absolute top-2 right-4 bg-workstation-surface/95 border border-workstation-accentCyan/60 rounded px-2.5 py-1 text-3xs font-mono text-workstation-textBright shadow-lg pointer-events-none">
+          <div className="absolute top-2 right-4 bg-[#070E22] border border-[#1E3A8A] px-2.5 py-1 text-3xs font-mono text-[#FFFFFF] font-bold shadow pointer-events-none">
             {hoveredPoint.label}
           </div>
         )}

@@ -1,6 +1,8 @@
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.analytics.quality_checker import TelemetryQualityChecker
@@ -59,6 +61,27 @@ class LapChannelsResponse(BaseModel):
     channel_units: dict[str, str]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+@router.get(
+    "/telemetry/sample-csv",
+    tags=["Telemetry Pipeline"],
+    summary="Download canonical sample telemetry CSV",
+)
+def get_sample_telemetry_csv():
+    """Return the reference lap sample CSV for quick ingestion testing."""
+    candidates = [
+        Path("examples/telemetry/reference_lap.csv"),
+        Path(__file__).resolve().parents[4] / "examples" / "telemetry" / "reference_lap.csv",
+    ]
+    for p in candidates:
+        if p.exists():
+            return FileResponse(
+                str(p),
+                media_type="text/csv",
+                filename="reference_lap.csv",
+            )
+    raise HTTPException(status_code=404, detail="Sample CSV not found")
 
 
 @router.post(

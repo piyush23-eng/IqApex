@@ -181,47 +181,49 @@ export const OptimizationPage: React.FC<OptimizationPageProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-y-auto bg-workstation-background p-3 space-y-3 font-mono text-2xs select-none">
+    <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[#030712] p-4 space-y-4 font-mono text-2xs select-none text-[#FFFFFF]">
       {/* Top Header Strip */}
-      <div className="bg-workstation-panel border border-workstation-border rounded p-3 space-y-2">
-        <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-2">
+      <div className="matrix-hud-card scanline-container bg-[#0A132E] border border-[#1E3A8A] p-3 space-y-2 shadow-md relative">
+        <div className="scan-beam" />
+        <div className="flex flex-wrap items-center justify-between border-b border-[#1E3A8A] pb-2 gap-2 relative z-10">
           <div className="flex items-center space-x-2">
-            <Cpu className="w-4 h-4 text-workstation-accentCyan" />
-            <span className="font-bold text-workstation-textBright tracking-wider uppercase text-xs">
-              PERFORMANCE SENSITIVITY & ENGINEERING OPTIMIZATION WORKSPACE
+            <span className="w-2.5 h-2.5 bg-[#00F0FF] rounded-full animate-ping shadow-[0_0_8px_#00F0FF]" />
+            <Cpu className="w-4 h-4 text-[#0062FF] stroke-[2.5]" />
+            <span className="font-black text-[#FFFFFF] tracking-wider uppercase text-xs font-mono">
+              [ PERFORMANCE SENSITIVITY &amp; ENGINEERING OPTIMIZATION WORKSPACE ]
             </span>
-            <span className="text-workstation-border">|</span>
-            <span className="text-workstation-textMuted">CIRCUIT: AUTODROMO NAZIONALE MONZA</span>
+            <span className="text-[#3B82F6] font-bold">|</span>
+            <span className="text-[#93C5FD] font-bold">CIRCUIT: AUTODROMO NAZIONALE MONZA</span>
           </div>
 
           <div className="flex items-center space-x-2">
-            <span className="px-2 py-0.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 font-semibold rounded text-3xs flex items-center space-x-1">
-              <AlertCircle className="w-3 h-3" />
-              <span>SYNTHETIC DEMONSTRATION DATASET</span>
+            <span className="px-2 py-0.5 bg-[#0062FF] text-[#FFFFFF] border border-[#00F0FF] font-black text-4xs shadow-matrix-glow flex items-center space-x-1">
+              <AlertCircle className="w-3 h-3 text-[#00F0FF] stroke-[2.5]" />
+              <span>SYNTHETIC CALIBRATION DATASET ✕</span>
             </span>
 
-            <div className="flex items-center bg-workstation-surface border border-workstation-border rounded p-0.5 text-3xs">
+            <div className="flex items-center space-x-1 font-mono text-3xs">
               <button
                 onClick={() => setViewMode('1d')}
-                className={`px-2 py-0.5 rounded font-semibold transition-colors flex items-center space-x-1 ${
+                className={`px-2.5 py-1 border border-[#1E3A8A] font-extrabold uppercase transition-all flex items-center space-x-1 ${
                   viewMode === '1d'
-                    ? 'bg-workstation-accentCyan text-workstation-background'
-                    : 'text-workstation-textMuted hover:text-workstation-textBright'
+                    ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                    : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
                 }`}
               >
                 <Sliders className="w-3 h-3" />
-                <span>1D Curve</span>
+                <span>[ 1D CURVE ]</span>
               </button>
               <button
                 onClick={() => setViewMode('2d')}
-                className={`px-2 py-0.5 rounded font-semibold transition-colors flex items-center space-x-1 ${
+                className={`px-2.5 py-1 border border-[#1E3A8A] font-extrabold uppercase transition-all flex items-center space-x-1 ${
                   viewMode === '2d'
-                    ? 'bg-workstation-accentCyan text-workstation-background'
-                    : 'text-workstation-textMuted hover:text-workstation-textBright'
+                    ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                    : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
                 }`}
               >
                 <Layers className="w-3 h-3" />
-                <span>2D Interaction</span>
+                <span>[ 2D INTERACTION ]</span>
               </button>
             </div>
           </div>

@@ -56,6 +56,15 @@ class ApiService {
   }
 
   // Stage 2 Pipeline Methods
+  async getSampleTelemetryCsv(): Promise<File> {
+    const res = await fetch(`${BASE_URL}/api/telemetry/sample-csv`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch sample CSV: HTTP ${res.status}`);
+    }
+    const blob = await res.blob();
+    return new File([blob], 'reference_lap.csv', { type: 'text/csv' });
+  }
+
   async inspectTelemetry(file: File): Promise<TelemetryInspectionResult> {
     const formData = new FormData();
     formData.append('file', file);

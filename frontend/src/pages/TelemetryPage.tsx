@@ -34,6 +34,8 @@ import {
 import { SynchronizedTelemetryWorkspace } from '../components/telemetry/SynchronizedTelemetryWorkspace';
 import { CornerAnalysisTable } from '../components/telemetry/CornerAnalysisTable';
 import { CornerContextInspector } from '../components/telemetry/CornerContextInspector';
+import { MonzaTrackMap } from '../components/common/MonzaTrackMap';
+import { MapPin } from 'lucide-react';
 
 interface TelemetryPageProps {
   sessions: Session[];
@@ -110,6 +112,7 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
   });
   const [cursorSample, setCursorSample] = useState<CursorSample | null>(null);
   const [selectedCornerId, setSelectedCornerId] = useState<string | null>(null);
+  const [showTrackMap, setShowTrackMap] = useState<boolean>(true);
 
   // Aggregate all laps in session for reference/comparison dropdowns
   const [allSessionLaps, setAllSessionLaps] = useState<Lap[]>([]);
@@ -166,6 +169,13 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
       setIsComparing(false);
     }
   }, []);
+
+  // Synchronize reference lap when currentLap prop changes from top context bar
+  useEffect(() => {
+    if (currentLap?.lap_id && currentLap.lap_id !== referenceLapId) {
+      setReferenceLapId(currentLap.lap_id);
+    }
+  }, [currentLap?.lap_id, referenceLapId]);
 
   // Initial load or on lap change
   useEffect(() => {
@@ -242,23 +252,24 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
   }, [handleToggleChannel]);
 
   return (
-    <div className="h-full overflow-y-auto p-3 space-y-3 font-mono text-2xs select-none">
+    <div className="h-full overflow-y-auto p-4 space-y-4 font-mono text-2xs select-none bg-[#030712] text-[#FFFFFF]">
       {/* 1. TOP ACQUISITION & WORKFLOW BAR */}
-      <div className="p-2.5 bg-workstation-panel border border-workstation-border rounded flex flex-wrap items-center justify-between gap-2.5">
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-1.5 text-workstation-textMuted uppercase text-3xs font-semibold">
-            <Activity className="w-3.5 h-3.5 text-workstation-accentCyan" />
-            <span>ACQUISITION & ANALYSIS WORKFLOW</span>
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 flex flex-wrap items-center justify-between gap-3 shadow-md">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center space-x-2 text-[#FFFFFF] uppercase text-2xs font-bold tracking-wider">
+            <span className="w-2.5 h-2.5 bg-[#00F0FF] border border-[#1E3A8A] animate-pulse" />
+            <Activity className="w-3.5 h-3.5 text-[#FFFFFF]" />
+            <span>[ ACQUISITION & ANALYSIS WORKFLOW ]</span>
           </div>
 
-          <span className="text-workstation-border">|</span>
+          <span className="text-[#FFFFFF] font-bold">|</span>
 
           {/* Session Selection */}
-          <div className="flex items-center space-x-1.5">
-            <span className="text-workstation-textMuted text-3xs uppercase">SESSION:</span>
+          <div className="flex items-center space-x-1.5 px-2.5 py-1 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-[#94A3B8] text-3xs font-bold uppercase tracking-wider">SESSION:</span>
             <select
               aria-label="Select Session"
-              className="bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-0.5 rounded text-2xs focus:outline-none focus:border-workstation-accentCyan"
+              className="bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-0.5 text-2xs font-bold focus:outline-none focus:bg-[#00F0FF] cursor-pointer"
               value={currentSession?.session_id || ''}
               onChange={(e) => onSelectSession(e.target.value)}
             >
@@ -272,11 +283,11 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
           </div>
 
           {/* Run Selection */}
-          <div className="flex items-center space-x-1.5">
-            <span className="text-workstation-textMuted text-3xs uppercase">RUN:</span>
+          <div className="flex items-center space-x-1.5 px-2.5 py-1 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-[#94A3B8] text-3xs font-bold uppercase tracking-wider">RUN:</span>
             <select
               aria-label="Select Run"
-              className="bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-0.5 rounded text-2xs focus:outline-none focus:border-workstation-accentCyan disabled:opacity-50"
+              className="bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-0.5 text-2xs font-bold focus:outline-none focus:bg-[#00F0FF] cursor-pointer disabled:opacity-50"
               value={currentRun?.run_id || ''}
               onChange={(e) => onSelectRun(e.target.value)}
               disabled={runs.length === 0}
@@ -291,11 +302,11 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
           </div>
 
           {/* Lap Selection */}
-          <div className="flex items-center space-x-1.5">
-            <span className="text-workstation-textMuted text-3xs uppercase">ACTIVE LAP:</span>
+          <div className="flex items-center space-x-1.5 px-2.5 py-1 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-[#94A3B8] text-3xs font-bold uppercase tracking-wider">ACTIVE LAP:</span>
             <select
               aria-label="Select Lap"
-              className="bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-0.5 rounded text-2xs focus:outline-none focus:border-workstation-accentCyan disabled:opacity-50"
+              className="bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-0.5 text-2xs font-bold focus:outline-none focus:bg-[#00F0FF] cursor-pointer disabled:opacity-50"
               value={currentLap?.lap_id || ''}
               onChange={(e) => {
                 onSelectLap(e.target.value);
@@ -315,38 +326,50 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
           <button
             onClick={onLoadTelemetry}
             disabled={!currentLap || isLoading}
-            className="px-2.5 py-0.5 bg-workstation-surface hover:bg-workstation-border border border-workstation-borderSubtle text-workstation-textSecondary rounded text-3xs flex items-center space-x-1 transition-colors disabled:opacity-40"
+            className="btn-retro-primary text-3xs font-bold flex items-center space-x-1.5 disabled:opacity-40"
             title="Reload raw telemetry for active lap"
           >
-            <Download className="w-2.5 h-2.5" />
-            <span>{isLoading ? 'Loading...' : 'Acquire'}</span>
+            <Download className="w-3 h-3 text-[#FFFFFF]" />
+            <span>{isLoading ? '[ ACQUIRING... ]' : '[ ACQUIRE ]'}</span>
           </button>
         </div>
 
-        {/* View Mode Tabs */}
+        {/* View Mode Tabs & Map Toggle */}
         <div className="flex items-center space-x-2">
-          <div className="flex items-center bg-workstation-surface border border-workstation-border rounded p-0.5 text-3xs">
+          <button
+            onClick={() => setShowTrackMap(!showTrackMap)}
+            className={`px-3 py-1.5 border border-[#1E3A8A] font-bold flex items-center space-x-1.5 transition-all text-3xs ${
+              showTrackMap
+                ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D]'
+            }`}
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            <span>{showTrackMap ? '[ RADAR MAP: ON ]' : '[ RADAR MAP: OFF ]'}</span>
+          </button>
+
+          <div className="flex items-center space-x-1 font-mono text-2xs">
             <button
               onClick={() => setActiveTab('workstation')}
-              className={`px-3 py-1 rounded transition-colors font-semibold flex items-center space-x-1.5 ${
+              className={`px-3 py-1.5 border border-[#1E3A8A] font-bold flex items-center space-x-1.5 transition-all text-3xs ${
                 activeTab === 'workstation'
-                  ? 'bg-workstation-accentCyan/20 text-workstation-accentCyan'
-                  : 'text-workstation-textMuted hover:text-workstation-textSecondary'
+                  ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                  : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
               }`}
             >
-              <BarChart2 className="w-3 h-3" />
-              <span>SYNCHRONIZED WORKSTATION</span>
+              <BarChart2 className="w-3.5 h-3.5" />
+              <span>[ SYNCHRONIZED WORKSTATION ]</span>
             </button>
             <button
               onClick={() => setActiveTab('diagnostics')}
-              className={`px-3 py-1 rounded transition-colors font-semibold flex items-center space-x-1.5 ${
+              className={`px-3 py-1.5 border border-[#1E3A8A] font-bold flex items-center space-x-1.5 transition-all text-3xs ${
                 activeTab === 'diagnostics'
-                  ? 'bg-workstation-accentCyan/20 text-workstation-accentCyan'
-                  : 'text-workstation-textMuted hover:text-workstation-textSecondary'
+                  ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                  : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
               }`}
             >
-              <TableProperties className="w-3 h-3" />
-              <span>PIPELINE DIAGNOSTICS</span>
+              <TableProperties className="w-3.5 h-3.5" />
+              <span>[ PIPELINE DIAGNOSTICS ]</span>
             </button>
           </div>
         </div>
@@ -354,7 +377,22 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
 
       {/* 2. SYNCHRONIZED WORKSTATION VIEW */}
       {activeTab === 'workstation' && (
-        <div className="space-y-2.5">
+        <div className="space-y-3">
+          {/* Animated Circuit Radar Map */}
+          {showTrackMap && (
+            <div className="mb-3">
+              <MonzaTrackMap
+                selectedCornerId={selectedCornerId}
+                onSelectCorner={(cid) => {
+                  setSelectedCornerId(cid);
+                  const found = cornerMetrics.find((c) => c.corner_id === cid);
+                  if (found) handleSelectCorner(found);
+                }}
+                showDetails={true}
+              />
+            </div>
+          )}
+
           {/* Lap Summary Header: Reference vs Comparison */}
           <LapSummaryHeader summary={comparisonSummary} isLoading={isComparing} />
 
@@ -416,125 +454,125 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
         </div>
       )}
 
-      {/* 3. PIPELINE DIAGNOSTICS VIEW (Preserved from Stage 2) */}
+      {/* 3. PIPELINE DIAGNOSTICS VIEW */}
       {activeTab === 'diagnostics' && (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {/* Top Metric Strip */}
-          <div className="grid grid-cols-6 gap-2.5">
-            <div className="p-2.5 bg-workstation-panel border border-workstation-border rounded">
-              <div className="text-3xs text-workstation-textMuted uppercase flex items-center space-x-1">
-                <HardDrive className="w-3 h-3 text-workstation-accentCyan" />
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+            <div className="p-3 bg-[#070E22] border border-[#1E3A8A] shadow">
+              <div className="text-3xs text-[#94A3B8] font-bold uppercase flex items-center space-x-1">
+                <HardDrive className="w-3 h-3 text-[#FFFFFF]" />
                 <span>AVAILABILITY</span>
               </div>
-              <div className="text-sm font-semibold text-workstation-telemetryGreen mt-1">ACQUIRED</div>
-              <div className="text-3xs text-workstation-textMuted mt-0.5">
+              <div className="text-sm font-bold text-[#00E676] mt-1">ACQUIRED</div>
+              <div className="text-3xs text-[#94A3B8] mt-0.5">
                 {alignedData?.point_count.toLocaleString() || '5,794'} distance points
               </div>
             </div>
 
-            <div className="p-2.5 bg-workstation-panel border border-workstation-border rounded">
-              <div className="text-3xs text-workstation-textMuted uppercase flex items-center space-x-1">
-                <Layers className="w-3 h-3 text-workstation-accentCyan" />
+            <div className="p-3 bg-[#070E22] border border-[#1E3A8A] shadow">
+              <div className="text-3xs text-[#94A3B8] font-bold uppercase flex items-center space-x-1">
+                <Layers className="w-3 h-3 text-[#FFFFFF]" />
                 <span>CHANNELS</span>
               </div>
-              <div className="text-sm font-semibold text-workstation-textBright mt-1">10 CANONICAL</div>
-              <div className="text-3xs text-workstation-textMuted mt-0.5">10 Core / 0 Missing</div>
+              <div className="text-sm font-bold text-[#FFFFFF] mt-1">10 CANONICAL</div>
+              <div className="text-3xs text-[#94A3B8] mt-0.5">10 Core / 0 Missing</div>
             </div>
 
-            <div className="p-2.5 bg-workstation-panel border border-workstation-border rounded">
-              <div className="text-3xs text-workstation-textMuted uppercase flex items-center space-x-1">
-                <ShieldCheck className="w-3 h-3 text-workstation-accentCyan" />
+            <div className="p-3 bg-[#070E22] border border-[#1E3A8A] shadow">
+              <div className="text-3xs text-[#94A3B8] font-bold uppercase flex items-center space-x-1">
+                <ShieldCheck className="w-3 h-3 text-[#FFFFFF]" />
                 <span>DATA QUALITY</span>
               </div>
-              <div className="text-sm font-semibold text-workstation-telemetryGreen mt-1">
+              <div className="text-sm font-bold text-[#00E676] mt-1">
                 {comparisonSummary ? `PASS (${comparisonSummary.reference_quality_score.toFixed(1)})` : 'PASS (100.0)'}
               </div>
-              <div className="text-3xs text-workstation-textMuted mt-0.5">0 active warnings</div>
+              <div className="text-3xs text-[#94A3B8] mt-0.5">0 active warnings</div>
             </div>
 
-            <div className="p-2.5 bg-workstation-panel border border-workstation-border rounded">
-              <div className="text-3xs text-workstation-textMuted uppercase flex items-center space-x-1">
-                <Cpu className="w-3 h-3 text-workstation-accentCyan" />
+            <div className="p-3 bg-[#070E22] border border-[#1E3A8A] shadow">
+              <div className="text-3xs text-[#94A3B8] font-bold uppercase flex items-center space-x-1">
+                <Cpu className="w-3 h-3 text-[#FFFFFF]" />
                 <span>SPATIAL STEP</span>
               </div>
-              <div className="text-sm font-semibold text-workstation-textBright mt-1">1.00 m NOMINAL</div>
-              <div className="text-3xs text-workstation-textMuted mt-0.5">Uniform Grid</div>
+              <div className="text-sm font-bold text-[#FFFFFF] mt-1">1.00 m NOMINAL</div>
+              <div className="text-3xs text-[#94A3B8] mt-0.5">Uniform Grid</div>
             </div>
 
-            <div className="p-2.5 bg-workstation-panel border border-workstation-border rounded">
-              <div className="text-3xs text-workstation-textMuted uppercase flex items-center space-x-1">
-                <Clock className="w-3 h-3 text-workstation-accentCyan" />
+            <div className="p-3 bg-[#070E22] border border-[#1E3A8A] shadow">
+              <div className="text-3xs text-[#94A3B8] font-bold uppercase flex items-center space-x-1">
+                <Clock className="w-3 h-3 text-[#FFFFFF]" />
                 <span>DISTANCE SPAN</span>
               </div>
-              <div className="text-sm font-semibold text-workstation-accentCyan mt-1">0 → 5,793 m</div>
-              <div className="text-3xs text-workstation-textMuted mt-0.5">
+              <div className="text-sm font-bold text-[#FFFFFF] mt-1">0 → 5,793 m</div>
+              <div className="text-3xs text-[#94A3B8] mt-0.5">
                 {telemetryData ? `${telemetryData.total_raw_points} samples` : '1-meter aligned grid'}
               </div>
             </div>
 
-            <div className="p-2.5 bg-workstation-panel border border-workstation-border rounded">
-              <div className="text-3xs text-workstation-textMuted uppercase flex items-center space-x-1">
-                <Fingerprint className="w-3 h-3 text-workstation-accentCyan" />
+            <div className="p-3 bg-[#070E22] border border-[#1E3A8A] shadow">
+              <div className="text-3xs text-[#94A3B8] font-bold uppercase flex items-center space-x-1">
+                <Fingerprint className="w-3 h-3 text-[#FFFFFF]" />
                 <span>DATA SOURCE</span>
               </div>
-              <div className="text-xs font-semibold text-workstation-telemetryAmber mt-1 truncate">
+              <div className="text-xs font-bold text-[#FF3366] mt-1 truncate">
                 {isSynthetic ? 'Synthetic demo' : 'Parquet Store'}
               </div>
-              <div className="text-3xs text-workstation-textMuted mt-0.5 truncate">
+              <div className="text-3xs text-[#94A3B8] mt-0.5 truncate">
                 Pipeline v{metadata?.lineage?.pipeline_version || '2.0.0'}
               </div>
             </div>
           </div>
 
           {/* Diagnostics Tabs & Content */}
-          <div className="bg-workstation-panel border border-workstation-border rounded">
-            <div className="flex items-center space-x-2 px-3 pt-2 border-b border-workstation-borderSubtle">
+          <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] shadow-md">
+            <div className="flex items-center space-x-2 px-3 pt-2 border-b border-[#1E3A8A] bg-[#070E22]">
               <button
                 onClick={() => setDiagSubTab('channels')}
-                className={`px-3 py-1.5 text-2xs font-semibold border-b-2 transition-colors ${
+                className={`px-3 py-1.5 text-2xs font-bold transition-all border-b-2 ${
                   diagSubTab === 'channels'
-                    ? 'border-workstation-accentCyan text-workstation-accentCyan'
-                    : 'border-transparent text-workstation-textMuted hover:text-workstation-textSecondary'
+                    ? 'border-[#1E3A8A] bg-[#070E22] text-[#FFFFFF]'
+                    : 'border-transparent text-[#94A3B8] hover:text-[#FFFFFF]'
                 }`}
               >
-                Canonical Channel Table ({channelsData?.channels.length || 10})
+                [ Canonical Channel Table ({channelsData?.channels.length || 10}) ]
               </button>
               <button
                 onClick={() => setDiagSubTab('quality')}
-                className={`px-3 py-1.5 text-2xs font-semibold border-b-2 transition-colors ${
+                className={`px-3 py-1.5 text-2xs font-bold transition-all border-b-2 ${
                   diagSubTab === 'quality'
-                    ? 'border-workstation-accentCyan text-workstation-accentCyan'
-                    : 'border-transparent text-workstation-textMuted hover:text-workstation-textSecondary'
+                    ? 'border-[#1E3A8A] bg-[#070E22] text-[#FFFFFF]'
+                    : 'border-transparent text-[#94A3B8] hover:text-[#FFFFFF]'
                 }`}
               >
-                Data Quality Report
+                [ Data Quality Report ]
               </button>
               <button
                 onClick={() => setDiagSubTab('lineage')}
-                className={`px-3 py-1.5 text-2xs font-semibold border-b-2 transition-colors ${
+                className={`px-3 py-1.5 text-2xs font-bold transition-all border-b-2 ${
                   diagSubTab === 'lineage'
-                    ? 'border-workstation-accentCyan text-workstation-accentCyan'
-                    : 'border-transparent text-workstation-textMuted hover:text-workstation-textSecondary'
+                    ? 'border-[#1E3A8A] bg-[#070E22] text-[#FFFFFF]'
+                    : 'border-transparent text-[#94A3B8] hover:text-[#FFFFFF]'
                 }`}
               >
-                Cryptographic Lineage
+                [ Cryptographic Lineage ]
               </button>
             </div>
 
-            <div className="p-3">
+            <div className="p-3 bg-[#070E22]">
               {diagSubTab === 'channels' && (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-2xs">
                     <thead>
-                      <tr className="text-3xs text-workstation-textMuted uppercase border-b border-workstation-borderSubtle pb-1">
-                        <th className="py-1">Canonical Channel</th>
-                        <th className="py-1">Type</th>
-                        <th className="py-1">Canonical Unit</th>
-                        <th className="py-1">Resampling Interpolation</th>
-                        <th className="py-1">Enforcement Status</th>
+                      <tr className="text-3xs text-[#FFFFFF] font-bold uppercase border-b border-[#1E3A8A] pb-1 bg-[#070E22]">
+                        <th className="py-1.5 px-2">Canonical Channel</th>
+                        <th className="py-1.5 px-2">Type</th>
+                        <th className="py-1.5 px-2">Canonical Unit</th>
+                        <th className="py-1.5 px-2">Resampling Interpolation</th>
+                        <th className="py-1.5 px-2">Enforcement Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-workstation-borderMuted">
+                    <tbody className="divide-y divide-[#E0E0E0] text-[#FFFFFF]">
                       {[
                         { name: 'timestamp', type: 'float64', unit: 's', interp: 'Linear', status: 'Core Mandatory' },
                         { name: 'distance', type: 'float64', unit: 'm', interp: 'Spatial Reference', status: 'Core Mandatory' },
@@ -547,13 +585,13 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
                         { name: 'lateral_acceleration', type: 'float64', unit: 'G', interp: 'Linear', status: 'Core Mandatory' },
                         { name: 'longitudinal_acceleration', type: 'float64', unit: 'G', interp: 'Linear', status: 'Core Mandatory' },
                       ].map((ch) => (
-                        <tr key={ch.name} className="hover:bg-workstation-surface/40">
-                          <td className="py-1.5 font-medium text-workstation-textBright">{ch.name}</td>
-                          <td className="py-1.5 text-workstation-textSecondary">{ch.type}</td>
-                          <td className="py-1.5 text-workstation-accentCyan">{ch.unit}</td>
-                          <td className="py-1.5 text-workstation-textSecondary">{ch.interp}</td>
-                          <td className="py-1.5">
-                            <span className="text-3xs px-1.5 py-0.5 bg-workstation-surface border border-workstation-borderSubtle text-workstation-telemetryGreen rounded">
+                        <tr key={ch.name} className="hover:bg-[#0A132E]">
+                          <td className="py-1.5 px-2 font-bold text-[#FFFFFF]">{ch.name}</td>
+                          <td className="py-1.5 px-2 text-[#CBD5E1]">{ch.type}</td>
+                          <td className="py-1.5 px-2 text-[#FFFFFF] font-semibold bg-[#00F0FF]/20">{ch.unit}</td>
+                          <td className="py-1.5 px-2 text-[#CBD5E1]">{ch.interp}</td>
+                          <td className="py-1.5 px-2">
+                            <span className="text-3xs px-2 py-0.5 bg-[#00F0FF] border border-[#1E3A8A] text-[#FFFFFF] font-bold">
                               {ch.status}
                             </span>
                           </td>
@@ -566,36 +604,36 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
 
               {diagSubTab === 'quality' && (
                 <div className="space-y-3">
-                  <div className="grid grid-cols-4 gap-3 p-3 bg-workstation-surface border border-workstation-borderSubtle rounded">
+                  <div className="grid grid-cols-4 gap-3 p-3 bg-[#0A132E] border border-[#1E3A8A] shadow">
                     <div>
-                      <div className="text-3xs text-workstation-textMuted uppercase">Quality Status</div>
-                      <div className="text-sm font-semibold text-workstation-telemetryGreen mt-0.5">
+                      <div className="text-3xs text-[#94A3B8] font-bold uppercase">Quality Status</div>
+                      <div className="text-sm font-bold text-[#00E676] mt-0.5">
                         {telemetryData?.data_quality?.status || 'PASS'}
                       </div>
                     </div>
                     <div>
-                      <div className="text-3xs text-workstation-textMuted uppercase">Integrity Score</div>
-                      <div className="text-sm font-semibold text-workstation-textBright mt-0.5">
+                      <div className="text-3xs text-[#94A3B8] font-bold uppercase">Integrity Score</div>
+                      <div className="text-sm font-bold text-[#FFFFFF] mt-0.5">
                         {telemetryData?.data_quality?.quality_score?.toFixed(1) || '100.0'} / 100.0
                       </div>
                     </div>
                     <div>
-                      <div className="text-3xs text-workstation-textMuted uppercase">Missing Channels</div>
-                      <div className="text-sm font-semibold text-workstation-textSecondary mt-0.5">
+                      <div className="text-3xs text-[#94A3B8] font-bold uppercase">Missing Channels</div>
+                      <div className="text-sm font-bold text-[#FFFFFF] mt-0.5">
                         {telemetryData?.data_quality?.missing_percentage?.toFixed(2) || '0.00'}%
                       </div>
                     </div>
                     <div>
-                      <div className="text-3xs text-workstation-textMuted uppercase">Physical Boundary Checks</div>
-                      <div className="text-sm font-semibold text-workstation-telemetryGreen mt-0.5">100% Validated</div>
+                      <div className="text-3xs text-[#94A3B8] font-bold uppercase">Physical Boundary Checks</div>
+                      <div className="text-sm font-bold text-[#00E676] mt-0.5">100% Validated</div>
                     </div>
                   </div>
 
-                  <div className="p-2 bg-workstation-surface border border-workstation-borderSubtle rounded text-workstation-textMuted text-3xs">
+                  <div className="p-3 bg-[#0A132E] border border-[#1E3A8A] text-[#E2E8F0] text-3xs font-medium">
                     {telemetryData?.data_quality?.warnings && telemetryData.data_quality.warnings.length > 0 ? (
                       <div className="space-y-1">
                         {telemetryData.data_quality.warnings.map((w, i) => (
-                          <div key={i} className="text-amber-400">{w}</div>
+                          <div key={i} className="text-[#FF3366] font-bold">{w}</div>
                         ))}
                       </div>
                     ) : (
@@ -606,34 +644,34 @@ export const TelemetryPage: React.FC<TelemetryPageProps> = ({
               )}
 
               {diagSubTab === 'lineage' && (
-                <div className="p-3 bg-workstation-surface border border-workstation-borderSubtle rounded space-y-2 text-2xs">
-                  <div className="flex justify-between pb-1.5 border-b border-workstation-borderSubtle">
-                    <span className="text-workstation-textMuted uppercase text-3xs">PROCESSING RUN ID</span>
-                    <span className="text-workstation-accentCyan font-semibold">
+                <div className="p-3 bg-[#0A132E] border border-[#1E3A8A] space-y-2 text-2xs shadow">
+                  <div className="flex justify-between pb-1.5 border-b border-[#1E3A8A]">
+                    <span className="text-[#94A3B8] uppercase text-3xs font-bold">PROCESSING RUN ID</span>
+                    <span className="text-[#FFFFFF] font-bold">
                       {metadata?.lineage?.processing_run_id || 'pr-demo-baseline-001'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-workstation-textMuted uppercase text-3xs">SOURCE FILE</span>
-                    <span className="text-workstation-textPrimary">
+                    <span className="text-[#94A3B8] uppercase text-3xs font-bold">SOURCE FILE</span>
+                    <span className="text-[#FFFFFF] font-semibold">
                       {metadata?.lineage?.source_file || 'synthetic_monza_fp2.csv'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-workstation-textMuted uppercase text-3xs">SOURCE SHA-256 HASH</span>
-                    <span className="text-workstation-textSecondary text-3xs truncate max-w-md">
+                    <span className="text-[#94A3B8] uppercase text-3xs font-bold">SOURCE SHA-256 HASH</span>
+                    <span className="text-[#CBD5E1] text-3xs font-mono truncate max-w-md">
                       {metadata?.lineage?.source_hash || 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-workstation-textMuted uppercase text-3xs">PIPELINE / MAPPING VERSION</span>
-                    <span className="text-workstation-textSecondary">
+                    <span className="text-[#94A3B8] uppercase text-3xs font-bold">PIPELINE / MAPPING VERSION</span>
+                    <span className="text-[#FFFFFF] font-semibold">
                       Pipeline v{metadata?.lineage?.pipeline_version || '2.0.0'} / Map v{metadata?.lineage?.mapping_version || '1.0.0'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-workstation-textMuted uppercase text-3xs">PROCESSED AT</span>
-                    <span className="text-workstation-textSecondary">
+                    <span className="text-[#94A3B8] uppercase text-3xs font-bold">PROCESSED AT</span>
+                    <span className="text-[#FFFFFF] font-semibold">
                       {metadata?.lineage?.processed_at || new Date().toISOString()}
                     </span>
                   </div>

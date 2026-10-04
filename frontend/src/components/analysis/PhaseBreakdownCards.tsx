@@ -9,8 +9,8 @@ interface PhaseBreakdownCardsProps {
 export const PhaseBreakdownCards: React.FC<PhaseBreakdownCardsProps> = ({ decomposition }) => {
   if (!decomposition) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-4 text-center font-mono text-xs text-workstation-textMuted">
-        Awaiting decomposition calculation...
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-4 text-center font-mono text-xs text-[#94A3B8] font-bold shadow-md">
+        [ AWAITING DECOMPOSITION CALCULATION... ]
       </div>
     );
   }
@@ -78,13 +78,13 @@ export const PhaseBreakdownCards: React.FC<PhaseBreakdownCardsProps> = ({ decomp
 
   return (
     <div className="space-y-1.5 font-mono">
-      <div className="flex items-center justify-between text-3xs text-workstation-textMuted uppercase px-1">
-        <span className="font-semibold text-workstation-textBright tracking-wider">
-          MEASURED PERFORMANCE PHASE CONTRIBUTIONS
+      <div className="flex items-center justify-between text-3xs text-[#94A3B8] uppercase px-1">
+        <span className="font-extrabold text-[#FFFFFF] tracking-wider">
+          [ MEASURED PERFORMANCE PHASE CONTRIBUTIONS ]
         </span>
-        <span className="text-workstation-accentCyan flex items-center space-x-1">
-          <CheckCircle2 className="w-3 h-3 text-workstation-telemetryGreen" />
-          <span>ZERO-HIDDEN RESIDUAL RECONCILIATION</span>
+        <span className="text-[#FFFFFF] font-bold flex items-center space-x-1">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#00E676] stroke-[2.5]" />
+          <span>ZERO-HIDDEN RESIDUAL RECONCILIATION ✕</span>
         </span>
       </div>
 
@@ -95,48 +95,46 @@ export const PhaseBreakdownCards: React.FC<PhaseBreakdownCardsProps> = ({ decomp
           const isPositive = card.delta > 0.0005;
           const deltaSign = card.delta > 0 ? '+' : '';
           const deltaColor = isNegative
-            ? 'text-workstation-telemetryGreen'
+            ? 'text-[#00E676]'
             : isPositive
-            ? 'text-workstation-telemetryAmber'
-            : 'text-workstation-textMuted';
+            ? 'text-[#FFB000]'
+            : 'text-[#FFFFFF]';
 
           return (
             <div
               key={card.id}
-              className={`bg-workstation-panel border rounded p-2.5 flex flex-col justify-between transition-colors ${
-                card.isResidual
-                  ? 'border-dashed border-workstation-border hover:border-workstation-accentCyan/50'
-                  : 'border-workstation-border hover:border-workstation-borderHighlight'
+              className={`window-retro bg-[#0A132E] border border-[#1E3A8A] p-2.5 flex flex-col justify-between shadow transition-transform hover:-translate-y-0.5 ${
+                card.isResidual ? 'border-dashed' : ''
               }`}
             >
               <div>
-                <div className="flex items-center justify-between text-3xs text-workstation-textMuted mb-1">
-                  <span className="font-bold tracking-wider flex items-center space-x-1">
-                    <Icon className="w-3 h-3 text-workstation-accentCyan" />
+                <div className="flex items-center justify-between text-3xs text-[#94A3B8] mb-1">
+                  <span className="font-extrabold tracking-wider text-[#FFFFFF] flex items-center space-x-1">
+                    <Icon className="w-3.5 h-3.5 text-[#FFFFFF] stroke-[2.5]" />
                     <span>{card.label}</span>
                   </span>
                   {card.isResidual && (
-                    <span className="px-1 py-0.2 bg-workstation-surface border border-workstation-borderSubtle text-workstation-accentCyan rounded text-4xs">
+                    <span className="px-1 py-0.2 bg-[#070E22] border border-[#1E3A8A] text-[#FFFFFF] font-bold text-4xs">
                       UNFORCED
                     </span>
                   )}
                 </div>
 
                 <div className="flex items-baseline space-x-1.5 my-1">
-                  <span className={`text-base font-bold tracking-tight ${deltaColor}`}>
+                  <span className={`text-base font-extrabold tracking-tight ${deltaColor}`}>
                     {deltaSign}{card.delta.toFixed(3)}s
                   </span>
-                  <span className="text-3xs text-workstation-textMuted">
+                  <span className="text-3xs text-[#94A3B8] font-bold">
                     ({card.percentage >= 0 ? '+' : ''}{card.percentage.toFixed(1)}%)
                   </span>
                 </div>
               </div>
 
-              <div className="border-t border-workstation-borderSubtle pt-1.5 mt-1 space-y-0.5 text-3xs">
-                <div className="text-workstation-accentCyan/80 font-mono truncate" title={card.criterion}>
+              <div className="border-t border-[#1E3A8A]/20 pt-1.5 mt-1 space-y-0.5 text-3xs">
+                <div className="text-[#FFFFFF] font-mono font-bold truncate" title={card.criterion}>
                   {card.criterion}
                 </div>
-                <div className="text-workstation-textMuted text-4xs leading-tight">
+                <div className="text-[#94A3B8] text-4xs font-medium leading-tight">
                   {card.description}
                 </div>
               </div>

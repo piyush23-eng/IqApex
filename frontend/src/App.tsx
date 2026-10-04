@@ -10,6 +10,7 @@ import { VehiclePerformancePage } from './pages/VehiclePerformancePage';
 import { StrategyPage } from './pages/StrategyPage';
 import { EngineeringAnalysisPage } from './pages/EngineeringAnalysisPage';
 import { ModelHealthPage } from './pages/ModelHealthPage';
+import { DriverComparisonPage } from './pages/DriverComparisonPage';
 import { UninitializedModule } from './components/UninitializedModule';
 import { api } from './services/api';
 import {
@@ -189,6 +190,32 @@ export const App: React.FC = () => {
     }
   }, []);
 
+  // Auto-load demo dataset on mount so workstation is immediately functional
+  useEffect(() => {
+    loadDemoData();
+  }, [loadDemoData]);
+
+  // Auto-fetch telemetry whenever selectedLap changes
+  useEffect(() => {
+    if (selectedLap) {
+      handleLoadTelemetry();
+    }
+  }, [selectedLap?.lap_id, handleLoadTelemetry]);
+
+  // ContextBar driver selector handler
+  const handleSelectDriverFromBar = useCallback((d: Driver) => {
+    setSelectedDriver(d);
+    const driverRun = runs.find((r) => r.driver_id === d.driver_id);
+    if (driverRun) {
+      handleSelectRun(driverRun.run_id);
+    }
+  }, [runs, handleSelectRun]);
+
+  // ContextBar run selector handler
+  const handleSelectRunFromBar = useCallback((r: Run) => {
+    handleSelectRun(r.run_id);
+  }, [handleSelectRun]);
+
   const unloadDemoData = useCallback(() => {
     setSession(null);
     setDrivers([]);
@@ -254,8 +281,9 @@ export const App: React.FC = () => {
       latencyMs={latencyMs}
       bufferPointCount={telemetryData?.returned_points || 0}
       downsampleActive={telemetryData?.downsampled || false}
-      onSelectDriver={setSelectedDriver}
-      onSelectRun={setSelectedRun}
+      onSelectDriver={handleSelectDriverFromBar}
+      onSelectRun={handleSelectRunFromBar}
+      onSelectReferenceDriver={setReferenceDriver}
       onSelectModule={setActiveModule}
       onToggleDemoData={toggleDemoData}
     >
@@ -268,6 +296,7 @@ export const App: React.FC = () => {
           telemetryData={telemetryData}
           isSynthetic={isSynthetic}
           onLoadSyntheticData={loadDemoData}
+          onNavigateModule={setActiveModule}
         />
       )}
 
@@ -295,6 +324,8 @@ export const App: React.FC = () => {
 
       {activeModule === 'lap-analysis' && <LapAnalysisPage />}
 
+      {activeModule === 'driver-comparison' && <DriverComparisonPage />}
+
       {activeModule === 'sensitivity' && (
         <SensitivityPage
           onNavigateToOptimization={(cornerId, paramName) => {
@@ -310,7 +341,8 @@ export const App: React.FC = () => {
       )}
 
       {activeModule === 'vehicle-performance' && <VehiclePerformancePage />}
-      {activeModule === 'strategy' && <StrategyPage />}
+      {activeModule === 'tyres' && <StrategyPage initialTab="tyres_mass" />}
+      {activeModule === 'strategy' && <StrategyPage initialTab="matrix" />}
       {activeModule === 'engineering-analysis' && <EngineeringAnalysisPage />}
       {activeModule === 'model-health' && <ModelHealthPage />}
 
@@ -318,11 +350,14 @@ export const App: React.FC = () => {
         activeModule !== 'telemetry' &&
         activeModule !== 'data-runs' &&
         activeModule !== 'lap-analysis' &&
+        activeModule !== 'driver-comparison' &&
+        activeModule !== 'vehicle-performance' &&
+        activeModule !== 'tyres' &&
         activeModule !== 'sensitivity' &&
         activeModule !== 'optimization' &&
-        activeModule !== 'vehicle-performance' &&
         activeModule !== 'strategy' &&
-        activeModule !== 'engineering-analysis' && activeModule !== 'model-health' && (
+        activeModule !== 'engineering-analysis' &&
+        activeModule !== 'model-health' && (
           <UninitializedModule
             module={activeModule}
             onReturnToOverview={() => setActiveModule('overview')}

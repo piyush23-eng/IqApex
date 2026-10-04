@@ -24,29 +24,29 @@ export const ParameterSelector: React.FC<ParameterSelectorProps> = ({
   corners = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11'],
 }) => {
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs space-y-2">
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-1.5">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2 shadow">
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-1.5">
         <div className="flex items-center space-x-2">
-          <Sliders className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright tracking-wider uppercase">
-            PARAMETER & TARGET CONFIGURATION
+          <Sliders className="w-3.5 h-3.5 text-[#FFFFFF] stroke-[2.5]" />
+          <span className="font-extrabold text-[#FFFFFF] tracking-wider uppercase text-2xs">
+            [ PARAMETER &amp; TARGET CONFIGURATION ]
           </span>
         </div>
-        <span className="text-3xs text-workstation-textMuted uppercase">
-          CENTRAL REGISTRY ({parameters.length} REGISTERED)
+        <span className="text-3xs text-[#FFFFFF] font-extrabold uppercase bg-[#070E22] px-1.5 py-0.2 border border-[#1E3A8A] shadow-sm">
+          REGISTRY ({parameters.length} REGISTERED) ✕
         </span>
       </div>
 
       <div className="grid grid-cols-12 gap-3 items-center">
         {/* Corner Selection */}
         <div className="col-span-3 space-y-1">
-          <label className="text-3xs text-workstation-textMuted uppercase flex items-center space-x-1">
-            <Compass className="w-3 h-3 text-workstation-accentCyan" />
+          <label className="text-3xs text-[#FFFFFF] font-extrabold uppercase flex items-center space-x-1">
+            <Compass className="w-3 h-3 text-[#FFFFFF] stroke-[2.5]" />
             <span>CIRCUIT CORNER</span>
           </label>
           <select
             aria-label="Select Circuit Corner"
-            className="w-full bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-1 rounded text-2xs focus:outline-none focus:border-workstation-accentCyan"
+            className="w-full bg-[#070E22] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-1 text-2xs font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0062FF]"
             value={selectedCorner}
             onChange={(e) => onSelectCorner(e.target.value)}
           >
@@ -60,13 +60,13 @@ export const ParameterSelector: React.FC<ParameterSelectorProps> = ({
 
         {/* Parameter Selection */}
         <div className="col-span-5 space-y-1">
-          <label className="text-3xs text-workstation-textMuted uppercase flex items-center space-x-1">
-            <Sliders className="w-3 h-3 text-workstation-accentCyan" />
+          <label className="text-3xs text-[#FFFFFF] font-extrabold uppercase flex items-center space-x-1">
+            <Sliders className="w-3 h-3 text-[#FFFFFF] stroke-[2.5]" />
             <span>PERFORMANCE PARAMETER</span>
           </label>
           <select
             aria-label="Select Performance Parameter"
-            className="w-full bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-1 rounded text-2xs focus:outline-none focus:border-workstation-accentCyan"
+            className="w-full bg-[#070E22] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-1 text-2xs font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0062FF]"
             value={selectedParam?.name || ''}
             onChange={(e) => {
               const p = parameters.find((item) => item.name === e.target.value);
@@ -83,13 +83,13 @@ export const ParameterSelector: React.FC<ParameterSelectorProps> = ({
 
         {/* Target Metric */}
         <div className="col-span-4 space-y-1">
-          <label className="text-3xs text-workstation-textMuted uppercase flex items-center space-x-1">
-            <Target className="w-3 h-3 text-workstation-telemetryAmber" />
+          <label className="text-3xs text-[#FFFFFF] font-extrabold uppercase flex items-center space-x-1">
+            <Target className="w-3 h-3 text-[#FFFFFF] stroke-[2.5]" />
             <span>OPTIMIZATION TARGET</span>
           </label>
           <select
             aria-label="Select Optimization Target"
-            className="w-full bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-1 rounded text-2xs focus:outline-none focus:border-workstation-telemetryAmber"
+            className="w-full bg-[#070E22] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-1 text-2xs font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0062FF]"
             value={targetMetric}
             onChange={(e) => onSelectTargetMetric(e.target.value)}
           >
@@ -104,17 +104,17 @@ export const ParameterSelector: React.FC<ParameterSelectorProps> = ({
 
       {/* Selected Parameter Specifications */}
       {selectedParam && (
-        <div className="bg-workstation-surface/50 border border-workstation-borderSubtle p-2 rounded flex items-center justify-between text-3xs text-workstation-textMuted">
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-2 shadow-sm flex items-center justify-between text-3xs text-[#FFFFFF]">
           <div className="flex items-center space-x-3">
-            <span className="flex items-center space-x-1 text-workstation-textBright font-semibold">
-              <Info className="w-3 h-3 text-workstation-accentCyan" />
+            <span className="flex items-center space-x-1 font-bold text-[#FFFFFF]">
+              <Info className="w-3.5 h-3.5 text-[#FFFFFF] stroke-[2.5]" />
               <span>{selectedParam.description}</span>
             </span>
           </div>
-          <div className="flex items-center space-x-4">
-            <span>Physical Bounds: <strong className="text-workstation-textPrimary">[{selectedParam.minimum}, {selectedParam.maximum}] {selectedParam.unit}</strong></span>
-            <span>Allowed Perturbation: <strong className="text-workstation-accentCyan">[{selectedParam.allowed_perturbation[0]}, +{selectedParam.allowed_perturbation[1]}] {selectedParam.unit}</strong></span>
-            <span>Step: <strong className="text-workstation-textPrimary">{selectedParam.step} {selectedParam.unit}</strong></span>
+          <div className="flex items-center space-x-4 font-bold text-[#CBD5E1]">
+            <span>Bounds: <strong className="text-[#FFFFFF] font-extrabold">[{selectedParam.minimum}, {selectedParam.maximum}] {selectedParam.unit}</strong></span>
+            <span>Perturbation: <strong className="text-[#FFFFFF] font-extrabold">[{selectedParam.allowed_perturbation[0]}, +{selectedParam.allowed_perturbation[1]}] {selectedParam.unit}</strong></span>
+            <span>Step: <strong className="text-[#FFFFFF] font-extrabold">{selectedParam.step} {selectedParam.unit}</strong></span>
           </div>
         </div>
       )}

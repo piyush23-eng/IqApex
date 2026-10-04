@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { api } from '../../src/services/api';
+import { api } from '../services/api';
 import {
   FeasibleStrategy,
   RaceSimulationResponse,
@@ -20,14 +20,22 @@ import { ScenarioMatrixTable } from '../components/strategy/ScenarioMatrixTable'
 import { StrategyProvenancePanel } from '../components/strategy/StrategyProvenancePanel';
 import { GitBranch, Layers, Disc, Binary } from 'lucide-react';
 
-export const StrategyPage: React.FC = () => {
+interface StrategyPageProps {
+  initialTab?: 'matrix' | 'tyres_mass' | 'monte_carlo';
+}
+
+export const StrategyPage: React.FC<StrategyPageProps> = ({ initialTab = 'matrix' }) => {
   const [strategies, setStrategies] = useState<FeasibleStrategy[]>([]);
   const [selectedStrategyId, setSelectedStrategyId] = useState<string>('strat_1stop_med_hard');
   const [weather, setWeather] = useState<string>('DRY');
   const [safetyCar, setSafetyCar] = useState<string>('GREEN');
   const [traffic, setTraffic] = useState<string>('LIGHT_TRAFFIC');
 
-  const [activeTab, setActiveTab] = useState<'matrix' | 'tyres_mass' | 'monte_carlo'>('matrix');
+  const [activeTab, setActiveTab] = useState<'matrix' | 'tyres_mass' | 'monte_carlo'>(initialTab);
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
 
   // Simulation Results
   const [simulation, setSimulation] = useState<RaceSimulationResponse | null>(null);
@@ -148,56 +156,59 @@ export const StrategyPage: React.FC = () => {
   }, [selectedStrategyId, simulation, getSelectedStints]);
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-workstation-bg overflow-y-auto p-4 space-y-3">
+    <div className="flex-1 flex flex-col h-full bg-[#030712] text-[#FFFFFF] overflow-y-auto p-4 space-y-4 font-mono select-none">
       {/* Top Banner / Breadcrumb */}
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-2">
-        <div className="flex items-center space-x-2.5">
-          <GitBranch className="w-5 h-5 text-workstation-accentCyan" />
+      <div className="matrix-hud-card scanline-container bg-[#0A132E] border border-[#1E3A8A] p-3 flex flex-wrap items-center justify-between gap-3 shadow-md relative">
+        <div className="scan-beam" />
+        <div className="flex items-center space-x-2.5 relative z-10">
+          <span className="w-2.5 h-2.5 bg-[#00F0FF] rounded-full animate-ping shadow-[0_0_8px_#00F0FF]" />
+          <GitBranch className="w-5 h-5 text-[#0062FF]" />
           <div>
-            <h1 className="text-sm font-mono font-bold text-workstation-textBright tracking-wider uppercase">
-              RACE STRATEGY & SCENARIO SIMULATION ENGINE
+            <h1 className="text-xs font-mono font-black text-[#FFFFFF] tracking-wider uppercase">
+              [ RACE STRATEGY &amp; SCENARIO SIMULATION ENGINE ]
             </h1>
-            <p className="text-3xs font-mono text-workstation-textMuted">
+            <p className="text-3xs font-mono text-[#93C5FD]">
               Autodromo Nazionale Monza — 53 Laps · Fuel Depletion · Non-linear Tyre Degradation · Deterministic Monte Carlo
             </p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-1.5 bg-workstation-surface border border-workstation-borderSubtle rounded p-0.5 font-mono text-2xs">
+        {/* Bracketed Tabs Strip */}
+        <div className="flex items-center space-x-2 font-mono text-2xs relative z-10">
           <button
             onClick={() => setActiveTab('matrix')}
-            className={`flex items-center space-x-1.5 px-3 py-1 rounded transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 border border-[#1E3A8A] text-3xs font-bold transition-all ${
               activeTab === 'matrix'
-                ? 'bg-workstation-accentCyan text-slate-950 font-bold'
-                : 'text-workstation-textSecondary hover:text-workstation-textBright'
+                ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>STRATEGY MATRIX & SCENARIOS</span>
+            <span>[ STRATEGY MATRIX &amp; SCENARIOS ]</span>
           </button>
 
           <button
             onClick={() => setActiveTab('tyres_mass')}
-            className={`flex items-center space-x-1.5 px-3 py-1 rounded transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 border border-[#1E3A8A] text-3xs font-bold transition-all ${
               activeTab === 'tyres_mass'
-                ? 'bg-workstation-accentCyan text-slate-950 font-bold'
-                : 'text-workstation-textSecondary hover:text-workstation-textBright'
+                ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
             }`}
           >
             <Disc className="w-3.5 h-3.5" />
-            <span>TYRES & VEHICLE MASS</span>
+            <span>[ TYRES &amp; VEHICLE MASS ]</span>
           </button>
 
           <button
             onClick={() => setActiveTab('monte_carlo')}
-            className={`flex items-center space-x-1.5 px-3 py-1 rounded transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 border border-[#1E3A8A] text-3xs font-bold transition-all ${
               activeTab === 'monte_carlo'
-                ? 'bg-workstation-accentCyan text-slate-950 font-bold'
-                : 'text-workstation-textSecondary hover:text-workstation-textBright'
+                ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
             }`}
           >
             <Binary className="w-3.5 h-3.5" />
-            <span>MONTE CARLO & PIT SENSITIVITY</span>
+            <span>[ MONTE CARLO &amp; PIT SENSITIVITY ]</span>
           </button>
         </div>
       </div>
@@ -226,7 +237,7 @@ export const StrategyPage: React.FC = () => {
 
       {/* Tab Panels */}
       {activeTab === 'matrix' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <StrategyComparisonTable
             strategies={strategies}
             selectedStrategyId={selectedStrategyId}
@@ -242,7 +253,7 @@ export const StrategyPage: React.FC = () => {
       )}
 
       {activeTab === 'tyres_mass' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <TyreDegradationPlot
             curves={tyreCurves}
             isLoading={isLoadingInit}
@@ -255,7 +266,7 @@ export const StrategyPage: React.FC = () => {
       )}
 
       {activeTab === 'monte_carlo' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <StrategyMonteCarloPlot
             monteCarloData={monteCarloData}
             isLoading={isLoadingMC}

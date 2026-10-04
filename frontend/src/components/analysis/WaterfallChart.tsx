@@ -12,8 +12,8 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
 
   if (!steps || steps.length === 0) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-6 text-center font-mono text-xs text-workstation-textMuted">
-        No waterfall decomposition steps available.
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-6 text-center font-mono text-xs text-[#94A3B8] font-bold shadow-md">
+        [ NO WATERFALL DECOMPOSITION STEPS AVAILABLE ]
       </div>
     );
   }
@@ -42,37 +42,36 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
   const stepGap = chartWidth / steps.length;
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs space-y-2">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2 shadow-md">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-1.5">
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-1.5">
         <div className="flex items-center space-x-2">
-          <BarChart3 className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright tracking-wider uppercase">
-            CUMULATIVE LAP-TIME WATERFALL DECOMPOSITION
+          <BarChart3 className="w-3.5 h-3.5 text-[#FFFFFF] stroke-[2.5]" />
+          <span className="font-extrabold text-[#FFFFFF] tracking-wider uppercase text-2xs">
+            [ CUMULATIVE LAP-TIME WATERFALL DECOMPOSITION ]
           </span>
         </div>
-        <div className="flex items-center space-x-3 text-3xs text-workstation-textMuted">
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 bg-workstation-telemetryGreen rounded-xs inline-block" />
-            <span>Time Gained (Δ &lt; 0)</span>
+        <div className="flex items-center space-x-2 text-3xs">
+          <span className="flex items-center space-x-1 px-1.5 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="w-2.5 h-2.5 bg-[#00F0FF] border border-[#1E3A8A] inline-block" />
+            <span className="font-bold text-[#FFFFFF]">Time Gained (Δ &lt; 0)</span>
           </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 bg-workstation-telemetryAmber rounded-xs inline-block" />
-            <span>Time Lost (Δ &gt; 0)</span>
+          <span className="flex items-center space-x-1 px-1.5 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="w-2.5 h-2.5 bg-[#FFB000] border border-[#1E3A8A] inline-block" />
+            <span className="font-bold text-[#FFFFFF]">Time Lost (Δ &gt; 0)</span>
           </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 bg-workstation-accentCyan/80 rounded-xs inline-block" />
-            <span>Residual (Exact)</span>
+          <span className="flex items-center space-x-1 px-1.5 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="w-2.5 h-2.5 bg-black border border-[#1E3A8A] inline-block" />
+            <span className="font-bold text-[#FFFFFF]">Residual (Exact)</span>
           </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 bg-workstation-textBright rounded-xs inline-block" />
-            <span>Total Δ ({totalDelta > 0 ? '+' : ''}{totalDelta.toFixed(3)}s)</span>
+          <span className="flex items-center space-x-1 px-1.5 py-0.5 bg-[#00F0FF] border border-[#1E3A8A] shadow-sm">
+            <span className="font-extrabold text-[#FFFFFF]">Total Δ ({totalDelta > 0 ? '+' : ''}{totalDelta.toFixed(3)}s)</span>
           </span>
         </div>
       </div>
 
       {/* Interactive Waterfall SVG */}
-      <div className="relative overflow-x-auto">
+      <div className="relative overflow-x-auto bg-[#070E22] border border-[#1E3A8A] p-2 shadow">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           className="w-full h-auto select-none"
@@ -89,17 +88,18 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
                   y1={y}
                   x2={svgWidth - padding.right}
                   y2={y}
-                  stroke={gridVal === 0 ? '#38bdf8' : '#27272a'}
-                  strokeWidth={gridVal === 0 ? 1 : 0.5}
+                  stroke={gridVal === 0 ? '#0062FF' : '#1E3A8A'}
+                  strokeWidth={gridVal === 0 ? 1.5 : 0.75}
                   strokeDasharray={gridVal === 0 ? undefined : '2,2'}
                 />
                 <text
                   x={padding.left - 6}
                   y={y + 3}
                   textAnchor="end"
-                  fill="#71717a"
+                  fill="#93C5FD"
                   fontSize="8"
                   fontFamily="monospace"
+                  fontWeight="bold"
                 >
                   {gridVal > 0 ? `+${gridVal.toFixed(2)}` : gridVal.toFixed(2)}s
                 </text>
@@ -115,17 +115,17 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
             // Bar Y coordinates
             let yTop: number;
             let yBottom: number;
-            let barFill = '#71717a';
+            let barFill = '#0A132E';
 
             if (step.category === 'baseline') {
               yTop = zeroY - 2;
               yBottom = zeroY + 2;
-              barFill = '#52525b';
+              barFill = '#FFFFFF';
             } else if (step.category === 'total') {
               const valY = getY(step.end_time);
               yTop = Math.min(zeroY, valY);
               yBottom = Math.max(zeroY, valY);
-              barFill = step.end_time > 0 ? '#f59e0b' : '#10b981';
+              barFill = step.end_time > 0 ? '#FF3366' : '#00E676';
             } else {
               const startY = getY(step.start_time);
               const endY = getY(step.end_time);
@@ -133,13 +133,13 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
               yBottom = Math.max(startY, endY);
 
               if (step.category === 'residual') {
-                barFill = '#06b6d4';
+                barFill = '#0062FF';
               } else if (step.increment > 0.0005) {
-                barFill = '#f59e0b';
+                barFill = '#FF3366';
               } else if (step.increment < -0.0005) {
-                barFill = '#10b981';
+                barFill = '#00E676';
               } else {
-                barFill = '#71717a';
+                barFill = '#0A132E';
               }
             }
 
@@ -158,8 +158,8 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
                   y1={endY}
                   x2={nextBarX}
                   y2={endY}
-                  stroke="#52525b"
-                  strokeWidth={0.75}
+                  stroke="#00F0FF"
+                  strokeWidth={1}
                   strokeDasharray="2,2"
                 />
               );
@@ -192,11 +192,8 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
                   width={colWidth}
                   height={barHeight}
                   fill={barFill}
-                  opacity={isHovered ? 1 : 0.85}
-                  stroke={isHovered ? '#ffffff' : step.category === 'residual' ? '#06b6d4' : 'none'}
-                  strokeWidth={isHovered ? 1.5 : step.category === 'residual' ? 1 : 0}
-                  strokeDasharray={step.category === 'residual' ? '2,1' : undefined}
-                  rx={1.5}
+                  stroke={isHovered ? '#FFFFFF' : '#1E3A8A'}
+                  strokeWidth={isHovered ? 2 : 1}
                 />
 
                 {/* Value on top of bar */}
@@ -205,9 +202,9 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
                     x={centerX}
                     y={yTop - 4}
                     textAnchor="middle"
-                    fill={isHovered ? '#ffffff' : '#a1a1aa'}
-                    fontSize="7"
-                    fontWeight={isHovered ? 'bold' : 'normal'}
+                    fill="#FFFFFF"
+                    fontSize="7.5"
+                    fontWeight="bold"
                     fontFamily="monospace"
                   >
                     {step.category === 'total'
@@ -222,10 +219,10 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
                   y={svgHeight - padding.bottom + 14}
                   textAnchor="end"
                   transform={`rotate(-40, ${centerX}, ${svgHeight - padding.bottom + 14})`}
-                  fill={isHovered ? '#38bdf8' : '#71717a'}
+                  fill={isHovered ? '#00F0FF' : '#93C5FD'}
                   fontSize="7.5"
                   fontFamily="monospace"
-                  fontWeight={isHovered ? 'bold' : 'normal'}
+                  fontWeight="bold"
                 >
                   {displayLabel}
                 </text>
@@ -236,24 +233,24 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
 
         {/* Hovered Step Inspector Tooltip */}
         {hoveredStep && (
-          <div className="absolute top-2 right-4 bg-workstation-surface/95 border border-workstation-accentCyan/60 rounded px-2.5 py-1.5 shadow-lg backdrop-blur-sm pointer-events-none text-3xs space-y-0.5">
-            <div className="text-workstation-textBright font-bold flex items-center space-x-1">
-              <Info className="w-2.5 h-2.5 text-workstation-accentCyan" />
+          <div className="absolute top-2 right-4 bg-[#070E22] border border-[#1E3A8A] p-2 shadow pointer-events-none text-3xs space-y-0.5">
+            <div className="text-[#FFFFFF] font-extrabold flex items-center space-x-1">
+              <Info className="w-3 h-3 text-[#FFFFFF]" />
               <span>{hoveredStep.label}</span>
             </div>
-            <div className="text-workstation-textMuted">
-              Span: <span className="text-workstation-textPrimary">{hoveredStep.distance_range}</span>
+            <div className="text-[#94A3B8] font-bold">
+              Span: <span className="text-[#FFFFFF]">{hoveredStep.distance_range}</span>
             </div>
-            <div className="flex items-center space-x-3 pt-0.5">
+            <div className="flex items-center space-x-3 pt-0.5 font-bold">
               <span>
                 Step Δ:{' '}
                 <strong
                   className={
                     hoveredStep.increment > 0
-                      ? 'text-workstation-telemetryAmber'
+                      ? 'text-[#FFB000]'
                       : hoveredStep.increment < 0
-                      ? 'text-workstation-telemetryGreen'
-                      : 'text-workstation-textMuted'
+                      ? 'text-[#00E676]'
+                      : 'text-[#FFFFFF]'
                   }
                 >
                   {hoveredStep.increment > 0 ? '+' : ''}
@@ -262,7 +259,7 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
               </span>
               <span>
                 Cumulative:{' '}
-                <strong className="text-workstation-textBright">
+                <strong className="text-[#FFFFFF]">
                   {hoveredStep.end_time > 0 ? '+' : ''}
                   {hoveredStep.end_time.toFixed(4)}s
                 </strong>

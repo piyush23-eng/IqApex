@@ -9,8 +9,8 @@ interface WhatIfResultPanelProps {
 export const WhatIfResultPanel: React.FC<WhatIfResultPanelProps> = ({ curveData }) => {
   if (!curveData) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-4 text-center font-mono text-xs text-workstation-textMuted">
-        Awaiting what-if parameter evaluation...
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-4 text-center font-mono text-xs text-[#94A3B8] font-bold shadow-md">
+        [ AWAITING WHAT-IF PARAMETER EVALUATION... ]
       </div>
     );
   }
@@ -32,46 +32,46 @@ export const WhatIfResultPanel: React.FC<WhatIfResultPanelProps> = ({ curveData 
   const isFaster = predicted_delta < -0.0005;
   const isSlower = predicted_delta > 0.0005;
   const deltaColor = isFaster
-    ? 'text-workstation-telemetryGreen'
+    ? 'text-[#00E676]'
     : isSlower
-    ? 'text-workstation-telemetryAmber'
-    : 'text-workstation-textMuted';
+    ? 'text-[#FFB000]'
+    : 'text-[#94A3B8]';
 
   const deltaSign = predicted_delta > 0 ? '+' : '';
   const piLower = predicted_delta - uncertainty_95;
   const piUpper = predicted_delta + uncertainty_95;
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs space-y-2.5">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-1.5">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2.5 shadow-md">
+      {/* Titanium Header */}
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-2 bg-[#070E22] p-2 -mx-3 -mt-3 mb-2">
         <div className="flex items-center space-x-2">
-          <Activity className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright tracking-wider uppercase">
-            MODELLED WHAT-IF PERFORMANCE RESPONSE ({parameter_name.replace(/_/g, ' ')})
+          <Activity className="w-3.5 h-3.5 text-[#FFFFFF]" />
+          <span className="font-bold text-[#FFFFFF] tracking-wider uppercase text-xs">
+            [ MODELLED WHAT-IF PERFORMANCE RESPONSE ({parameter_name.replace(/_/g, ' ')}) ]
           </span>
         </div>
 
         <div className="flex items-center space-x-2">
-          <span className="px-1.5 py-0.2 bg-workstation-surface border border-workstation-borderSubtle text-workstation-accentCyan rounded text-3xs font-semibold">
+          <span className="px-2 py-0.5 bg-[#070E22] border border-[#1E3A8A] text-[#FFFFFF] text-3xs font-bold shadow-sm">
             STATUS: MODELLED
           </span>
           <span
-            className={`px-1.5 py-0.2 rounded text-3xs font-bold flex items-center space-x-1 ${
+            className={`px-2 py-0.5 border border-[#1E3A8A] text-3xs font-black flex items-center space-x-1 shadow-sm ${
               domain_status === 'EXTRAPOLATION'
-                ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
-                : 'bg-green-500/10 border border-green-500/30 text-workstation-telemetryGreen'
+                ? 'bg-[#0E1A3D] text-[#FBBF24] border border-[#FBBF24]/50 text-[#FFB000]'
+                : 'bg-[#00F0FF] text-[#FFFFFF]'
             }`}
           >
             {domain_status === 'EXTRAPOLATION' ? (
               <>
-                <AlertTriangle className="w-2.5 h-2.5" />
-                <span>EXTRAPOLATION</span>
+                <AlertTriangle className="w-3 h-3" />
+                <span>[ EXTRAPOLATION ]</span>
               </>
             ) : (
               <>
-                <CheckCircle2 className="w-2.5 h-2.5" />
-                <span>INTERPOLATION</span>
+                <CheckCircle2 className="w-3 h-3" />
+                <span>[ INTERPOLATION ]</span>
               </>
             )}
           </span>
@@ -80,91 +80,91 @@ export const WhatIfResultPanel: React.FC<WhatIfResultPanelProps> = ({ curveData 
 
       {/* Main Metric Cards */}
       <div className="grid grid-cols-4 gap-2.5">
-        <div className="bg-workstation-surface/60 border border-workstation-borderSubtle p-2 rounded">
-          <div className="text-3xs text-workstation-textMuted uppercase">BASELINE SETUP</div>
-          <div className="text-sm font-bold text-workstation-textBright mt-0.5">
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow">
+          <div className="text-3xs text-[#94A3B8] font-bold uppercase">[ BASELINE SETUP ]</div>
+          <div className="text-base font-black text-[#FFFFFF] mt-0.5">
             {baseline_x.toFixed(1)} → {baseline_y.toFixed(3)}s
           </div>
-          <div className="text-4xs text-workstation-textMuted mt-0.5">
+          <div className="text-4xs text-[#94A3B8] font-bold mt-0.5">
             Measured reference {target_name.replace(/_/g, ' ')}
           </div>
         </div>
 
-        <div className="bg-workstation-surface/60 border border-workstation-borderSubtle p-2 rounded">
-          <div className="text-3xs text-workstation-textMuted uppercase">SCENARIO TARGET</div>
-          <div className="text-sm font-bold text-workstation-textBright mt-0.5">
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow">
+          <div className="text-3xs text-[#94A3B8] font-bold uppercase">[ SCENARIO TARGET ]</div>
+          <div className="text-base font-black text-[#FFFFFF] mt-0.5">
             {scenario_x.toFixed(1)} → {scenario_y.toFixed(3)}s
           </div>
-          <div className="text-4xs text-workstation-textMuted mt-0.5">
+          <div className="text-4xs text-[#94A3B8] font-bold mt-0.5">
             Perturbation: {scenario_x - baseline_x >= 0 ? '+' : ''}
             {(scenario_x - baseline_x).toFixed(2)} units
           </div>
         </div>
 
-        <div className="bg-workstation-surface/80 border-l-2 border-workstation-accentCyan p-2 rounded-r">
-          <div className="text-3xs text-workstation-textMuted uppercase">PREDICTED RESPONSE (Δt)</div>
-          <div className={`text-base font-bold mt-0.5 ${deltaColor}`}>
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow">
+          <div className="text-3xs text-[#94A3B8] font-bold uppercase">[ PREDICTED RESPONSE (Δt) ]</div>
+          <div className={`text-base font-black mt-0.5 ${deltaColor}`}>
             {deltaSign}{predicted_delta.toFixed(4)} s
           </div>
-          <div className="text-4xs text-workstation-textMuted mt-0.5">
+          <div className="text-4xs text-[#94A3B8] font-bold mt-0.5">
             Model estimates {predicted_delta < 0 ? 'lap-time improvement' : 'lap-time loss'}
           </div>
         </div>
 
-        <div className="bg-workstation-surface/80 border-l-2 border-workstation-telemetryAmber p-2 rounded-r">
-          <div className="text-3xs text-workstation-textMuted uppercase">95% PREDICTION INTERVAL</div>
-          <div className="text-xs font-bold text-workstation-textBright mt-0.5">
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow">
+          <div className="text-3xs text-[#94A3B8] font-bold uppercase">[ 95% PREDICTION INTERVAL ]</div>
+          <div className="text-sm font-black text-[#FFFFFF] mt-0.5">
             [{piLower.toFixed(3)}s, {piUpper.toFixed(3)}s]
           </div>
-          <div className="text-4xs text-workstation-textMuted mt-0.5">
+          <div className="text-4xs text-[#94A3B8] font-bold mt-0.5">
             Uncertainty: ±{uncertainty_95.toFixed(4)} s (Student t)
           </div>
         </div>
       </div>
 
       {/* Engineering Decision Context and Model Diagnostics */}
-      <div className="bg-workstation-surface/40 border border-workstation-borderSubtle p-2.5 rounded space-y-1.5 text-3xs">
-        <div className="flex items-center justify-between text-workstation-textMuted">
+      <div className="bg-[#0A0D15] border border-[#1E3A8A] p-2.5 space-y-1.5 text-3xs text-[#FFFFFF] font-bold shadow-sm">
+        <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-1">
           <div className="flex items-center space-x-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-workstation-telemetryGreen" />
-            <span className="font-semibold text-workstation-textBright">
-              MODEL GOVERNANCE & VALIDATION
+            <ShieldCheck className="w-3.5 h-3.5 text-[#00E676]" />
+            <span className="font-bold text-[#FFFFFF] uppercase">
+              [ MODEL GOVERNANCE & VALIDATION ]
             </span>
           </div>
-          <span>
+          <span className="bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5">
             Observed Domain: [{observed_range[0].toFixed(1)}, {observed_range[1].toFixed(1)}]
           </span>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 pt-1 border-t border-workstation-borderSubtle">
+        <div className="grid grid-cols-4 gap-2 pt-0.5">
           <div>
-            <span className="text-workstation-textMuted block">Selected Model:</span>
-            <span className="font-bold text-workstation-textBright">{model_metadata.model_id}</span>
+            <span className="text-[#94A3B8] block">Selected Model:</span>
+            <span className="font-black text-[#FFFFFF]">{model_metadata.model_id}</span>
           </div>
           <div>
-            <span className="text-workstation-textMuted block">Validation RMSE:</span>
-            <span className="font-bold text-workstation-accentCyan">
+            <span className="text-[#94A3B8] block">Validation RMSE:</span>
+            <span className="font-black text-[#FFFFFF]">
               {model_metadata.metrics.rmse.toFixed(4)} s
             </span>
           </div>
           <div>
-            <span className="text-workstation-textMuted block">Grouped CV RMSE:</span>
-            <span className="font-bold text-workstation-accentCyan">
+            <span className="text-[#94A3B8] block">Grouped CV RMSE:</span>
+            <span className="font-black text-[#FFFFFF]">
               {model_metadata.metrics.cv_rmse.toFixed(4)} s
             </span>
           </div>
           <div>
-            <span className="text-workstation-textMuted block">Fit Coefficient (R²):</span>
-            <span className="font-bold text-workstation-textBright">
+            <span className="text-[#94A3B8] block">Fit Coefficient (R²):</span>
+            <span className="font-black text-[#FFFFFF]">
               {model_metadata.metrics.r_squared.toFixed(3)}
             </span>
           </div>
         </div>
 
-        <div className="border-t border-workstation-borderSubtle pt-1 text-4xs text-workstation-textMuted flex items-center space-x-1">
-          <HelpCircle className="w-3 h-3 text-workstation-accentCyan shrink-0" />
+        <div className="border-t border-[#1E3A8A] pt-1 text-4xs text-[#CBD5E1] flex items-center space-x-1">
+          <HelpCircle className="w-3.5 h-3.5 text-[#FFFFFF] shrink-0" />
           <span>
-            <strong>No-Causality Guarantee:</strong> ApexIQ models statistical association within the recorded dataset.
+            <strong>NO-CAUSALITY GUARANTEE:</strong> ApexIQ models statistical association within the recorded dataset.
             The predicted change is an estimated response surface evaluation, not a physically guaranteed outcome.
           </span>
         </div>

@@ -125,60 +125,62 @@ export const VehiclePerformancePage: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-y-auto bg-workstation-background p-3 space-y-3 font-mono text-2xs select-none">
+    <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[#030712] p-4 space-y-4 font-mono text-2xs select-none text-[#FFFFFF]">
       {/* 1. Header Bar */}
-      <div className="bg-workstation-panel border border-workstation-border rounded p-3 space-y-2">
-        <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-2">
+      <div className="matrix-hud-card scanline-container bg-[#0A132E] border border-[#1E3A8A] p-3 space-y-2 shadow-md relative">
+        <div className="scan-beam" />
+        <div className="flex flex-wrap items-center justify-between border-b border-[#1E3A8A] pb-2 gap-2 relative z-10">
           <div className="flex items-center space-x-2">
-            <Compass className="w-4 h-4 text-workstation-accentCyan" />
-            <span className="font-bold text-workstation-textBright tracking-wider uppercase text-xs">
-              VEHICLE PERFORMANCE & AERODYNAMIC SURROGATE WORKSTATION
+            <span className="w-2.5 h-2.5 bg-[#00F0FF] rounded-full animate-ping shadow-[0_0_8px_#00F0FF]" />
+            <Compass className="w-4 h-4 text-[#0062FF]" />
+            <span className="font-black text-[#FFFFFF] tracking-wider uppercase text-xs font-mono">
+              [ VEHICLE PERFORMANCE &amp; AERODYNAMIC SURROGATE WORKSTATION ]
             </span>
-            <span className="text-workstation-border">|</span>
-            <span className="text-workstation-textMuted">CIRCUIT: AUTODROMO NAZIONALE MONZA</span>
+            <span className="text-[#3B82F6] font-bold">|</span>
+            <span className="text-[#93C5FD] font-mono text-3xs font-semibold">CIRCUIT: AUTODROMO NAZIONALE MONZA</span>
           </div>
 
           {/* Sub-view switch tabs */}
-          <div className="flex items-center space-x-1 bg-workstation-surface border border-workstation-borderSubtle rounded p-0.5">
+          <div className="flex items-center space-x-2 font-mono text-2xs">
             <button
               onClick={() => setActiveTab('surfaces')}
-              className={`flex items-center space-x-1 px-2.5 py-1 rounded text-3xs font-semibold uppercase transition-colors ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 border border-[#1E3A8A] text-3xs font-bold uppercase transition-all ${
                 activeTab === 'surfaces'
-                  ? 'bg-workstation-accentCyan text-slate-950 font-bold'
-                  : 'text-workstation-textSecondary hover:text-workstation-textBright'
+                  ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                  : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
               }`}
             >
-              <Layers className="w-3 h-3" />
-              <span>2D SURFACES</span>
+              <Layers className="w-3.5 h-3.5" />
+              <span>[ 2D SURFACES ]</span>
             </button>
 
             <button
               onClick={() => setActiveTab('pareto')}
-              className={`flex items-center space-x-1 px-2.5 py-1 rounded text-3xs font-semibold uppercase transition-colors ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 border border-[#1E3A8A] text-3xs font-bold uppercase transition-all ${
                 activeTab === 'pareto'
-                  ? 'bg-workstation-accentCyan text-slate-950 font-bold'
-                  : 'text-workstation-textSecondary hover:text-workstation-textBright'
+                  ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                  : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
               }`}
             >
-              <GitCommit className="w-3 h-3" />
-              <span>PARETO FRONTIER</span>
+              <GitCommit className="w-3.5 h-3.5" />
+              <span>[ PARETO FRONTIER ]</span>
             </button>
 
             <button
               onClick={() => setActiveTab('kinematics')}
-              className={`flex items-center space-x-1 px-2.5 py-1 rounded text-3xs font-semibold uppercase transition-colors ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 border border-[#1E3A8A] text-3xs font-bold uppercase transition-all ${
                 activeTab === 'kinematics'
-                  ? 'bg-workstation-accentCyan text-slate-950 font-bold'
-                  : 'text-workstation-textSecondary hover:text-workstation-textBright'
+                  ? 'bg-[#0062FF] text-[#FFFFFF] border-[#00F0FF] shadow-matrix-glow'
+                  : 'bg-[#070E22] text-[#93C5FD] hover:bg-[#0E1A3D] shadow-sm'
               }`}
             >
-              <SplitSquareVertical className="w-3 h-3" />
-              <span>TRACK KINEMATICS</span>
+              <SplitSquareVertical className="w-3.5 h-3.5" />
+              <span>[ TRACK KINEMATICS ]</span>
             </button>
           </div>
         </div>
 
-        <p className="text-3xs text-workstation-textMuted">
+        <p className="text-3xs text-[#94A3B8] font-semibold">
           Multi-variable aerodynamic surrogate models (GBR/LHS) estimating downforce, drag, aero balance, and vehicle track-segment lap times.
         </p>
       </div>

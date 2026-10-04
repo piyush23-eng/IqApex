@@ -19,8 +19,8 @@ export const MonteCarloDistributionPlot: React.FC<MonteCarloDistributionPlotProp
 
   if (!simulationData) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-4 text-center font-mono text-xs text-workstation-textMuted">
-        Awaiting Monte Carlo uncertainty simulation...
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-4 text-center font-mono text-xs text-[#94A3B8] font-bold shadow-md">
+        [ AWAITING MONTE CARLO UNCERTAINTY SIMULATION... ]
       </div>
     );
   }
@@ -49,111 +49,110 @@ export const MonteCarloDistributionPlot: React.FC<MonteCarloDistributionPlotProp
   const maxX = bins[bins.length - 1]?.bin_end ?? 0.05;
 
   const getX = (val: number) => pad.left + ((val - minX) / (maxX - minX || 1.0)) * w;
-
   const barWidth = w / Math.max(1, bins.length);
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs space-y-2">
-      {/* Header & Controls */}
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-1.5">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2 shadow-md">
+      {/* Titanium Header */}
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-2 bg-[#070E22] p-2 -mx-3 -mt-3 mb-2">
         <div className="flex items-center space-x-2">
-          <BarChart2 className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright tracking-wider uppercase">
-            MONTE CARLO UNCERTAINTY PROPAGATION (N={totalIters.toLocaleString()})
+          <BarChart2 className="w-3.5 h-3.5 text-[#FFFFFF]" />
+          <span className="font-bold text-[#FFFFFF] tracking-wider uppercase text-xs">
+            [ MONTE CARLO UNCERTAINTY PROPAGATION (N={totalIters.toLocaleString()}) ]
           </span>
         </div>
 
-        <div className="flex items-center space-x-2 text-3xs">
-          <div className="flex items-center space-x-1">
-            <span className="text-workstation-textMuted">Input σ:</span>
+        <div className="flex items-center space-x-2 text-3xs font-bold">
+          <div className="flex items-center space-x-1 bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5">
+            <span className="text-[#94A3B8]">Input σ:</span>
             <input
               type="number"
               step="0.1"
               value={paramStd}
               onChange={(e) => setParamStd(parseFloat(e.target.value) || 0.1)}
-              className="w-12 bg-workstation-surface border border-workstation-border px-1 py-0.5 rounded text-workstation-textBright text-center"
+              className="w-12 bg-[#0A132E] border border-[#1E3A8A] px-1 py-0.5 text-[#FFFFFF] font-black text-center"
             />
           </div>
 
-          <div className="flex items-center space-x-1">
-            <span className="text-workstation-textMuted">N:</span>
+          <div className="flex items-center space-x-1 bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5">
+            <span className="text-[#94A3B8]">N:</span>
             <input
               type="number"
               step="1000"
               value={iterations}
               onChange={(e) => setIterations(parseInt(e.target.value, 10) || 10000)}
-              className="w-16 bg-workstation-surface border border-workstation-border px-1 py-0.5 rounded text-workstation-textBright text-center"
+              className="w-16 bg-[#0A132E] border border-[#1E3A8A] px-1 py-0.5 text-[#FFFFFF] font-black text-center"
             />
           </div>
 
-          <div className="flex items-center space-x-1">
-            <span className="text-workstation-textMuted">Seed:</span>
+          <div className="flex items-center space-x-1 bg-[#070E22] border border-[#1E3A8A] px-1.5 py-0.5">
+            <span className="text-[#94A3B8]">Seed:</span>
             <input
               type="number"
               value={seed}
               onChange={(e) => setSeed(parseInt(e.target.value, 10) || 42871)}
-              className="w-16 bg-workstation-surface border border-workstation-border px-1 py-0.5 rounded text-workstation-textBright text-center"
+              className="w-16 bg-[#0A132E] border border-[#1E3A8A] px-1 py-0.5 text-[#FFFFFF] font-black text-center"
             />
           </div>
 
           <button
             onClick={() => onRunSimulation(paramStd, iterations, seed)}
             disabled={isLoading}
-            className="px-2 py-0.5 bg-workstation-accentCyan/20 hover:bg-workstation-accentCyan/30 border border-workstation-accentCyan/50 text-workstation-accentCyan rounded flex items-center space-x-1 font-semibold transition-colors disabled:opacity-50"
+            className="btn-retro-primary text-3xs flex items-center space-x-1 font-bold disabled:opacity-50"
           >
-            {isLoading ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Play className="w-3 h-3" />}
-            <span>Simulate</span>
+            {isLoading ? <RefreshCw className="w-3 h-3 animate-spin text-[#FFFFFF]" /> : <Play className="w-3 h-3 fill-current text-[#FFFFFF]" />}
+            <span>[ Simulate ]</span>
           </button>
         </div>
       </div>
 
       {/* Percentiles Summary Strip */}
       <div className="grid grid-cols-6 gap-2 text-3xs">
-        <div className="bg-workstation-surface/60 border border-workstation-borderSubtle p-1 rounded text-center">
-          <span className="text-workstation-textMuted block">P05 (95% OPTIMISTIC)</span>
-          <span className="font-bold text-workstation-telemetryGreen mt-0.5 block">
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-1.5 text-center shadow-sm">
+          <span className="text-[#94A3B8] block font-bold uppercase">P05 (95% OPT)</span>
+          <span className="font-black text-[#00E676] mt-0.5 block">
             {p05_delta >= 0 ? '+' : ''}{p05_delta.toFixed(3)}s
           </span>
         </div>
 
-        <div className="bg-workstation-surface/60 border border-workstation-borderSubtle p-1 rounded text-center">
-          <span className="text-workstation-textMuted block">P50 (MEDIAN EXPECTED)</span>
-          <span className="font-bold text-workstation-textBright mt-0.5 block">
+        <div className="bg-[#0062FF] border border-[#00F0FF] p-1.5 text-center shadow-matrix-glow">
+          <span className="text-[#FFFFFF] block font-bold uppercase">[ P50 MEDIAN ]</span>
+          <span className="font-black text-[#FFFFFF] mt-0.5 block">
             {p50_delta >= 0 ? '+' : ''}{p50_delta.toFixed(3)}s
           </span>
         </div>
 
-        <div className="bg-workstation-surface/60 border border-workstation-borderSubtle p-1 rounded text-center">
-          <span className="text-workstation-textMuted block">P95 (95% PESSIMISTIC)</span>
-          <span className="font-bold text-workstation-telemetryAmber mt-0.5 block">
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-1.5 text-center shadow-sm">
+          <span className="text-[#94A3B8] block font-bold uppercase">P95 (95% PESS)</span>
+          <span className="font-black text-[#FF3366] mt-0.5 block">
             {p95_delta >= 0 ? '+' : ''}{p95_delta.toFixed(3)}s
           </span>
         </div>
 
-        <div className="bg-workstation-surface/60 border border-workstation-borderSubtle p-1 rounded text-center">
-          <span className="text-workstation-textMuted block">MEAN OUTCOME (μ)</span>
-          <span className="font-bold text-workstation-accentCyan mt-0.5 block">
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-1.5 text-center shadow-sm">
+          <span className="text-[#94A3B8] block font-bold uppercase">MEAN (μ)</span>
+          <span className="font-black text-[#FFFFFF] mt-0.5 block">
             {mean_delta >= 0 ? '+' : ''}{mean_delta.toFixed(3)}s
           </span>
         </div>
 
-        <div className="bg-workstation-surface/60 border border-workstation-borderSubtle p-1 rounded text-center">
-          <span className="text-workstation-textMuted block">STANDARD DEV (σ)</span>
-          <span className="font-bold text-workstation-textMuted mt-0.5 block">
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-1.5 text-center shadow-sm">
+          <span className="text-[#94A3B8] block font-bold uppercase">STD DEV (σ)</span>
+          <span className="font-black text-[#FFFFFF] mt-0.5 block">
             ±{std_dev_delta.toFixed(4)}s
           </span>
         </div>
 
-        <div className="bg-workstation-surface/60 border border-workstation-borderSubtle p-1 rounded text-center">
-          <span className="text-workstation-textMuted block">DETERMINISTIC SEED</span>
-          <span className="font-bold text-workstation-textBright mt-0.5 block">
+        <div className="bg-[#070E22] border border-[#1E3A8A] p-1.5 text-center shadow-sm">
+          <span className="text-[#94A3B8] block font-bold uppercase">SEED</span>
+          <span className="font-black text-[#FFFFFF] mt-0.5 block">
             {simulation_seed}
           </span>
         </div>
       </div>
 
       {/* SVG Histogram */}
-      <div className="relative overflow-x-auto">
+      <div className="relative bg-[#070E22] border border-[#1E3A8A] p-2 shadow overflow-x-auto">
         <svg
           viewBox={`0 0 ${width} ${height}`}
           className="w-full h-auto select-none"
@@ -173,11 +172,10 @@ export const MonteCarloDistributionPlot: React.FC<MonteCarloDistributionPlotProp
                 y={y}
                 width={Math.max(1, barWidth - 1)}
                 height={barH}
-                fill={isNegative ? '#10b981' : '#f59e0b'}
-                fillOpacity="0.7"
-                stroke={isNegative ? '#10b981' : '#f59e0b'}
-                strokeWidth={0.5}
-                className="hover:fill-opacity-100 transition-colors cursor-pointer"
+                fill={isNegative ? '#0062FF' : '#0A132E'}
+                stroke="#1E3A8A"
+                strokeWidth={1}
+                className="hover:fill-[#00F0FF] transition-colors cursor-pointer"
               >
                 <title>{`Δt: [${bin.bin_start.toFixed(3)}s, ${bin.bin_end.toFixed(3)}s] | Freq: ${(bin.frequency * 100).toFixed(1)}% (${bin.count})`}</title>
               </rect>
@@ -190,25 +188,25 @@ export const MonteCarloDistributionPlot: React.FC<MonteCarloDistributionPlotProp
             y1={pad.top}
             x2={getX(0.0)}
             y2={pad.top + h}
-            stroke="#ffffff"
-            strokeWidth={1}
-            strokeDasharray="2,2"
+            stroke="#0062FF"
+            strokeWidth={1.5}
+            strokeDasharray="3,3"
           />
 
-          {/* Median P50 Marker */}
+          {/* Median P50 Marker (Solid Pure White) */}
           <line
             x1={getX(p50_delta)}
             y1={pad.top}
             x2={getX(p50_delta)}
             y2={pad.top + h}
-            stroke="#38bdf8"
-            strokeWidth={1.5}
+            stroke="#FFFFFF"
+            strokeWidth="2.5"
           />
           <text
-            x={getX(p50_delta) + 3}
+            x={getX(p50_delta) + 4}
             y={pad.top + 10}
-            fill="#38bdf8"
-            fontSize="7"
+            fill="#FFFFFF"
+            fontSize="7.5"
             fontFamily="monospace"
             fontWeight="bold"
           >
@@ -221,8 +219,8 @@ export const MonteCarloDistributionPlot: React.FC<MonteCarloDistributionPlotProp
             y1={pad.top + h}
             x2={pad.left + w}
             y2={pad.top + h}
-            stroke="#52525b"
-            strokeWidth={1}
+            stroke="#1E3A8A"
+            strokeWidth={1.5}
           />
 
           {/* Axis Ticks */}
@@ -233,16 +231,17 @@ export const MonteCarloDistributionPlot: React.FC<MonteCarloDistributionPlotProp
                 y1={pad.top + h}
                 x2={getX(tickVal)}
                 y2={pad.top + h + 4}
-                stroke="#52525b"
-                strokeWidth={1}
+                stroke="#1E3A8A"
+                strokeWidth={1.5}
               />
               <text
                 x={getX(tickVal)}
                 y={pad.top + h + 12}
                 textAnchor="middle"
-                fill="#71717a"
+                fill="#93C5FD"
                 fontSize="7.5"
                 fontFamily="monospace"
+                fontWeight="bold"
               >
                 {tickVal >= 0 ? '+' : ''}{tickVal.toFixed(3)}s
               </text>
@@ -251,11 +250,11 @@ export const MonteCarloDistributionPlot: React.FC<MonteCarloDistributionPlotProp
         </svg>
       </div>
 
-      <div className="text-4xs text-workstation-textMuted border-t border-workstation-borderSubtle pt-1 flex items-center justify-between">
+      <div className="text-4xs text-[#CBD5E1] font-bold border-t border-[#1E3A8A] pt-1.5 flex items-center justify-between">
         <span>{disclaimer}</span>
-        <span className="text-workstation-accentCyan flex items-center space-x-1">
-          <Layers className="w-2.5 h-2.5" />
-          <span>RNG: NumPy default_rng (PCG64)</span>
+        <span className="flex items-center space-x-1 bg-[#0A0D15] border border-[#1E3A8A] px-1.5 py-0.5">
+          <Layers className="w-2.5 h-2.5 text-[#FFFFFF]" />
+          <span>RNG: NUMPY DEFAULT_RNG (PCG64)</span>
         </span>
       </div>
     </div>

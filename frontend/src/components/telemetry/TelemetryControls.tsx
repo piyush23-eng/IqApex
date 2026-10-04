@@ -49,16 +49,17 @@ export const TelemetryControls: React.FC<TelemetryControlsProps> = ({
   const isZoomed = zoomSpan.min > 10 || zoomSpan.max < trackLength - 10;
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-2 font-mono text-2xs select-none space-y-2">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="window-retro p-2.5 font-mono text-2xs select-none space-y-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-2.5">
         {/* Lap Selectors */}
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-1.5">
-            <span className="w-2 h-2 rounded-full bg-workstation-accentCyan inline-block" />
-            <span className="text-3xs text-workstation-textMuted uppercase font-semibold">REF:</span>
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Reference Lap Selector */}
+          <div className="flex items-center space-x-2 px-2.5 py-1 bg-[#070E22] border border-[#0062FF] shadow">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#0062FF] border border-[#00F0FF] inline-block flex-shrink-0 shadow-[0_0_6px_#0062FF]" />
+            <span className="text-3xs text-[#00F0FF] uppercase font-black tracking-wider">REF:</span>
             <select
               aria-label="Select Reference Lap"
-              className="bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-0.5 rounded text-2xs focus:outline-none focus:border-workstation-accentCyan"
+              className="bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-0.5 font-bold text-2xs focus:outline-none focus:border-[#0062FF] cursor-pointer"
               value={referenceLapId}
               onChange={(e) => onSelectReferenceLap(e.target.value)}
             >
@@ -70,14 +71,26 @@ export const TelemetryControls: React.FC<TelemetryControlsProps> = ({
             </select>
           </div>
 
-          <span className="text-workstation-border">|</span>
+          {/* Swap Button */}
+          <button
+            onClick={() => {
+              onSelectReferenceLap(comparisonLapId);
+              onSelectComparisonLap(referenceLapId);
+            }}
+            className="btn-retro text-3xs font-extrabold flex items-center space-x-1.5"
+            title="Swap Reference & Comparison Laps"
+          >
+            <span className="font-black text-[#FFFFFF]">⇄</span>
+            <span>[ SWAP ]</span>
+          </button>
 
-          <div className="flex items-center space-x-1.5">
-            <span className="w-2 h-2 rounded-full bg-workstation-telemetryAmber inline-block" />
-            <span className="text-3xs text-workstation-textMuted uppercase font-semibold">COMP:</span>
+          {/* Comparison Lap Selector */}
+          <div className="flex items-center space-x-2 px-2.5 py-1 bg-[#070E22] border border-[#FFFFFF] shadow">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#FFFFFF] border border-[#FFFFFF] inline-block flex-shrink-0 shadow-[0_0_6px_#FFFFFF]" />
+            <span className="text-3xs text-[#FFFFFF] uppercase font-black tracking-wider">COMP:</span>
             <select
               aria-label="Select Comparison Lap"
-              className="bg-workstation-surface border border-workstation-border text-workstation-textPrimary px-2 py-0.5 rounded text-2xs focus:outline-none focus:border-workstation-telemetryAmber"
+              className="bg-[#0A132E] border border-[#1E3A8A] text-[#FFFFFF] px-2 py-0.5 font-bold text-2xs focus:outline-none focus:border-[#FFFFFF] cursor-pointer"
               value={comparisonLapId}
               onChange={(e) => onSelectComparisonLap(e.target.value)}
             >
@@ -91,100 +104,85 @@ export const TelemetryControls: React.FC<TelemetryControlsProps> = ({
         </div>
 
         {/* Delta Mode Toggle & Zoom Controls */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2.5">
           {/* Delta Mode toggle */}
-          <div className="flex items-center bg-workstation-surface border border-workstation-border rounded p-0.5 text-3xs">
+          <div className="flex items-center space-x-1">
             <button
               onClick={() => onToggleDeltaMode('time')}
-              className={`px-2 py-0.5 rounded transition-colors font-semibold ${
-                deltaMode === 'time'
-                  ? 'bg-workstation-accentCyan/20 text-workstation-accentCyan'
-                  : 'text-workstation-textMuted hover:text-workstation-textSecondary'
-              }`}
+              className={deltaMode === 'time' ? 'tab-retro-active text-3xs' : 'tab-retro-inactive text-3xs'}
             >
-              Δt (Time)
+              [ Δt (Time) ]
             </button>
             <button
               onClick={() => onToggleDeltaMode('speed')}
-              className={`px-2 py-0.5 rounded transition-colors font-semibold ${
-                deltaMode === 'speed'
-                  ? 'bg-workstation-accentCyan/20 text-workstation-accentCyan'
-                  : 'text-workstation-textMuted hover:text-workstation-textSecondary'
-              }`}
+              className={deltaMode === 'speed' ? 'tab-retro-active text-3xs' : 'tab-retro-inactive text-3xs'}
             >
-              Δv (Speed)
+              [ Δv (Speed) ]
             </button>
           </div>
 
-          <span className="text-workstation-border">|</span>
+          <span className="text-[#FFFFFF] font-bold">|</span>
 
           {/* Zoom info & buttons */}
-          <div className="flex items-center space-x-1">
-            <span className="text-3xs text-workstation-textMuted px-1">
+          <div className="flex items-center space-x-1.5">
+            <span className="text-3xs text-[#FFFFFF] px-2 py-1 bg-[#070E22] border border-[#1E3A8A] shadow-sm font-black">
               [{Math.round(zoomSpan.min)}m → {Math.round(zoomSpan.max)}m]
             </span>
             <button
               onClick={onZoomIn}
               title="Zoom In (+)"
-              className="p-1 bg-workstation-surface hover:bg-workstation-border border border-workstation-border rounded text-workstation-textSecondary transition-colors"
+              className="btn-retro p-1 text-[#FFFFFF]"
             >
-              <ZoomIn className="w-3 h-3" />
+              <ZoomIn className="w-3.5 h-3.5 stroke-[2.5]" />
             </button>
             <button
               onClick={onZoomOut}
               title="Zoom Out (-)"
-              className="p-1 bg-workstation-surface hover:bg-workstation-border border border-workstation-border rounded text-workstation-textSecondary transition-colors"
+              className="btn-retro p-1 text-[#FFFFFF]"
             >
-              <ZoomOut className="w-3 h-3" />
+              <ZoomOut className="w-3.5 h-3.5 stroke-[2.5]" />
             </button>
             <button
               onClick={onResetZoom}
               title="Reset Zoom [R]"
-              className={`px-2 py-0.5 border rounded flex items-center space-x-1 text-3xs transition-colors ${
-                isZoomed
-                  ? 'bg-workstation-accent/20 border-workstation-accent text-workstation-accentCyan font-bold'
-                  : 'bg-workstation-surface border-workstation-border text-workstation-textMuted hover:text-workstation-textSecondary'
+              className={`btn-retro text-3xs font-extrabold flex items-center space-x-1 ${
+                isZoomed ? 'bg-[#00F0FF] hover:bg-[#00EE00]' : ''
               }`}
             >
-              <RotateCcw className="w-2.5 h-2.5" />
-              <span>Reset [R]</span>
+              <RotateCcw className="w-3 h-3 stroke-[2.5]" />
+              <span>[ RESET R ]</span>
             </button>
           </div>
 
           {/* Shortcut tooltip trigger */}
           <button
             onClick={() => setShowHotkeys(!showHotkeys)}
-            className="p-1 text-workstation-textMuted hover:text-workstation-textSecondary transition-colors"
+            className="btn-retro p-1 text-[#FFFFFF]"
             title="Workstation Hotkeys"
           >
-            <HelpCircle className="w-3.5 h-3.5" />
+            <HelpCircle className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
       </div>
 
       {/* Channel Toggles Strip */}
-      <div className="flex flex-wrap items-center justify-between pt-1 border-t border-workstation-borderSubtle gap-1">
-        <div className="flex items-center space-x-1 text-3xs text-workstation-textMuted mr-2">
-          <Eye className="w-3 h-3 text-workstation-accentCyan" />
-          <span className="uppercase font-semibold">CHANNELS:</span>
+      <div className="flex flex-wrap items-center justify-between pt-2 border-t-2 border-dashed border-[#1E3A8A] gap-1.5">
+        <div className="flex items-center space-x-1.5 text-3xs text-[#FFFFFF] font-black uppercase tracking-wider mr-2">
+          <Eye className="w-3 h-3 stroke-[2.5]" />
+          <span>CHANNELS:</span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1.5">
           {CHANNELS.map((ch) => {
             const isVisible = visibleChannels[ch.key];
             return (
               <button
                 key={ch.key}
                 onClick={() => onToggleChannel(ch.key)}
-                className={`px-2 py-0.5 rounded text-3xs border transition-all flex items-center space-x-1 ${
-                  isVisible
-                    ? 'bg-workstation-surface border-workstation-accentCyan/40 text-workstation-textBright font-semibold'
-                    : 'bg-workstation-surface/40 border-workstation-border/40 text-workstation-textMuted/50 line-through'
-                }`}
+                className={isVisible ? 'tab-retro-active text-3xs' : 'tab-retro-inactive text-3xs line-through opacity-60'}
                 title={`Toggle ${ch.label} [Key: ${ch.hotkey}]`}
               >
-                <span className="text-workstation-textMuted font-mono">[{ch.hotkey}]</span>
-                <span>{ch.label}</span>
+                <span>[{ch.hotkey}: {ch.label}]</span>
               </button>
             );
           })}
@@ -193,15 +191,21 @@ export const TelemetryControls: React.FC<TelemetryControlsProps> = ({
 
       {/* Hotkeys Dialog */}
       {showHotkeys && (
-        <div className="p-2 bg-workstation-surface border border-workstation-accentCyan/40 rounded text-3xs space-y-1">
-          <div className="font-semibold text-workstation-accentCyan uppercase">Workstation Keyboard Controls</div>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-workstation-textSecondary">
-            <div><kbd className="px-1 py-0.2 bg-black/40 rounded text-workstation-textBright">R</kbd> : Reset zoom to full lap</div>
-            <div><kbd className="px-1 py-0.2 bg-black/40 rounded text-workstation-textBright">1 - 9</kbd> : Toggle channel 1 through 9</div>
-            <div><kbd className="px-1 py-0.2 bg-black/40 rounded text-workstation-textBright">← / →</kbd> : Step cursor 10 meters</div>
-            <div><kbd className="px-1 py-0.2 bg-black/40 rounded text-workstation-textBright">Shift + ← / →</kbd> : Step cursor 100 meters</div>
-            <div><kbd className="px-1 py-0.2 bg-black/40 rounded text-workstation-textBright">Drag</kbd> : Distance box zoom</div>
-            <div><kbd className="px-1 py-0.2 bg-black/40 rounded text-workstation-textBright">Scroll</kbd> : Zoom in / out at mouse position</div>
+        <div className="p-3 bg-[#070E22] border border-[#1E3A8A] shadow-md text-3xs space-y-2">
+          <div className="font-black text-[#FFFFFF] uppercase tracking-wider flex items-center justify-between border-b border-[#1E3A8A] pb-1">
+            <span className="flex items-center space-x-1.5">
+              <span className="w-2 h-2 bg-[#00F0FF] border border-[#1E3A8A] inline-block" />
+              <span>KEYBOARD SHORTCUTS & NAVIGATION MAP</span>
+            </span>
+            <span onClick={() => setShowHotkeys(false)} className="cursor-pointer font-bold">[✕]</span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1.5 text-[#FFFFFF] font-bold">
+            <div><kbd className="kbd-cap mr-1">R</kbd> Reset zoom to full lap</div>
+            <div><kbd className="kbd-cap mr-1">1 - 9</kbd> Toggle channels 1 to 9</div>
+            <div><kbd className="kbd-cap mr-1">← / →</kbd> Step cursor 10m</div>
+            <div><kbd className="kbd-cap mr-1">Shift + ← / →</kbd> Step cursor 100m</div>
+            <div><kbd className="kbd-cap mr-1">Drag</kbd> Distance box zoom</div>
+            <div><kbd className="kbd-cap mr-1">Scroll</kbd> Zoom at cursor</div>
           </div>
         </div>
       )}

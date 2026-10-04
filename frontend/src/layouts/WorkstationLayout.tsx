@@ -20,6 +20,7 @@ interface WorkstationLayoutProps {
   downsampleActive: boolean;
   onSelectDriver: (driver: Driver) => void;
   onSelectRun: (run: Run) => void;
+  onSelectReferenceDriver?: (driver: Driver) => void;
   onSelectModule: (module: NavModule) => void;
   onToggleDemoData: () => void;
   children: React.ReactNode;
@@ -41,13 +42,14 @@ export const WorkstationLayout: React.FC<WorkstationLayoutProps> = ({
   downsampleActive,
   onSelectDriver,
   onSelectRun,
+  onSelectReferenceDriver,
   onSelectModule,
   onToggleDemoData,
   children,
 }) => {
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-workstation-bg select-none">
-      {/* 1. TOP ENGINEERING CONTEXT BAR */}
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#030712] text-[#FFFFFF] select-none">
+      {/* 1. TOP ENGINEERING CONTEXT BAR (F1 Pit-Wall Standard) */}
       <ContextBar
         session={session}
         drivers={drivers}
@@ -59,13 +61,14 @@ export const WorkstationLayout: React.FC<WorkstationLayoutProps> = ({
         isSynthetic={isSynthetic}
         onSelectDriver={onSelectDriver}
         onSelectRun={onSelectRun}
+        onSelectReferenceDriver={onSelectReferenceDriver}
         onToggleDemoData={onToggleDemoData}
       />
 
-      {/* 2. MAIN ENGINEERING WORKSPACE WITH COMPACT LEFT NAV */}
+      {/* 2. MAIN ENGINEERING WORKSPACE WITH SLEEK F1 LEFT NAV */}
       <div className="flex-1 flex overflow-hidden">
         <LeftNav activeModule={activeModule} onSelectModule={onSelectModule} />
-        <main className="flex-1 overflow-hidden bg-workstation-bg relative">
+        <main className="flex-1 overflow-y-auto bg-[#030712] p-3 relative">
           {children}
         </main>
       </div>

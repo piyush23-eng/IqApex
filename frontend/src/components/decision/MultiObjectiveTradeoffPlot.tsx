@@ -123,26 +123,26 @@ export const MultiObjectiveTradeoffPlot: React.FC<MultiObjectiveTradeoffPlotProp
   }, [paretoLineData, scaleX, scaleY, xMetric, yMetric]);
 
   return (
-    <div className="bg-[#12161f] border border-[#232936] rounded p-4 font-mono">
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-3 border-b border-[#1c2230] pb-2">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-0 shadow-md font-mono">
+      <div className="window-header-retro bg-[#070E22] border-b border-[#1E3A8A] px-3 py-1.5 flex flex-wrap items-center justify-between text-[#FFFFFF] font-extrabold">
         <div className="flex items-center gap-2">
-          <Target className="w-4 h-4 text-cyan-400" />
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-200">
-            Multi-Objective Setup Trade-off Space
+          <Target className="w-4 h-4 text-[#FFFFFF] stroke-[2.5]" />
+          <span className="text-2xs font-extrabold uppercase tracking-wider text-[#FFFFFF]">
+            [ MULTI-OBJECTIVE SETUP TRADE-OFF SPACE ]
           </span>
-          <span className="text-[10px] bg-cyan-950/80 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-800/60">
-            Pareto Frontier
+          <span className="text-3xs bg-[#00F0FF] text-[#FFFFFF] font-extrabold px-1.5 py-0.2 border border-[#1E3A8A] shadow-sm">
+            PARETO FRONTIER
           </span>
         </div>
 
         {/* Axis Selectors */}
-        <div className="flex items-center gap-3 text-xs">
+        <div className="flex items-center gap-3 text-2xs">
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-500 text-[11px]">X:</span>
+            <span className="text-[#FFFFFF] font-bold">X:</span>
             <select
               value={xMetric}
               onChange={(e) => setXMetric(e.target.value as MetricKey)}
-              className="bg-[#0b0e14] border border-[#2d3748] text-slate-300 text-xs px-2 py-1 rounded focus:outline-none focus:border-cyan-500"
+              className="bg-[#070E22] border border-[#1E3A8A] text-[#FFFFFF] text-3xs px-2 py-0.5 font-bold focus:outline-none focus:ring-2 focus:ring-[#0062FF] cursor-pointer"
             >
               {METRIC_OPTIONS.map((opt) => (
                 <option key={opt.key} value={opt.key}>
@@ -153,11 +153,11 @@ export const MultiObjectiveTradeoffPlot: React.FC<MultiObjectiveTradeoffPlotProp
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-500 text-[11px]">Y:</span>
+            <span className="text-[#FFFFFF] font-bold">Y:</span>
             <select
               value={yMetric}
               onChange={(e) => setYMetric(e.target.value as MetricKey)}
-              className="bg-[#0b0e14] border border-[#2d3748] text-slate-300 text-xs px-2 py-1 rounded focus:outline-none focus:border-cyan-500"
+              className="bg-[#070E22] border border-[#1E3A8A] text-[#FFFFFF] text-3xs px-2 py-0.5 font-bold focus:outline-none focus:ring-2 focus:ring-[#0062FF] cursor-pointer"
             >
               {METRIC_OPTIONS.map((opt) => (
                 <option key={opt.key} value={opt.key}>
@@ -169,220 +169,230 @@ export const MultiObjectiveTradeoffPlot: React.FC<MultiObjectiveTradeoffPlotProp
         </div>
       </div>
 
-      {/* SVG Canvas */}
-      <div className="relative flex justify-center bg-[#0d1017] rounded border border-[#1a202c] overflow-hidden">
-        <svg
-          viewBox={`0 0 ${width} ${height}`}
-          className="w-full h-auto max-h-[360px] select-none"
-        >
-          {/* Grid lines */}
-          {[0, 0.25, 0.5, 0.75, 1].map((pct) => {
-            const y = padding.top + pct * plotHeight;
-            const x = padding.left + pct * plotWidth;
-            const valY = maxY - pct * (maxY - minY);
-            const valX = minX + pct * (maxX - minX);
+      <div className="p-3 space-y-3">
+        {/* SVG Canvas */}
+        <div className="relative flex justify-center bg-[#070E22] border border-[#1E3A8A] shadow overflow-hidden">
+          <svg
+            viewBox={`0 0 ${width} ${height}`}
+            className="w-full h-auto max-h-[360px] select-none"
+          >
+            {/* Grid lines */}
+            {[0, 0.25, 0.5, 0.75, 1].map((pct) => {
+              const y = padding.top + pct * plotHeight;
+              const x = padding.left + pct * plotWidth;
+              const valY = maxY - pct * (maxY - minY);
+              const valX = minX + pct * (maxX - minX);
 
-            return (
-              <g key={pct}>
-                <line
-                  x1={padding.left}
-                  y1={y}
-                  x2={padding.left + plotWidth}
-                  y2={y}
-                  stroke="#1e2533"
-                  strokeDasharray="2,2"
-                />
-                <text
-                  x={padding.left - 6}
-                  y={y + 3}
-                  textAnchor="end"
-                  fontSize="9"
-                  fill="#64748b"
+              return (
+                <g key={pct}>
+                  <line
+                    x1={padding.left}
+                    y1={y}
+                    x2={padding.left + plotWidth}
+                    y2={y}
+                    stroke="#1E3A8A"
+                    strokeDasharray="2,2"
+                  />
+                  <text
+                    x={padding.left - 6}
+                    y={y + 3}
+                    textAnchor="end"
+                    fontSize="9"
+                    fontFamily="monospace"
+                    fontWeight="bold"
+                    fill="#93C5FD"
+                  >
+                    {valY.toFixed(valY >= 100 ? 0 : 2)}
+                  </text>
+
+                  <line
+                    x1={x}
+                    y1={padding.top}
+                    x2={x}
+                    y2={padding.top + plotHeight}
+                    stroke="#1E3A8A"
+                    strokeDasharray="2,2"
+                  />
+                  <text
+                    x={x}
+                    y={padding.top + plotHeight + 14}
+                    textAnchor="middle"
+                    fontSize="9"
+                    fontFamily="monospace"
+                    fontWeight="bold"
+                    fill="#93C5FD"
+                  >
+                    {valX.toFixed(valX >= 100 ? 0 : 2)}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* Zero baseline lines if in range */}
+            {minX < 0 && maxX > 0 && (
+              <line
+                x1={scaleX(0)}
+                y1={padding.top}
+                x2={scaleX(0)}
+                y2={padding.top + plotHeight}
+                stroke="#0062FF"
+                strokeWidth="1.5"
+                strokeDasharray="3,3"
+              />
+            )}
+            {minY < 0 && maxY > 0 && (
+              <line
+                x1={padding.left}
+                y1={scaleY(0)}
+                x2={padding.left + plotWidth}
+                y2={scaleY(0)}
+                stroke="#0062FF"
+                strokeWidth="1.5"
+                strokeDasharray="3,3"
+              />
+            )}
+
+            {/* Pareto line connecting non-dominated candidates */}
+            {paretoPath && (
+              <path
+                d={paretoPath}
+                fill="none"
+                stroke="#00F0FF"
+                strokeWidth="2.5"
+                strokeDasharray="4,2"
+              />
+            )}
+
+            {/* Data Points */}
+            {points.map((pt) => {
+              const cx = scaleX(pt[xMetric]);
+              const cy = scaleY(pt[yMetric]);
+              const isPareto = paretoPoints.has(pt.id);
+              const isSelected = pt.id === selectedPointId;
+              const isHovered = hoveredPoint?.id === pt.id;
+
+              return (
+                <g
+                  key={pt.id}
+                  className="cursor-pointer"
+                  onClick={() => onSelectPoint?.(pt)}
+                  onMouseEnter={() => setHoveredPoint(pt)}
+                  onMouseLeave={() => setHoveredPoint(null)}
                 >
-                  {valY.toFixed(valY >= 100 ? 0 : 2)}
-                </text>
+                  {/* Halo for current or selected */}
+                  {(pt.is_current || isSelected || isHovered) && (
+                    <circle
+                      cx={cx}
+                      cy={cy}
+                      r={isSelected || pt.is_current ? 11 : 8}
+                      fill={pt.is_current ? '#0062FF' : isSelected ? '#00F0FF' : '#3B82F6'}
+                      opacity={0.4}
+                    />
+                  )}
 
-                <line
-                  x1={x}
-                  y1={padding.top}
-                  x2={x}
-                  y2={padding.top + plotHeight}
-                  stroke="#1e2533"
-                  strokeDasharray="2,2"
-                />
-                <text
-                  x={x}
-                  y={padding.top + plotHeight + 14}
-                  textAnchor="middle"
-                  fontSize="9"
-                  fill="#64748b"
-                >
-                  {valX.toFixed(valX >= 100 ? 0 : 2)}
-                </text>
-              </g>
-            );
-          })}
-
-          {/* Zero baseline lines if in range */}
-          {minX < 0 && maxX > 0 && (
-            <line
-              x1={scaleX(0)}
-              y1={padding.top}
-              x2={scaleX(0)}
-              y2={padding.top + plotHeight}
-              stroke="#334155"
-              strokeWidth="1.5"
-            />
-          )}
-          {minY < 0 && maxY > 0 && (
-            <line
-              x1={padding.left}
-              y1={scaleY(0)}
-              x2={padding.left + plotWidth}
-              y2={scaleY(0)}
-              stroke="#334155"
-              strokeWidth="1.5"
-            />
-          )}
-
-          {/* Pareto line connecting non-dominated candidates */}
-          {paretoPath && (
-            <path
-              d={paretoPath}
-              fill="none"
-              stroke="#06b6d4"
-              strokeWidth="1.5"
-              strokeDasharray="3,3"
-              opacity="0.6"
-            />
-          )}
-
-          {/* Data Points */}
-          {points.map((pt) => {
-            const cx = scaleX(pt[xMetric]);
-            const cy = scaleY(pt[yMetric]);
-            const isPareto = paretoPoints.has(pt.id);
-            const isSelected = pt.id === selectedPointId;
-            const isHovered = hoveredPoint?.id === pt.id;
-
-            return (
-              <g
-                key={pt.id}
-                className="cursor-pointer transition-transform duration-100"
-                onClick={() => onSelectPoint?.(pt)}
-                onMouseEnter={() => setHoveredPoint(pt)}
-                onMouseLeave={() => setHoveredPoint(null)}
-              >
-                {/* Halo for current or selected */}
-                {(pt.is_current || isSelected || isHovered) && (
+                  {/* Point Node */}
                   <circle
                     cx={cx}
                     cy={cy}
-                    r={isSelected || pt.is_current ? 9 : 7}
-                    fill={pt.is_current ? '#38bdf8' : isSelected ? '#a855f7' : '#06b6d4'}
-                    opacity={0.25}
+                    r={pt.is_current ? 6.5 : isPareto ? 5 : 4}
+                    fill={
+                      pt.is_current
+                        ? '#0062FF'
+                        : isSelected
+                        ? '#FFFFFF'
+                        : isPareto
+                        ? '#00F0FF'
+                        : '#0A132E'
+                    }
+                    stroke={pt.is_current ? '#00F0FF' : isSelected ? '#0062FF' : isPareto ? '#FFFFFF' : '#1E3A8A'}
+                    strokeWidth={pt.is_current ? 2.5 : 1.5}
                   />
+
+                  {/* Label for current setup */}
+                  {pt.is_current && (
+                    <text
+                      x={cx + 9}
+                      y={cy - 6}
+                      fontSize="9"
+                      fontWeight="bold"
+                      fontFamily="monospace"
+                      fill="#00F0FF"
+                    >
+                      [CURRENT]
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+
+            {/* Axis Labels */}
+            <text
+              x={padding.left + plotWidth / 2}
+              y={height - 8}
+              textAnchor="middle"
+              fontSize="10"
+              fill="#93C5FD"
+              fontWeight="bold"
+              fontFamily="monospace"
+            >
+              {xOption.label} ({xOption.unit}) {xOption.direction === 'min' ? '← Lower Better' : '→ Higher Better'}
+            </text>
+
+            <text
+              transform={`rotate(-90)`}
+              x={-(padding.top + plotHeight / 2)}
+              y={14}
+              textAnchor="middle"
+              fontSize="10"
+              fill="#93C5FD"
+              fontWeight="bold"
+              fontFamily="monospace"
+            >
+              {yOption.label} ({yOption.unit}) {yOption.direction === 'min' ? '↓ Lower Better' : '↑ Higher Better'}
+            </text>
+          </svg>
+
+          {/* Hover / Selection tooltip overlay */}
+          {hoveredPoint && (
+            <div className="absolute top-2 right-2 bg-[#070E22] border border-[#1E3A8A] p-2.5 text-3xs text-[#FFFFFF] pointer-events-none shadow-md max-w-[220px]">
+              <div className="font-extrabold text-[#FFFFFF] border-b border-[#1E3A8A] pb-1 mb-1.5 flex justify-between items-center">
+                <span>{hoveredPoint.name}</span>
+                {paretoPoints.has(hoveredPoint.id) && (
+                  <span className="text-4xs bg-[#00F0FF] text-[#FFFFFF] font-bold px-1 border border-[#1E3A8A]">PARETO</span>
                 )}
-
-                {/* Point Node */}
-                <circle
-                  cx={cx}
-                  cy={cy}
-                  r={pt.is_current ? 5.5 : isPareto ? 4.5 : 3.5}
-                  fill={
-                    pt.is_current
-                      ? '#38bdf8'
-                      : isSelected
-                      ? '#a855f7'
-                      : isPareto
-                      ? '#06b6d4'
-                      : '#64748b'
-                  }
-                  stroke={pt.is_current ? '#0284c7' : isPareto ? '#0891b2' : '#334155'}
-                  strokeWidth={1.5}
-                />
-
-                {/* Label for current setup */}
-                {pt.is_current && (
-                  <text
-                    x={cx + 8}
-                    y={cy - 6}
-                    fontSize="9"
-                    fontWeight="bold"
-                    fill="#38bdf8"
-                  >
-                    Current
-                  </text>
-                )}
-              </g>
-            );
-          })}
-
-          {/* Axis Labels */}
-          <text
-            x={padding.left + plotWidth / 2}
-            y={height - 8}
-            textAnchor="middle"
-            fontSize="10"
-            fill="#94a3b8"
-            fontWeight="bold"
-          >
-            {xOption.label} ({xOption.unit}) {xOption.direction === 'min' ? '← Lower Better' : '→ Higher Better'}
-          </text>
-
-          <text
-            transform={`rotate(-90)`}
-            x={-(padding.top + plotHeight / 2)}
-            y={14}
-            textAnchor="middle"
-            fontSize="10"
-            fill="#94a3b8"
-            fontWeight="bold"
-          >
-            {yOption.label} ({yOption.unit}) {yOption.direction === 'min' ? '↓ Lower Better' : '↑ Higher Better'}
-          </text>
-        </svg>
-
-        {/* Hover / Selection tooltip overlay */}
-        {hoveredPoint && (
-          <div className="absolute top-2 right-2 bg-[#090d16]/95 border border-cyan-800/80 p-2.5 rounded text-[11px] text-slate-200 pointer-events-none shadow-xl max-w-[220px]">
-            <div className="font-bold text-cyan-300 border-b border-cyan-900/60 pb-1 mb-1.5 flex justify-between items-center">
-              <span>{hoveredPoint.name}</span>
-              {paretoPoints.has(hoveredPoint.id) && (
-                <span className="text-[9px] bg-cyan-950 text-cyan-400 px-1 rounded">Pareto</span>
-              )}
+              </div>
+              <div className="space-y-0.5 text-[#E2E8F0] font-bold">
+                <div>FW: {hoveredPoint.front_wing_angle.toFixed(1)}° | RW: {hoveredPoint.rear_wing_angle.toFixed(1)}°</div>
+                <div>Lap Delta: <span className={hoveredPoint.lap_time_delta_s <= 0 ? 'text-[#00E676]' : 'text-[#FFB000]'}>{hoveredPoint.lap_time_delta_s > 0 ? '+' : ''}{hoveredPoint.lap_time_delta_s.toFixed(3)} s</span></div>
+                <div>Race Delta: <span className={hoveredPoint.race_time_delta_s <= 0 ? 'text-[#00E676]' : 'text-[#FFB000]'}>{hoveredPoint.race_time_delta_s > 0 ? '+' : ''}{hoveredPoint.race_time_delta_s.toFixed(2)} s</span></div>
+                <div>Downforce: <span className="text-[#FFFFFF] font-extrabold">{hoveredPoint.downforce_n.toFixed(0)} N</span></div>
+                <div>Drag: <span className="text-[#FFFFFF] font-extrabold">{hoveredPoint.drag_n.toFixed(0)} N</span></div>
+                <div>95% PI: <span className="text-[#FFFFFF] font-extrabold">±{(hoveredPoint.uncertainty_pi_s / 2).toFixed(3)} s</span></div>
+              </div>
             </div>
-            <div className="space-y-0.5 text-slate-400 text-[10px]">
-              <div>FW: {hoveredPoint.front_wing_angle.toFixed(1)}° | RW: {hoveredPoint.rear_wing_angle.toFixed(1)}°</div>
-              <div>Lap Delta: <span className={hoveredPoint.lap_time_delta_s <= 0 ? 'text-emerald-400' : 'text-amber-400'}>{hoveredPoint.lap_time_delta_s > 0 ? '+' : ''}{hoveredPoint.lap_time_delta_s.toFixed(3)} s</span></div>
-              <div>Race Delta: <span className={hoveredPoint.race_time_delta_s <= 0 ? 'text-emerald-400' : 'text-amber-400'}>{hoveredPoint.race_time_delta_s > 0 ? '+' : ''}{hoveredPoint.race_time_delta_s.toFixed(2)} s</span></div>
-              <div>Downforce: <span className="text-slate-200">{hoveredPoint.downforce_n.toFixed(0)} N</span></div>
-              <div>Drag: <span className="text-slate-200">{hoveredPoint.drag_n.toFixed(0)} N</span></div>
-              <div>95% PI: <span className="text-slate-200">±{(hoveredPoint.uncertainty_pi_s / 2).toFixed(3)} s</span></div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Legend & Guidance */}
-      <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-400 mt-2 px-1">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block border border-cyan-300" />
-            <span>Pareto Non-dominated</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-sky-400 inline-block border border-sky-200 ring-2 ring-sky-500/30" />
-            <span>Active Scenario Setup</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-slate-500 inline-block" />
-            <span>Candidate Alternative</span>
-          </div>
+          )}
         </div>
-        <div className="flex items-center gap-1 text-slate-500 text-[10px]">
-          <Info className="w-3 h-3 text-slate-500" />
-          <span>Click any candidate point to load into Setup What-If</span>
+
+        {/* Legend & Guidance */}
+        <div className="flex flex-wrap items-center justify-between text-3xs text-[#FFFFFF] px-1 font-bold">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 bg-[#008000] inline-block border border-[#1E3A8A]" />
+              <span>Pareto Non-dominated</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 bg-[#00F0FF] inline-block border border-[#1E3A8A]" />
+              <span>Active Scenario Setup</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 bg-[#93C5FD] inline-block border border-[#1E3A8A]" />
+              <span>Candidate Alternative</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 text-[#94A3B8] text-3xs">
+            <Info className="w-3.5 h-3.5 text-[#FFFFFF]" />
+            <span>Click any candidate point to load into Setup What-If</span>
+          </div>
         </div>
       </div>
     </div>

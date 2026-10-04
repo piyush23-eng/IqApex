@@ -56,60 +56,60 @@ export const CornerAnalysisTable: React.FC<CornerAnalysisTableProps> = ({
       return <ArrowUpDown className="w-2.5 h-2.5 opacity-40 ml-1 inline-block" />;
     }
     return sortOrder === 'asc' ? (
-      <ArrowUp className="w-2.5 h-2.5 text-workstation-accentCyan ml-1 inline-block" />
+      <ArrowUp className="w-2.5 h-2.5 text-[#FFFFFF] ml-1 inline-block" />
     ) : (
-      <ArrowDown className="w-2.5 h-2.5 text-workstation-accentCyan ml-1 inline-block" />
+      <ArrowDown className="w-2.5 h-2.5 text-[#FFFFFF] ml-1 inline-block" />
     );
   };
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded font-mono text-2xs select-none overflow-hidden">
+    <div className="window-retro font-mono text-2xs select-none overflow-hidden my-3">
       {/* Table Header Strip */}
-      <div className="p-2.5 border-b border-workstation-borderSubtle flex items-center justify-between">
+      <div className="window-header-retro flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <MapPin className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright uppercase text-3xs tracking-wider">
-            CORNER KINEMATIC ANALYSIS & PERFORMANCE DIVERGENCE
+          <MapPin className="w-3.5 h-3.5 text-[#FFFFFF]" />
+          <span className="font-bold text-[#FFFFFF] uppercase text-2xs tracking-wider">
+            [ CORNER KINEMATIC ANALYSIS & PERFORMANCE DIVERGENCE ]
           </span>
-          <span className="text-workstation-border">|</span>
-          <span className="text-3xs text-workstation-textMuted">
-            Click any corner row to focus synchronized telemetry and cursor on apex
+          <span className="text-gray-400">|</span>
+          <span className="text-3xs text-[#CBD5E1]">
+            Click any row to focus synchronized telemetry and cursor on apex
           </span>
         </div>
 
         <div className="flex items-center space-x-2 text-3xs">
-          <span className="text-workstation-textMuted">Sorted by:</span>
-          <span className="text-workstation-accentCyan font-semibold uppercase">{sortField.replace(/_/g, ' ')}</span>
+          <span className="text-[#93C5FD]">Sorted by:</span>
+          <span className="bg-[#0062FF] text-[#FFFFFF] px-1.5 py-0.5 border border-[#00F0FF] font-black uppercase shadow-matrix-glow">{sortField.replace(/_/g, ' ')}</span>
         </div>
       </div>
 
       {/* Engineering Data Table */}
-      <div className="overflow-x-auto max-h-72">
+      <div className="overflow-x-auto max-h-72 bg-[#070E22]">
         <table className="w-full text-left text-2xs border-collapse">
-          <thead className="bg-workstation-surface/90 sticky top-0 z-10 text-3xs text-workstation-textMuted uppercase border-b border-workstation-borderSubtle">
+          <thead className="bg-[#070E22] sticky top-0 z-10 text-3xs text-[#FFFFFF] uppercase border-b border-[#1E3A8A] font-bold">
             <tr>
               <th
-                className="py-1.5 px-2.5 cursor-pointer hover:text-workstation-textBright"
+                className="py-1.5 px-2.5 cursor-pointer hover:bg-[#070E22]"
                 onClick={() => handleHeaderClick('turn_number')}
               >
                 Corner {renderSortIcon('turn_number')}
               </th>
               <th className="py-1.5 px-2 text-right">Distance Span</th>
               <th
-                className="py-1.5 px-2 text-right cursor-pointer hover:text-workstation-textBright"
+                className="py-1.5 px-2 text-right cursor-pointer hover:bg-[#070E22]"
                 onClick={() => handleHeaderClick('entry_speed_delta')}
               >
                 Entry Speed [km/h] {renderSortIcon('entry_speed_delta')}
               </th>
               <th
-                className="py-1.5 px-2 text-right cursor-pointer hover:text-workstation-textBright"
+                className="py-1.5 px-2 text-right cursor-pointer hover:bg-[#070E22]"
                 onClick={() => handleHeaderClick('min_speed_delta')}
               >
                 Min Speed [km/h] {renderSortIcon('min_speed_delta')}
               </th>
               <th className="py-1.5 px-2 text-right">Apex Loc</th>
               <th
-                className="py-1.5 px-2 text-right cursor-pointer hover:text-workstation-textBright"
+                className="py-1.5 px-2 text-right cursor-pointer hover:bg-[#070E22]"
                 onClick={() => handleHeaderClick('exit_speed_delta')}
               >
                 Exit Speed [km/h] {renderSortIcon('exit_speed_delta')}
@@ -117,42 +117,42 @@ export const CornerAnalysisTable: React.FC<CornerAnalysisTableProps> = ({
               <th className="py-1.5 px-2 text-right">Braking Pt</th>
               <th className="py-1.5 px-2 text-right">Throttle Pickup</th>
               <th
-                className="py-1.5 px-2 text-right cursor-pointer hover:text-workstation-textBright"
+                className="py-1.5 px-2 text-right cursor-pointer hover:bg-[#070E22]"
                 onClick={() => handleHeaderClick('corner_time_delta')}
               >
                 Corner Time [s] {renderSortIcon('corner_time_delta')}
               </th>
               <th
-                className="py-1.5 px-2.5 text-right cursor-pointer hover:text-workstation-textBright"
+                className="py-1.5 px-2.5 text-right cursor-pointer hover:bg-[#070E22]"
                 onClick={() => handleHeaderClick('cumulative_time_delta_exit')}
               >
                 Exit Δt [s] {renderSortIcon('cumulative_time_delta_exit')}
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-workstation-borderSubtle/60">
+          <tbody className="divide-y divide-[#E0E0E0] text-[#FFFFFF]">
             {sortedCorners.map((c) => {
               const isSelected = selectedCornerId === c.corner_id;
               const timeColor =
                 c.corner_time_delta < 0
-                  ? 'text-workstation-telemetryGreen'
+                  ? 'text-[#00E676] font-bold'
                   : c.corner_time_delta > 0
-                  ? 'text-workstation-telemetryAmber'
-                  : 'text-workstation-textMuted';
+                  ? 'text-[#FF3366] font-bold'
+                  : 'text-[#94A3B8]';
 
               const exitSpeedColor =
                 c.exit_speed_delta > 0
-                  ? 'text-workstation-telemetryGreen'
+                  ? 'text-[#00E676] font-bold'
                   : c.exit_speed_delta < 0
-                  ? 'text-workstation-telemetryAmber'
-                  : 'text-workstation-textMuted';
+                  ? 'text-[#FF3366] font-bold'
+                  : 'text-[#94A3B8]';
 
               const minSpeedColor =
                 c.min_speed_delta > 0
-                  ? 'text-workstation-telemetryGreen'
+                  ? 'text-[#00E676] font-bold'
                   : c.min_speed_delta < 0
-                  ? 'text-workstation-telemetryAmber'
-                  : 'text-workstation-textMuted';
+                  ? 'text-[#FF3366] font-bold'
+                  : 'text-[#94A3B8]';
 
               return (
                 <tr
@@ -160,32 +160,32 @@ export const CornerAnalysisTable: React.FC<CornerAnalysisTableProps> = ({
                   onClick={() => onSelectCorner(c)}
                   className={`cursor-pointer transition-colors ${
                     isSelected
-                      ? 'bg-workstation-accent/20 border-l-4 border-workstation-accentCyan'
-                      : 'hover:bg-workstation-surface/50'
+                      ? 'bg-[#0062FF]/20 text-[#FFFFFF] border-l-4 border-[#00F0FF] shadow-matrix-glow font-semibold'
+                      : 'hover:bg-[#0062FF]/10'
                   }`}
                 >
                   {/* Corner ID and Name */}
                   <td className="py-1.5 px-2.5 whitespace-nowrap">
-                    <span className="font-bold text-workstation-accentCyan mr-1.5">{c.corner_id}</span>
-                    <span className="text-workstation-textPrimary font-medium">{c.corner_name}</span>
+                    <span className="font-bold text-[#FFFFFF] mr-1.5 bg-[#0E1A3D] text-[#00F0FF] px-1 py-0.5 border border-[#1E3A8A]">{c.corner_id}</span>
+                    <span className="text-[#FFFFFF] font-semibold">{c.corner_name}</span>
                   </td>
 
                   {/* Distance Span */}
-                  <td className="py-1.5 px-2 text-right text-workstation-textMuted whitespace-nowrap">
+                  <td className="py-1.5 px-2 text-right text-[#94A3B8] whitespace-nowrap">
                     {Math.round(c.entry_distance)}m → {Math.round(c.exit_distance)}m
                   </td>
 
                   {/* Entry Speed */}
                   <td className="py-1.5 px-2 text-right whitespace-nowrap">
-                    <span className="text-workstation-textMuted mr-1">{c.ref_entry_speed.toFixed(0)}</span>
-                    <span className="text-workstation-textSecondary mr-1">{c.comp_entry_speed.toFixed(0)}</span>
+                    <span className="text-[#94A3B8] mr-1">{c.ref_entry_speed.toFixed(0)}</span>
+                    <span className="text-[#FFFFFF] font-medium mr-1">{c.comp_entry_speed.toFixed(0)}</span>
                     <span
-                      className={`text-3xs font-semibold ${
+                      className={`text-3xs font-bold ${
                         c.entry_speed_delta > 0
-                          ? 'text-workstation-telemetryGreen'
+                          ? 'text-[#00E676]'
                           : c.entry_speed_delta < 0
-                          ? 'text-workstation-telemetryAmber'
-                          : 'text-workstation-textMuted'
+                          ? 'text-[#FF3366]'
+                          : 'text-[#94A3B8]'
                       }`}
                     >
                       ({c.entry_speed_delta > 0 ? '+' : ''}{c.entry_speed_delta.toFixed(1)})
@@ -194,18 +194,18 @@ export const CornerAnalysisTable: React.FC<CornerAnalysisTableProps> = ({
 
                   {/* Min Speed */}
                   <td className="py-1.5 px-2 text-right whitespace-nowrap">
-                    <span className="text-workstation-textMuted mr-1">{c.ref_min_speed.toFixed(0)}</span>
-                    <span className="text-workstation-textSecondary mr-1">{c.comp_min_speed.toFixed(0)}</span>
-                    <span className={`text-3xs font-semibold ${minSpeedColor}`}>
+                    <span className="text-[#94A3B8] mr-1">{c.ref_min_speed.toFixed(0)}</span>
+                    <span className="text-[#FFFFFF] font-medium mr-1">{c.comp_min_speed.toFixed(0)}</span>
+                    <span className={`text-3xs font-bold ${minSpeedColor}`}>
                       ({c.min_speed_delta > 0 ? '+' : ''}{c.min_speed_delta.toFixed(1)})
                     </span>
                   </td>
 
                   {/* Apex Location */}
-                  <td className="py-1.5 px-2 text-right text-workstation-textSecondary whitespace-nowrap">
+                  <td className="py-1.5 px-2 text-right text-[#FFFFFF] font-medium whitespace-nowrap">
                     {Math.round(c.comp_apex_distance)}m
                     {c.comp_apex_distance !== c.ref_apex_distance && (
-                      <span className="text-3xs text-workstation-textMuted ml-1">
+                      <span className="text-3xs text-[#94A3B8] ml-1">
                         ({c.comp_apex_distance > c.ref_apex_distance ? '+' : ''}
                         {(c.comp_apex_distance - c.ref_apex_distance).toFixed(0)}m)
                       </span>
@@ -214,28 +214,28 @@ export const CornerAnalysisTable: React.FC<CornerAnalysisTableProps> = ({
 
                   {/* Exit Speed */}
                   <td className="py-1.5 px-2 text-right whitespace-nowrap">
-                    <span className="text-workstation-textMuted mr-1">{c.ref_exit_speed.toFixed(0)}</span>
-                    <span className="text-workstation-textSecondary mr-1">{c.comp_exit_speed.toFixed(0)}</span>
-                    <span className={`text-3xs font-semibold ${exitSpeedColor}`}>
+                    <span className="text-[#94A3B8] mr-1">{c.ref_exit_speed.toFixed(0)}</span>
+                    <span className="text-[#FFFFFF] font-medium mr-1">{c.comp_exit_speed.toFixed(0)}</span>
+                    <span className={`text-3xs font-bold ${exitSpeedColor}`}>
                       ({c.exit_speed_delta > 0 ? '+' : ''}{c.exit_speed_delta.toFixed(1)})
                     </span>
                   </td>
 
                   {/* Braking Point */}
-                  <td className="py-1.5 px-2 text-right text-workstation-textSecondary whitespace-nowrap">
+                  <td className="py-1.5 px-2 text-right text-[#FFFFFF] font-medium whitespace-nowrap">
                     {c.comp_braking_point ? `${Math.round(c.comp_braking_point)}m` : '---'}
                     {c.braking_point_delta !== null && (
-                      <span className="text-3xs text-workstation-textMuted ml-1">
+                      <span className="text-3xs text-[#94A3B8] ml-1">
                         ({c.braking_point_delta > 0 ? '+' : ''}{c.braking_point_delta}m)
                       </span>
                     )}
                   </td>
 
                   {/* Throttle Pickup */}
-                  <td className="py-1.5 px-2 text-right text-workstation-textSecondary whitespace-nowrap">
+                  <td className="py-1.5 px-2 text-right text-[#FFFFFF] font-medium whitespace-nowrap">
                     {c.comp_throttle_pickup ? `${Math.round(c.comp_throttle_pickup)}m` : '---'}
                     {c.throttle_pickup_delta !== null && (
-                      <span className="text-3xs text-workstation-textMuted ml-1">
+                      <span className="text-3xs text-[#94A3B8] ml-1">
                         ({c.throttle_pickup_delta > 0 ? '+' : ''}{c.throttle_pickup_delta}m)
                       </span>
                     )}
@@ -243,8 +243,8 @@ export const CornerAnalysisTable: React.FC<CornerAnalysisTableProps> = ({
 
                   {/* Corner Time & Delta */}
                   <td className="py-1.5 px-2 text-right whitespace-nowrap">
-                    <span className="text-workstation-textMuted mr-1">{c.ref_corner_time.toFixed(3)}s</span>
-                    <span className={`font-semibold ${timeColor}`}>
+                    <span className="text-[#94A3B8] mr-1">{c.ref_corner_time.toFixed(3)}s</span>
+                    <span className={`font-bold ${timeColor}`}>
                       {c.corner_time_delta > 0 ? '+' : ''}{c.corner_time_delta.toFixed(3)}s
                     </span>
                   </td>
@@ -254,8 +254,8 @@ export const CornerAnalysisTable: React.FC<CornerAnalysisTableProps> = ({
                     <span
                       className={`font-bold ${
                         c.cumulative_time_delta_exit < 0
-                          ? 'text-workstation-telemetryGreen'
-                          : 'text-workstation-telemetryAmber'
+                          ? 'text-[#00E676]'
+                          : 'text-[#FF3366]'
                       }`}
                     >
                       {c.cumulative_time_delta_exit > 0 ? '+' : ''}{c.cumulative_time_delta_exit.toFixed(3)}s

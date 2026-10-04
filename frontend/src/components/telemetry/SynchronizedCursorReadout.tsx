@@ -35,12 +35,13 @@ export const SynchronizedCursorReadout: React.FC<SynchronizedCursorReadoutProps>
 }) => {
   if (!sample) {
     return (
-      <div className="bg-workstation-surface/80 border border-workstation-border p-2 rounded text-3xs font-mono text-workstation-textMuted flex items-center justify-between">
-        <span className="flex items-center space-x-1.5">
-          <Crosshair className="w-3 h-3 text-workstation-textMuted/60" />
-          <span>HOVER CURSOR OVER TELEMETRY TO INSPECT SYNCHRONIZED CHANNELS</span>
+      <div className="window-retro px-3 py-1.5 text-3xs font-mono text-[#FFFFFF] flex items-center justify-between">
+        <span className="flex items-center space-x-2 font-bold">
+          <span className="w-2.5 h-2.5 bg-[#00F0FF] border border-[#1E3A8A] inline-block animate-pulse" />
+          <Crosshair className="w-3.5 h-3.5 stroke-[2.5]" />
+          <span>[ HOVER CURSOR OVER TELEMETRY TO INSPECT SYNCHRONIZED CHANNELS ]</span>
         </span>
-        <span>Distance: --- m</span>
+        <span className="text-[#94A3B8] font-extrabold uppercase">DISTANCE: ——— M</span>
       </div>
     );
   }
@@ -54,122 +55,98 @@ export const SynchronizedCursorReadout: React.FC<SynchronizedCursorReadoutProps>
   const sector =
     sample.distance < 1842.0 ? 'S1' : sample.distance < 3611.0 ? 'S2' : 'S3';
 
-  const speedDeltaColor =
-    sample.speed_delta > 0
-      ? 'text-workstation-telemetryGreen'
-      : sample.speed_delta < 0
-      ? 'text-workstation-telemetryAmber'
-      : 'text-workstation-textMuted';
-
-  const timeDeltaColor =
-    sample.time_delta < 0
-      ? 'text-workstation-telemetryGreen'
-      : sample.time_delta > 0
-      ? 'text-workstation-telemetryAmber'
-      : 'text-workstation-textMuted';
-
   return (
-    <div className="bg-workstation-surface border border-workstation-accentCyan/30 rounded p-1.5 font-mono text-3xs select-none shadow-sm">
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+    <div className="window-retro p-1.5 font-mono text-3xs select-none">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
         {/* Spatial Location Indicator */}
         <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-1 text-workstation-accentCyan font-bold">
-            <Crosshair className="w-3 h-3" />
-            <span>s = {Math.round(sample.distance)} m</span>
+          <div className="flex items-center space-x-1 px-2 py-0.5 bg-[#0062FF] border border-[#00F0FF] font-black text-[#FFFFFF] shadow-matrix-glow">
+            <Crosshair className="w-3 h-3 stroke-[2.5]" />
+            <span className="tabular-nums">[ s = {Math.round(sample.distance)} m ]</span>
           </div>
 
-          <span className="px-1.5 py-0.2 bg-workstation-panel border border-workstation-borderSubtle text-workstation-textSecondary rounded font-semibold">
-            {sector}
+          <span className="px-2 py-0.5 bg-[#070E22] border border-[#1E3A8A] text-[#FFFFFF] font-black shadow-sm">
+            [{sector}]
           </span>
 
           {currentCorner ? (
-            <div className="px-1.5 py-0.2 bg-workstation-accentCyan/10 border border-workstation-accentCyan/40 text-workstation-accentCyan rounded font-semibold flex items-center space-x-1">
-              <MapPin className="w-2.5 h-2.5" />
-              <span>{currentCorner.corner_id} — {currentCorner.name}</span>
+            <div className="px-2 py-0.5 bg-[#070E22] border border-[#1E3A8A] text-[#FFFFFF] font-extrabold flex items-center space-x-1 shadow-sm">
+              <MapPin className="w-3 h-3 stroke-[2.5] text-[#00F0FF]" />
+              <span>[ {currentCorner.corner_id}: {currentCorner.name} ]</span>
             </div>
           ) : (
-            <span className="text-workstation-textMuted">Straight / Transition</span>
+            <span className="text-[#94A3B8] font-bold px-1">[ Straight / Transition ]</span>
           )}
         </div>
 
-        {/* Live Channel Values (Ref vs Comp) */}
-        <div className="flex items-center space-x-3 text-2xs divide-x divide-workstation-borderSubtle">
+        {/* Live Hardware Telemetry Channel Chips (Ref Blue #0062FF vs Comp White #FFFFFF) */}
+        <div className="flex flex-wrap items-center gap-1.5 text-2xs">
           {/* Speed */}
-          <div className="flex items-baseline space-x-1 pl-2">
-            <span className="text-3xs text-workstation-textMuted uppercase">SPD:</span>
-            <span className="text-workstation-accentCyan font-semibold">{sample.ref_speed.toFixed(0)}</span>
-            <span className="text-3xs text-workstation-textMuted">/</span>
-            <span className="text-workstation-telemetryAmber font-semibold">{sample.comp_speed.toFixed(0)}</span>
-            <span className={`text-3xs font-semibold ${speedDeltaColor}`}>
-              ({sample.speed_delta > 0 ? '+' : ''}{sample.speed_delta.toFixed(1)})
+          <div className="flex items-center space-x-1 px-2 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-4xs text-[#94A3B8] uppercase font-black">SPD:</span>
+            <span className="text-[#0062FF] font-black tabular-nums">{sample.ref_speed.toFixed(0)}</span>
+            <span className="text-[#888888] font-bold">/</span>
+            <span className="text-[#FFFFFF] font-black tabular-nums">{sample.comp_speed.toFixed(0)}</span>
+            <span className={`text-4xs font-black tabular-nums px-1 border ${sample.speed_delta >= 0 ? 'bg-[#00E676]/20 text-[#00E676] border-[#00E676]/40' : 'bg-[#FF3366]/20 text-[#FF3366] border-[#FF3366]/40'}`}>
+              {sample.speed_delta > 0 ? '+' : ''}{sample.speed_delta.toFixed(1)}
             </span>
           </div>
 
           {/* Throttle */}
-          <div className="flex items-baseline space-x-1 pl-2">
-            <span className="text-3xs text-workstation-textMuted uppercase">THR:</span>
-            <span className="text-workstation-accentCyan">{sample.ref_throttle.toFixed(0)}%</span>
-            <span className="text-3xs text-workstation-textMuted">/</span>
-            <span className="text-workstation-telemetryAmber">{sample.comp_throttle.toFixed(0)}%</span>
+          <div className="flex items-center space-x-1 px-2 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-4xs text-[#94A3B8] uppercase font-black">THR:</span>
+            <span className="text-[#0062FF] font-black tabular-nums">{sample.ref_throttle.toFixed(0)}%</span>
+            <span className="text-[#888888] font-bold">/</span>
+            <span className="text-[#FFFFFF] font-bold tabular-nums">{sample.comp_throttle.toFixed(0)}%</span>
           </div>
 
           {/* Brake */}
-          <div className="flex items-baseline space-x-1 pl-2">
-            <span className="text-3xs text-workstation-textMuted uppercase">BRK:</span>
-            <span className="text-workstation-accentCyan">{sample.ref_brake.toFixed(0)}%</span>
-            <span className="text-3xs text-workstation-textMuted">/</span>
-            <span className="text-workstation-telemetryAmber">{sample.comp_brake.toFixed(0)}%</span>
+          <div className="flex items-center space-x-1 px-2 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-4xs text-[#94A3B8] uppercase font-black">BRK:</span>
+            <span className="text-[#0062FF] font-black tabular-nums">{sample.ref_brake.toFixed(0)}%</span>
+            <span className="text-[#888888] font-bold">/</span>
+            <span className="text-[#FFFFFF] font-bold tabular-nums">{sample.comp_brake.toFixed(0)}%</span>
           </div>
 
           {/* Gear */}
-          <div className="flex items-baseline space-x-1 pl-2">
-            <span className="text-3xs text-workstation-textMuted uppercase">GEAR:</span>
-            <span className="text-workstation-accentCyan font-bold">G{sample.ref_gear}</span>
-            <span className="text-3xs text-workstation-textMuted">/</span>
-            <span className="text-workstation-telemetryAmber font-bold">G{sample.comp_gear}</span>
+          <div className="flex items-center space-x-1 px-2 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-4xs text-[#94A3B8] uppercase font-black">GEAR:</span>
+            <span className="text-[#0062FF] font-black">G{sample.ref_gear}</span>
+            <span className="text-[#888888] font-bold">/</span>
+            <span className="text-[#FFFFFF] font-bold">G{sample.comp_gear}</span>
           </div>
 
           {/* RPM */}
-          <div className="flex items-baseline space-x-1 pl-2">
-            <span className="text-3xs text-workstation-textMuted uppercase">RPM:</span>
-            <span className="text-workstation-accentCyan">{sample.ref_rpm}</span>
-            <span className="text-3xs text-workstation-textMuted">/</span>
-            <span className="text-workstation-telemetryAmber">{sample.comp_rpm}</span>
+          <div className="flex items-center space-x-1 px-2 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-4xs text-[#94A3B8] uppercase font-black">RPM:</span>
+            <span className="text-[#FFFFFF] font-black tabular-nums">{sample.ref_rpm}</span>
           </div>
 
           {/* DRS */}
-          <div className="flex items-baseline space-x-1 pl-2">
-            <span className="text-3xs text-workstation-textMuted uppercase">DRS:</span>
-            <span className={sample.ref_drs ? 'text-workstation-telemetryGreen font-bold' : 'text-workstation-textMuted'}>
+          <div className="flex items-center space-x-1 px-2 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-4xs text-[#94A3B8] uppercase font-black">DRS:</span>
+            <span className={`px-1 font-black ${sample.ref_drs ? 'bg-[#0062FF] text-[#FFFFFF] border border-[#00F0FF]' : 'text-[#888888]'}`}>
               {sample.ref_drs ? 'ON' : 'OFF'}
-            </span>
-            <span className="text-3xs text-workstation-textMuted">/</span>
-            <span className={sample.comp_drs ? 'text-workstation-telemetryGreen font-bold' : 'text-workstation-textMuted'}>
-              {sample.comp_drs ? 'ON' : 'OFF'}
             </span>
           </div>
 
           {/* Lat G */}
-          <div className="flex items-baseline space-x-1 pl-2">
-            <span className="text-3xs text-workstation-textMuted uppercase">LAT:</span>
-            <span className="text-workstation-accentCyan">{sample.ref_lat_g.toFixed(1)}G</span>
-            <span className="text-3xs text-workstation-textMuted">/</span>
-            <span className="text-workstation-telemetryAmber">{sample.comp_lat_g.toFixed(1)}G</span>
+          <div className="flex items-center space-x-1 px-1.5 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-4xs text-[#94A3B8] uppercase font-black">LAT:</span>
+            <span className="text-[#FFFFFF] font-black tabular-nums">{sample.ref_lat_g.toFixed(1)}G</span>
           </div>
 
           {/* Long G */}
-          <div className="flex items-baseline space-x-1 pl-2">
-            <span className="text-3xs text-workstation-textMuted uppercase">LON:</span>
-            <span className="text-workstation-accentCyan">{sample.ref_long_g.toFixed(1)}G</span>
-            <span className="text-3xs text-workstation-textMuted">/</span>
-            <span className="text-workstation-telemetryAmber">{sample.comp_long_g.toFixed(1)}G</span>
+          <div className="flex items-center space-x-1 px-1.5 py-0.5 bg-[#070E22] border border-[#1E3A8A] shadow-sm">
+            <span className="text-4xs text-[#94A3B8] uppercase font-black">LON:</span>
+            <span className="text-[#FFFFFF] font-black tabular-nums">{sample.ref_long_g.toFixed(1)}G</span>
           </div>
 
           {/* Cumulative Time Delta Δt */}
-          <div className="flex items-baseline space-x-1 pl-2">
-            <span className="text-3xs text-workstation-textMuted uppercase">Δt(s):</span>
-            <span className={`font-bold ${timeDeltaColor}`}>
-              {sample.time_delta > 0 ? '+' : ''}{sample.time_delta.toFixed(3)} s
+          <div className={`flex items-center space-x-1 px-2 py-0.5 border shadow-sm ${sample.time_delta <= 0 ? 'bg-[#00E676]/20 border-[#00E676]/50 text-[#00E676]' : 'bg-[#FF3366]/20 border-[#FF3366]/50 text-[#FF3366]'}`}>
+            <span className="text-4xs uppercase font-black">Δt:</span>
+            <span className="font-black tabular-nums">
+              {sample.time_delta > 0 ? '+' : ''}{sample.time_delta.toFixed(3)}s
             </span>
           </div>
         </div>

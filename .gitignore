@@ -27,3 +27,6 @@ pnpm-debug.log*
 .env
 .DS_Store
 *.swp
+
+# Temporary data
+backend/data/

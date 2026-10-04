@@ -1,4 +1,5 @@
 import hashlib
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -13,11 +14,20 @@ class TelemetryStorage:
     """
 
     def __init__(self, base_data_dir: Path | None = None):
-        if base_data_dir is None:
-            # Default to root data/ directory
-            self.base_dir = Path(__file__).resolve().parents[3] / "data"
-        else:
+        if base_data_dir is not None:
             self.base_dir = Path(base_data_dir)
+        elif "APEXIQ_DATA_DIR" in os.environ:
+            self.base_dir = Path(os.environ["APEXIQ_DATA_DIR"])
+        else:
+            default_dir = Path(__file__).resolve().parents[3] / "data"
+            try:
+                default_dir.mkdir(parents=True, exist_ok=True)
+                probe = default_dir / ".probe_test"
+                probe.touch()
+                probe.unlink()
+                self.base_dir = default_dir
+            except (OSError, PermissionError):
+                self.base_dir = Path(__file__).resolve().parents[2] / "data"
 
         self.raw_dir = self.base_dir / "raw"
         self.processed_dir = self.base_dir / "processed"

@@ -13,9 +13,9 @@ export const TradeoffComparisonTable: React.FC<TradeoffComparisonTableProps> = (
 }) => {
   if (isLoading || !comparison) {
     return (
-      <div className="bg-workstation-panel border border-workstation-border rounded p-4 font-mono text-2xs animate-pulse text-workstation-textMuted flex items-center justify-center space-x-2 h-48">
-        <ArrowUpDown className="w-4 h-4 animate-spin text-workstation-accentCyan" />
-        <span>COMPUTING VEHICLE PERFORMANCE TRADE-OFF MATRIX...</span>
+      <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-4 font-mono text-2xs text-[#FFFFFF] flex items-center justify-center space-x-2 h-48 shadow-md">
+        <ArrowUpDown className="w-4 h-4 animate-spin text-[#FFFFFF]" />
+        <span className="font-bold uppercase">[ COMPUTING VEHICLE PERFORMANCE TRADE-OFF MATRIX... ]</span>
       </div>
     );
   }
@@ -23,24 +23,25 @@ export const TradeoffComparisonTable: React.FC<TradeoffComparisonTableProps> = (
   const lapDelta = comparison.modeled_lap_time_delta_s;
 
   return (
-    <div className="bg-workstation-panel border border-workstation-border rounded p-3 font-mono text-2xs space-y-3">
-      <div className="flex items-center justify-between border-b border-workstation-borderSubtle pb-2">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-3 shadow-md">
+      {/* Titanium Header */}
+      <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-2 bg-[#070E22] p-2 -mx-3 -mt-3 mb-2">
         <div className="flex items-center space-x-2">
-          <ArrowUpDown className="w-3.5 h-3.5 text-workstation-accentCyan" />
-          <span className="font-bold text-workstation-textBright uppercase tracking-wider text-xs">
-            AERODYNAMIC & VEHICLE TRADE-OFF AUDIT
+          <ArrowUpDown className="w-3.5 h-3.5 text-[#FFFFFF]" />
+          <span className="font-bold text-[#FFFFFF] uppercase tracking-wider text-xs">
+            [ AERODYNAMIC & VEHICLE TRADE-OFF AUDIT ]
           </span>
         </div>
 
         <div className="flex items-center space-x-2">
-          <span className="text-3xs text-workstation-textMuted">MODELLED LAP TIME CONSEQUENCE:</span>
+          <span className="text-3xs text-[#FFFFFF] font-bold uppercase">MODELLED LAP TIME CONSEQUENCE:</span>
           <span
-            className={`font-bold px-2 py-0.5 rounded text-xs ${
+            className={`font-black px-2 py-0.5 border border-[#1E3A8A] text-xs ${
               lapDelta < 0
-                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                ? 'bg-[#00F0FF] text-[#FFFFFF]'
                 : lapDelta > 0
-                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
-                : 'bg-slate-700 text-slate-300'
+                ? 'bg-[#0E1A3D] text-[#FBBF24] border border-[#FBBF24]/50 text-[#FFB000]'
+                : 'bg-[#070E22] text-[#FFFFFF]'
             }`}
           >
             {lapDelta > 0 ? `+${lapDelta.toFixed(3)}` : lapDelta.toFixed(3)} s
@@ -49,64 +50,64 @@ export const TradeoffComparisonTable: React.FC<TradeoffComparisonTableProps> = (
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full text-left border-collapse border border-[#1E3A8A] bg-[#070E22] shadow">
           <thead>
-            <tr className="border-b border-workstation-borderSubtle text-3xs text-workstation-textMuted uppercase">
-              <th className="py-1 px-2">PERFORMANCE METRIC</th>
-              <th className="py-1 px-2 text-right">BASELINE</th>
-              <th className="py-1 px-2 text-right">SCENARIO</th>
-              <th className="py-1 px-2 text-right">DELTA</th>
-              <th className="py-1 px-2 text-right">95% UNCERTAINTY</th>
-              <th className="py-1 px-2 text-center">TRADE-OFF IMPACT</th>
+            <tr className="border-b border-[#1E3A8A] text-3xs text-[#FFFFFF] bg-[#0A0D15] font-bold uppercase">
+              <th className="py-2 px-3 border-r border-[#1E3A8A]">[ PERFORMANCE METRIC ]</th>
+              <th className="py-2 px-3 text-right border-r border-[#1E3A8A]">[ BASELINE ]</th>
+              <th className="py-2 px-3 text-right border-r border-[#1E3A8A]">[ SCENARIO ]</th>
+              <th className="py-2 px-3 text-right border-r border-[#1E3A8A]">[ DELTA ]</th>
+              <th className="py-2 px-3 text-right border-r border-[#1E3A8A]">[ 95% UNCERTAINTY ]</th>
+              <th className="py-2 px-3 text-center">[ TRADE-OFF IMPACT ]</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-workstation-borderSubtle/50 text-2xs">
+          <tbody className="divide-y divide-black text-2xs">
             {comparison.metrics.map((m) => {
               const isPositive = m.delta > 0;
               const isNeutral = Math.abs(m.delta) < 0.0001;
 
               return (
-                <tr key={m.name} className="hover:bg-workstation-surface/30">
-                  <td className="py-1.5 px-2 font-medium text-workstation-textBright">
-                    {m.name} <span className="text-3xs text-workstation-textMuted font-normal">({m.unit})</span>
+                <tr key={m.name} className="hover:bg-[#0E1A3D] transition-colors">
+                  <td className="py-1.5 px-3 font-bold text-[#FFFFFF] border-r border-[#1E3A8A]">
+                    {m.name} <span className="text-3xs text-[#94A3B8] font-normal">({m.unit})</span>
                   </td>
-                  <td className="py-1.5 px-2 text-right text-workstation-textSecondary">
+                  <td className="py-1.5 px-3 text-right text-[#94A3B8] font-bold border-r border-[#1E3A8A]">
                     {m.baseline.toLocaleString()}
                   </td>
-                  <td className="py-1.5 px-2 text-right text-workstation-textBright font-semibold">
+                  <td className="py-1.5 px-3 text-right text-[#FFFFFF] font-black border-r border-[#1E3A8A]">
                     {m.scenario.toLocaleString()}
                   </td>
-                  <td className="py-1.5 px-2 text-right">
+                  <td className="py-1.5 px-3 text-right font-black border-r border-[#1E3A8A]">
                     <span
-                      className={`font-semibold ${
+                      className={
                         isNeutral
-                          ? 'text-workstation-textMuted'
+                          ? 'text-[#94A3B8]'
                           : m.name.includes('Drag') || m.name.includes('Time')
                           ? isPositive
-                            ? 'text-rose-400'
-                            : 'text-emerald-400'
+                            ? 'text-[#FFB000]'
+                            : 'text-[#00E676]'
                           : isPositive
-                          ? 'text-emerald-400'
-                          : 'text-rose-400'
-                      }`}
+                          ? 'text-[#00E676]'
+                          : 'text-[#FFB000]'
+                      }
                     >
                       {m.delta > 0 ? `+${m.delta.toLocaleString()}` : m.delta.toLocaleString()}
                     </span>
                   </td>
-                  <td className="py-1.5 px-2 text-right text-workstation-textMuted text-3xs">
+                  <td className="py-1.5 px-3 text-right text-[#94A3B8] font-bold text-3xs border-r border-[#1E3A8A]">
                     ±{m.uncertainty_95.toLocaleString()}
                   </td>
-                  <td className="py-1.5 px-2 text-center">
-                    <span className="inline-flex items-center space-x-1 text-3xs">
+                  <td className="py-1.5 px-3 text-center">
+                    <span className="inline-flex items-center space-x-1 text-3xs font-bold">
                       {isNeutral ? (
-                        <Minus className="w-3 h-3 text-slate-500" />
+                        <Minus className="w-3 h-3 text-[#94A3B8]" />
                       ) : isPositive ? (
-                        <TrendingUp className="w-3 h-3 text-workstation-accentCyan" />
+                        <TrendingUp className="w-3 h-3 text-[#FFFFFF]" />
                       ) : (
-                        <TrendingDown className="w-3 h-3 text-amber-400" />
+                        <TrendingDown className="w-3 h-3 text-[#FFFFFF]" />
                       )}
-                      <span className="text-workstation-textMuted capitalize">
-                        {isNeutral ? 'Neutral' : isPositive ? 'Increased' : 'Decreased'}
+                      <span className="text-[#FFFFFF] uppercase">
+                        [ {isNeutral ? 'Neutral' : isPositive ? 'Increased' : 'Decreased'} ]
                       </span>
                     </span>
                   </td>
@@ -117,10 +118,10 @@ export const TradeoffComparisonTable: React.FC<TradeoffComparisonTableProps> = (
         </table>
       </div>
 
-      <div className="bg-workstation-surface/40 border border-workstation-borderSubtle rounded p-2 text-3xs text-workstation-textMuted flex items-start space-x-2">
-        <AlertCircle className="w-3.5 h-3.5 text-workstation-accentCyan shrink-0 mt-0.5" />
+      <div className="bg-[#0A0D15] border border-[#1E3A8A] p-2 text-3xs text-[#FFFFFF] font-bold flex items-start space-x-2 shadow-sm">
+        <AlertCircle className="w-3.5 h-3.5 text-[#FFFFFF] shrink-0 mt-0.5" />
         <span>
-          <strong>Engineering Discipline:</strong> Trade-offs must be evaluated holistically. Increasing downforce reduces corner transit time but increases parasitic drag on straights. No arbitrary "Aero Score" is awarded.
+          <strong>ENGINEERING DISCIPLINE:</strong> Trade-offs must be evaluated holistically. Increasing downforce reduces corner transit time but increases parasitic drag on straights. No arbitrary &quot;Aero Score&quot; is awarded.
         </span>
       </div>
     </div>

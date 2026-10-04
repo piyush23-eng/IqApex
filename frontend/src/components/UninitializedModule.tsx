@@ -78,38 +78,39 @@ export const UninitializedModule: React.FC<UninitializedModuleProps> = ({
 
   return (
     <div className="h-full flex flex-col items-center justify-center p-8 text-center font-mono">
-      <div className="max-w-lg p-6 bg-workstation-panel border border-workstation-border rounded shadow-lg text-left space-y-4">
-        <div className="flex items-center space-x-2 text-workstation-telemetryAmber pb-2 border-b border-workstation-borderSubtle">
-          <Construction className="w-4 h-4" />
-          <span className="text-2xs font-semibold uppercase tracking-wider">
-            MODULE NOT INITIALIZED — {info.stage}
+      <div className="max-w-lg p-6 window-retro bg-[#0A132E] border border-[#1E3A8A] shadow-lg text-left space-y-4">
+        {/* Titanium Header */}
+        <div className="flex items-center space-x-2 text-[#FFFFFF] border-b border-[#1E3A8A] pb-2 bg-[#070E22] p-2 -mx-6 -mt-6">
+          <Construction className="w-4 h-4 text-[#FFFFFF]" />
+          <span className="text-2xs font-bold uppercase tracking-wider">
+            [ MODULE NOT INITIALIZED — {info.stage} ]
           </span>
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold text-workstation-textBright mb-1">{info.title}</h2>
-          <p className="text-xs text-workstation-textSecondary leading-relaxed">{info.spec}</p>
+          <h2 className="text-sm font-bold text-[#FFFFFF] uppercase mb-1">{info.title}</h2>
+          <p className="text-xs text-[#CBD5E1] leading-relaxed font-bold">{info.spec}</p>
         </div>
 
-        <div className="p-3 bg-workstation-surface border border-workstation-borderSubtle rounded space-y-1.5 text-3xs">
-          <div className="text-workstation-textMuted uppercase font-semibold">PRECONDITIONS FOR INITIALIZATION</div>
-          <div className="text-workstation-textSecondary flex items-center space-x-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-workstation-telemetryGreen inline-block" />
-            <span>Stage 1 Foundation & Domain Schema: ESTABLISHED</span>
+        <div className="p-3 bg-[#070E22] border border-[#1E3A8A] space-y-1.5 text-3xs shadow">
+          <div className="text-[#FFFFFF] uppercase font-black">[ PRECONDITIONS FOR INITIALIZATION ]</div>
+          <div className="text-[#FFFFFF] font-bold flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 border border-[#1E3A8A] bg-[#00F0FF] inline-block" />
+            <span>Stage 1 Foundation & Domain Schema: [ ESTABLISHED ]</span>
           </div>
-          <div className="text-workstation-textSecondary flex items-center space-x-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-workstation-telemetryAmber inline-block" />
-            <span>Target Stage Engine: Awaiting Ingestion Engine Integration</span>
+          <div className="text-[#FFFFFF] font-bold flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 border border-[#1E3A8A] bg-[#0E1A3D] text-[#FBBF24] border border-[#FBBF24]/50 inline-block" />
+            <span>Target Stage Engine: [ AWAITING INGESTION ENGINE INTEGRATION ]</span>
           </div>
         </div>
 
         <div className="pt-2 flex justify-start">
           <button
             onClick={onReturnToOverview}
-            className="flex items-center space-x-1.5 px-3 py-1 bg-workstation-surface hover:bg-workstation-surface/80 text-workstation-accentCyan border border-workstation-border rounded text-2xs transition-colors"
+            className="btn-retro-primary text-xs flex items-center space-x-2"
           >
-            <ArrowLeft className="w-3 h-3" />
-            <span>Return to Overview [F1]</span>
+            <ArrowLeft className="w-3.5 h-3.5 text-[#FFFFFF]" />
+            <span>[ RETURN TO OVERVIEW (F1) ]</span>
           </button>
         </div>
       </div>
