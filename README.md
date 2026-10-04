@@ -5,7 +5,9 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-teal.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18.3-cyan.svg)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Tests-148%20Passed%20(100%25)-emerald.svg)](backend/tests/)
+[![Tests](https://img.shields.io/badge/Tests-150%20Passed%20(100%25)-emerald.svg)](backend/tests/)
+[![CI](https://github.com/piyush23-eng/IqApex/actions/workflows/ci.yml/badge.svg)](https://github.com/piyush23-eng/IqApex/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/piyush23-eng/IqApex/actions/workflows/codeql.yml/badge.svg)](https://github.com/piyush23-eng/IqApex/actions/workflows/codeql.yml)
 [![Deterministic](https://img.shields.io/badge/Seed-42871-purple.svg)](docs/REPRODUCIBILITY.md)
 [![License](https://img.shields.io/badge/License-MIT-gray.svg)](LICENSE)
 
