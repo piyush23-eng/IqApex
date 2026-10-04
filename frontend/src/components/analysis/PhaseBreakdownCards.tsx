@@ -77,7 +77,7 @@ export const PhaseBreakdownCards: React.FC<PhaseBreakdownCardsProps> = ({ decomp
   ];
 
   return (
-    <div className="space-y-1.5 font-mono">
+    <div className="space-y-1.5 font-mono w-full flex-shrink-0">
       <div className="flex items-center justify-between text-3xs text-[#94A3B8] uppercase px-1">
         <span className="font-extrabold text-[#FFFFFF] tracking-wider">
           [ MEASURED PERFORMANCE PHASE CONTRIBUTIONS ]
@@ -88,7 +88,7 @@ export const PhaseBreakdownCards: React.FC<PhaseBreakdownCardsProps> = ({ decomp
         </span>
       </div>
 
-      <div className="grid grid-cols-5 gap-2.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
         {cards.map((card) => {
           const Icon = card.icon;
           const isNegative = card.delta < -0.0005;

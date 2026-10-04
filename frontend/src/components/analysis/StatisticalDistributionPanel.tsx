@@ -41,7 +41,7 @@ export const StatisticalDistributionPanel: React.FC<StatisticalDistributionPanel
   const { descriptive, outliers } = stats;
 
   return (
-    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-0 shadow-md font-mono text-2xs">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-0 shadow-md font-mono text-2xs w-full flex-shrink-0">
       {/* Header & Metric Selector */}
       <div className="window-header-retro bg-[#070E22] border-b border-[#1E3A8A] px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[#FFFFFF] font-extrabold">
         <div className="flex items-center space-x-2">

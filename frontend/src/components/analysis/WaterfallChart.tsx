@@ -42,7 +42,7 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
   const stepGap = chartWidth / steps.length;
 
   return (
-    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2 shadow-md">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs space-y-2 shadow-md w-full flex-shrink-0">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-1.5">
         <div className="flex items-center space-x-2">
@@ -71,11 +71,11 @@ export const WaterfallChart: React.FC<WaterfallChartProps> = ({ steps, totalDelt
       </div>
 
       {/* Interactive Waterfall SVG */}
-      <div className="relative overflow-x-auto bg-[#070E22] border border-[#1E3A8A] p-2 shadow">
+      <div className="relative overflow-x-auto bg-[#070E22] border border-[#1E3A8A] p-2 shadow min-h-[250px] w-full">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           className="w-full h-auto select-none"
-          style={{ minWidth: '680px' }}
+          style={{ minWidth: '680px', minHeight: '220px' }}
         >
           {/* Horizontal grid lines */}
           {[-0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4].map((gridVal) => {

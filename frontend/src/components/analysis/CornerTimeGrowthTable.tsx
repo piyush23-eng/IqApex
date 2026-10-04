@@ -68,7 +68,7 @@ export const CornerTimeGrowthTable: React.FC<CornerTimeGrowthTableProps> = ({ co
   };
 
   return (
-    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-0 shadow-md font-mono">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-0 shadow-md font-mono w-full flex-shrink-0">
       {/* Title Bar */}
       <div className="window-header-retro bg-[#070E22] border-b border-[#1E3A8A] px-3 py-1.5 flex items-center justify-between text-[#FFFFFF] font-extrabold">
         <div className="flex items-center space-x-2">

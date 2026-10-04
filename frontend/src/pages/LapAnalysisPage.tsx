@@ -118,7 +118,7 @@ export const LapAnalysisPage: React.FC = () => {
   }, [fetchStatistics]);
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[#030712] p-3 space-y-3 font-mono text-2xs select-none">
+    <div className="w-full space-y-4 font-mono text-2xs select-none pb-12">
       {/* Top Header & Methodology Controller */}
       <DecompositionSummaryHeader
         decomposition={decomposition}

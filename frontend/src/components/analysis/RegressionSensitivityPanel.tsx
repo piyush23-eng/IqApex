@@ -24,7 +24,7 @@ export const RegressionSensitivityPanel: React.FC<RegressionSensitivityPanelProp
   }
 
   return (
-    <div className="grid grid-cols-12 gap-3 font-mono text-2xs">
+    <div className="grid grid-cols-12 gap-3 font-mono text-2xs w-full flex-shrink-0">
       {/* Left 6 cols: OLS Degradation Regression & Residual Analysis */}
       <div className="col-span-12 md:col-span-6 window-retro bg-[#0A132E] border border-[#1E3A8A] p-0 shadow-md">
         <div className="window-header-retro bg-[#070E22] border-b border-[#1E3A8A] px-3 py-1.5 flex items-center justify-between text-[#FFFFFF] font-extrabold">

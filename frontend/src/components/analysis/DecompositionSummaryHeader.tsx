@@ -32,7 +32,7 @@ export const DecompositionSummaryHeader: React.FC<DecompositionSummaryHeaderProp
   const deltaSign = totalDelta > 0 ? '+' : '';
 
   return (
-    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs select-none space-y-2.5 shadow-md">
+    <div className="window-retro bg-[#0A132E] border border-[#1E3A8A] p-3 font-mono text-2xs select-none space-y-2.5 shadow-md w-full flex-shrink-0">
       {/* Top Bar: Circuit Info & Synthetic Dataset Notice */}
       <div className="flex items-center justify-between border-b border-[#1E3A8A] pb-2 text-3xs">
         <div className="flex items-center space-x-2">
@@ -53,9 +53,9 @@ export const DecompositionSummaryHeader: React.FC<DecompositionSummaryHeaderProp
       </div>
 
       {/* Main Workflow Strip */}
-      <div className="grid grid-cols-12 gap-3 items-center">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
         {/* Reference Methodology & Lap Selection */}
-        <div className="col-span-5 bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow space-y-1.5">
+        <div className="col-span-1 md:col-span-5 bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow space-y-1.5">
           <div className="flex items-center justify-between text-3xs text-[#94A3B8] uppercase">
             <span className="text-[#FFFFFF] font-extrabold flex items-center space-x-1">
               <Compass className="w-3.5 h-3.5 text-[#FFFFFF] stroke-[2.5]" />
@@ -102,7 +102,7 @@ export const DecompositionSummaryHeader: React.FC<DecompositionSummaryHeaderProp
         </div>
 
         {/* Comparison Lap Selector */}
-        <div className="col-span-4 bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow space-y-1.5">
+        <div className="col-span-1 md:col-span-4 bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow space-y-1.5">
           <div className="flex items-center justify-between text-3xs text-[#94A3B8] uppercase">
             <span className="text-[#FFFFFF] font-extrabold flex items-center space-x-1">
               <GitCommit className="w-3.5 h-3.5 text-[#FFB000] stroke-[2.5]" />
@@ -135,7 +135,7 @@ export const DecompositionSummaryHeader: React.FC<DecompositionSummaryHeaderProp
         </div>
 
         {/* Total Measured Lap Delta */}
-        <div className="col-span-3 bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow text-center">
+        <div className="col-span-1 md:col-span-3 bg-[#070E22] border border-[#1E3A8A] p-2.5 shadow text-center">
           <div className="text-3xs text-[#94A3B8] uppercase font-bold flex items-center justify-center space-x-1">
             <Timer className="w-3.5 h-3.5 text-[#FFFFFF] stroke-[2.5]" />
             <span>MEASURED TOTAL LAP DELTA</span>
